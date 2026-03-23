@@ -1,0 +1,130 @@
+# Requirements: BIBB United
+
+**Defined:** 2026-03-23
+**Core Value:** Community members can find clear, actionable information about their local school system and know exactly what to do about it.
+
+## v1 Requirements
+
+Requirements for initial release. Each maps to roadmap phases.
+
+### Content Management
+
+- [ ] **CONT-01**: User can create and edit rich text pages with headings, images, pull quotes, and embedded content
+- [ ] **CONT-02**: User can create and edit news posts with title, body, publish date, and featured image
+- [ ] **CONT-03**: Each page and news post has a configurable call-to-action block (CTA text + link)
+- [ ] **CONT-04**: Editor can activate a site-wide urgent banner with custom message and optional link
+- [ ] **CONT-05**: Non-technical editors can publish and manage all content via Payload CMS admin UI
+
+### Navigation
+
+- [ ] **NAV-01**: Site has a CMS-managed navigation menu with one level of dropdown sub-items
+- [ ] **NAV-02**: Menu items support both internal page links and external URLs
+- [ ] **NAV-03**: Site has an About / Mission page accessible from navigation
+
+### Civic Action
+
+- [ ] **CIVX-01**: Site has a Contact Your Officials page with names, roles, emails, and phone numbers
+- [ ] **CIVX-02**: Site has a Meeting Schedule page showing upcoming school board meeting dates, times, and locations
+
+### Design & UX
+
+- [ ] **DSGN-01**: Bold activist visual design with strong colors, large headlines, and urgency
+- [ ] **DSGN-02**: BIBB United brand identity (logo, color palette, typography)
+- [ ] **DSGN-03**: Clear, scannable homepage with latest news, key topic callouts, and hero section
+- [ ] **DSGN-04**: Fully responsive, mobile-first layout tested on real device sizes
+- [ ] **DSGN-05**: WCAG 2.1 AA accessible design (color contrast, keyboard nav, semantic HTML, alt text)
+- [ ] **DSGN-06**: Content freshness signals (last updated timestamps, recent activity indicators)
+- [ ] **DSGN-07**: Print-friendly CSS stylesheet for articles
+
+### SEO & Sharing
+
+- [ ] **SEO-01**: OpenGraph and Twitter Card meta tags on all pages and posts
+- [ ] **SEO-02**: JSON-LD structured data for articles and organization
+- [ ] **SEO-03**: Auto-generated sitemap.xml
+- [ ] **SEO-04**: Meta descriptions configurable per page/post in CMS
+
+### Deployment
+
+- [ ] **DEPLOY-01**: Dockerized Next.js + Payload app as single container
+- [ ] **DEPLOY-02**: K8s manifests for deployment with Traefik ingress
+- [ ] **DEPLOY-03**: Cloudflare tunnel configuration with admin route cache bypass
+- [ ] **DEPLOY-04**: PostgreSQL connection configured for cluster database
+- [ ] **DEPLOY-05**: Persistent storage for media uploads (survives pod restarts)
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### Content Organization
+
+- **TAXO-01**: Topic taxonomy/tags on pages and news posts (budget, personnel, facilities, policy)
+- **TAXO-02**: Topic landing pages that aggregate related content by issue
+
+### Resources
+
+- **RSRC-01**: Curated external resource links page with categorized links to official documents and media coverage
+- **RSRC-02**: Embedded document viewers for PDFs (budget documents, meeting minutes)
+
+### Engagement
+
+- **ENGMT-01**: Email newsletter with subscription management
+- **ENGMT-02**: Email capture form for future newsletter (collect addresses before v2 delivery)
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| User accounts / visitor login | Broadcast site, not a community platform. Adds security/privacy complexity with no clear value |
+| Comments or discussion forums | Moderation nightmare for 2-3 person team. Rarely produces constructive civic discourse |
+| Donation / payment processing | PCI compliance concerns. Use hosted solution (GoFundMe, ActBlue) and link out if needed |
+| Full-text search | Site will be small enough (<50 pages) to navigate via menu. Add when content outgrows navigation |
+| Event RSVP / ticketing | Over-engineering for public school board meetings. Post dates/locations, that's sufficient |
+| Multi-language support (i18n) | Significant complexity. Payload supports localization if needed later |
+| Real-time notifications / push | Social media serves this function. Site is source of truth, not alert system |
+| Admin analytics dashboard | Use external tool (Plausible, Umami) instead of building into CMS |
+| AI-generated content | Undermines credibility for civic trust content. Human-written only |
+| OAuth / social login for CMS | Payload's built-in auth is sufficient for a small editorial team |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| CONT-01 | TBD | Pending |
+| CONT-02 | TBD | Pending |
+| CONT-03 | TBD | Pending |
+| CONT-04 | TBD | Pending |
+| CONT-05 | TBD | Pending |
+| NAV-01 | TBD | Pending |
+| NAV-02 | TBD | Pending |
+| NAV-03 | TBD | Pending |
+| CIVX-01 | TBD | Pending |
+| CIVX-02 | TBD | Pending |
+| DSGN-01 | TBD | Pending |
+| DSGN-02 | TBD | Pending |
+| DSGN-03 | TBD | Pending |
+| DSGN-04 | TBD | Pending |
+| DSGN-05 | TBD | Pending |
+| DSGN-06 | TBD | Pending |
+| DSGN-07 | TBD | Pending |
+| SEO-01 | TBD | Pending |
+| SEO-02 | TBD | Pending |
+| SEO-03 | TBD | Pending |
+| SEO-04 | TBD | Pending |
+| DEPLOY-01 | TBD | Pending |
+| DEPLOY-02 | TBD | Pending |
+| DEPLOY-03 | TBD | Pending |
+| DEPLOY-04 | TBD | Pending |
+| DEPLOY-05 | TBD | Pending |
+
+**Coverage:**
+- v1 requirements: 22 total
+- Mapped to phases: 0
+- Unmapped: 22
+
+---
+*Requirements defined: 2026-03-23*
+*Last updated: 2026-03-23 after initial definition*
