@@ -93,38 +93,38 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONT-01 | TBD | Pending |
-| CONT-02 | TBD | Pending |
-| CONT-03 | TBD | Pending |
-| CONT-04 | TBD | Pending |
-| CONT-05 | TBD | Pending |
-| NAV-01 | TBD | Pending |
-| NAV-02 | TBD | Pending |
-| NAV-03 | TBD | Pending |
-| CIVX-01 | TBD | Pending |
-| CIVX-02 | TBD | Pending |
-| DSGN-01 | TBD | Pending |
-| DSGN-02 | TBD | Pending |
-| DSGN-03 | TBD | Pending |
-| DSGN-04 | TBD | Pending |
-| DSGN-05 | TBD | Pending |
-| DSGN-06 | TBD | Pending |
-| DSGN-07 | TBD | Pending |
-| SEO-01 | TBD | Pending |
-| SEO-02 | TBD | Pending |
-| SEO-03 | TBD | Pending |
-| SEO-04 | TBD | Pending |
-| DEPLOY-01 | TBD | Pending |
-| DEPLOY-02 | TBD | Pending |
-| DEPLOY-03 | TBD | Pending |
-| DEPLOY-04 | TBD | Pending |
-| DEPLOY-05 | TBD | Pending |
+| CONT-01 | Phase 1 | Pending |
+| CONT-02 | Phase 1 | Pending |
+| CONT-03 | Phase 1 | Pending |
+| CONT-04 | Phase 1 | Pending |
+| CONT-05 | Phase 1 | Pending |
+| NAV-01 | Phase 3 | Pending |
+| NAV-02 | Phase 3 | Pending |
+| NAV-03 | Phase 3 | Pending |
+| CIVX-01 | Phase 3 | Pending |
+| CIVX-02 | Phase 3 | Pending |
+| DSGN-01 | Phase 2 | Pending |
+| DSGN-02 | Phase 2 | Pending |
+| DSGN-03 | Phase 3 | Pending |
+| DSGN-04 | Phase 2 | Pending |
+| DSGN-05 | Phase 2 | Pending |
+| DSGN-06 | Phase 3 | Pending |
+| DSGN-07 | Phase 3 | Pending |
+| SEO-01 | Phase 4 | Pending |
+| SEO-02 | Phase 4 | Pending |
+| SEO-03 | Phase 4 | Pending |
+| SEO-04 | Phase 4 | Pending |
+| DEPLOY-01 | Phase 4 | Pending |
+| DEPLOY-02 | Phase 4 | Pending |
+| DEPLOY-03 | Phase 4 | Pending |
+| DEPLOY-04 | Phase 1 | Pending |
+| DEPLOY-05 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 22 total
-- Mapped to phases: 0
-- Unmapped: 22
+- v1 requirements: 26 total
+- Mapped to phases: 26
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-23*
-*Last updated: 2026-03-23 after initial definition*
+*Last updated: 2026-03-23 after roadmap creation*
