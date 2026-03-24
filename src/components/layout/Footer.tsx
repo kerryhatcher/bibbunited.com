@@ -11,7 +11,7 @@ export function Footer() {
           <h2 className="font-heading text-3xl font-bold uppercase tracking-tight sm:text-4xl">
             GET INVOLVED
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-text-on-dark/80">
+          <p className="mx-auto mt-4 max-w-xl text-lg text-text-on-dark">
             Your voice matters. Here&apos;s how you can make a difference.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -29,7 +29,7 @@ export function Footer() {
           {/* Left: logo + copyright */}
           <div className="flex items-center gap-3">
             <Logo />
-            <span className="text-sm text-text-on-dark/60">
+            <span className="text-sm text-text-on-dark/80">
               &copy; 2026 BIBB United. All rights reserved.
             </span>
           </div>
@@ -40,7 +40,7 @@ export function Footer() {
               <li>
                 <a
                   href="/about"
-                  className="text-sm text-text-on-dark/80 no-underline hover:text-white"
+                  className="text-sm text-text-on-dark no-underline hover:text-white"
                 >
                   About
                 </a>
@@ -48,7 +48,7 @@ export function Footer() {
               <li>
                 <a
                   href="/news"
-                  className="text-sm text-text-on-dark/80 no-underline hover:text-white"
+                  className="text-sm text-text-on-dark no-underline hover:text-white"
                 >
                   News
                 </a>
@@ -56,7 +56,7 @@ export function Footer() {
               <li>
                 <a
                   href="/contact-officials"
-                  className="text-sm text-text-on-dark/80 no-underline hover:text-white"
+                  className="text-sm text-text-on-dark no-underline hover:text-white"
                 >
                   Contact Officials
                 </a>
@@ -64,7 +64,7 @@ export function Footer() {
               <li>
                 <a
                   href="/meetings"
-                  className="text-sm text-text-on-dark/80 no-underline hover:text-white"
+                  className="text-sm text-text-on-dark no-underline hover:text-white"
                 >
                   Meetings
                 </a>
