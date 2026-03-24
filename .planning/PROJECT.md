@@ -48,7 +48,7 @@ Community members can find clear, actionable information about their local schoo
 
 ### Active
 
-(No active requirements -- next milestone not yet planned)
+(Defined in REQUIREMENTS.md for v1.1)
 
 ### Out of Scope
 
@@ -95,11 +95,21 @@ Community members can find clear, actionable information about their local schoo
 | DOM assertions over pixel-diff testing | CMS content changes; structural assertions are more stable than screenshots | ✓ Good -- v1.0 |
 | Seed script for test data | Enables full Playwright test coverage without manual setup | ✓ Good -- v1.0 |
 
-## Next Milestone Goals
+## Current Milestone: v1.1 Production Polish
 
-Not yet planned. Run `/gsd:new-milestone` to define v1.1 scope.
+**Goal:** Fix all UI/UX review issues and perform a final quality audit so the site is production-ready -- visually polished, fully accessible, optimized, and SEO-complete.
 
-Potential areas for v1.1:
+**Target features:**
+- Fix 4 critical appearance issues (footer contrast, empty nav, empty hero, dark seed images)
+- Fix 6 high-priority quality issues (missing H1, skip-to-content, Next.js Link/Image migration, admin email exposure, keyboard trap)
+- Fix 10 medium issues (duplicate titles, canonical URLs, OG tags, sitemap gaps, layout spacing, empty states, news excerpts, active nav indicator, cache headers, seed alt text)
+- Fix 5 low issues (footer self-link, missing OG image, X-Powered-By header, footer focus rings, sitemap priority)
+- Final quality audit: full automated re-review to verify all fixes, catch regressions, and identify remaining polish opportunities
+
+**Source:** UI-UX-REVIEW-2026-03-24.md (25 issues across 4 priority tiers)
+
+## Future Milestone Ideas
+
 - Topic taxonomy/tags (TAXO-01, TAXO-02 from v2 backlog)
 - Email newsletter subscription (ENGMT-01, ENGMT-02 from v2 backlog)
 - Resource links page (RSRC-01 from v2 backlog)
@@ -110,4 +120,4 @@ Potential areas for v1.1:
 This document evolves at phase transitions and milestone boundaries.
 
 ---
-*Last updated: 2026-03-24 after v1.0 milestone completion*
+*Last updated: 2026-03-24 -- v1.1 Production Polish milestone started*
