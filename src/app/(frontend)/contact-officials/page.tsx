@@ -20,6 +20,11 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         'Contact information for local officials -- school board, county commission, and water board members.',
     },
+    twitter: {
+      title: 'Contact Your Officials | BIBB United',
+      description:
+        'Contact information for local officials -- school board, county commission, and water board members.',
+    },
   }
 }
 

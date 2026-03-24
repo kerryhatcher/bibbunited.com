@@ -16,6 +16,11 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         'Upcoming school board and public meeting dates, times, and locations.',
     },
+    twitter: {
+      title: 'Meeting Schedule | BIBB United',
+      description:
+        'Upcoming school board and public meeting dates, times, and locations.',
+    },
   }
 }
 
