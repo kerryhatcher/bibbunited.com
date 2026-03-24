@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bibbunited
+  namespace: civpulse-dev
+  labels:
+    app: bibbunited
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bibbunited
+  template:
+    metadata:
+      labels:
+        app: bibbunited
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: bibbunited
+          image: ghcr.io/kerryhatcher/bibbunited.com:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: bibbunited-secrets
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: NEXT_TELEMETRY_DISABLED
+              value: "1"
+          volumeMounts:
+            - name: media
+              mountPath: /app/media
+            - name: nextjs-cache
+              mountPath: /app/.next/cache
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          securityContext:
+            runAsUser: 65534
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: bibbunited-media
+        - name: nextjs-cache
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}

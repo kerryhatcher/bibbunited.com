@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bibbunited-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/kerryhatcher/bibbunited.com.git
+    targetRevision: main
+    path: argocd/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: civpulse-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
