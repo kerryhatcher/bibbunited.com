@@ -29,12 +29,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Editor can add a call-to-action block (text + link) to any page or news post
   4. Editor can activate and deactivate a site-wide urgent banner with custom message and optional link
   5. All content persists in PostgreSQL and survives app restarts
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md -- Scaffold project, PostgreSQL config, Media collection, reusable fields (slug, CTA)
+- [ ] 01-02-PLAN.md -- Lexical editor blocks, Pages and NewsPosts collections with drafts and rich text
+- [ ] 01-03-PLAN.md -- UrgentBanner global, final config wiring, admin panel verification
 
 ### Phase 2: Brand & Design System
 **Goal**: BIBB United has a distinctive activist visual identity and a reusable Tailwind component system that enforces it across the site
