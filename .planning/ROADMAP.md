@@ -44,7 +44,7 @@
   4. Media files are served with long-lived cache headers and the X-Powered-By header is suppressed
 **Plans**: 2 plans
 Plans:
-- [ ] 09-01-PLAN.md -- Users displayName field, DB migration, Next.js cache/security headers
+- [x] 09-01-PLAN.md -- Users displayName field, DB migration, Next.js cache/security headers
 - [ ] 09-02-PLAN.md -- Seed script overhaul: images, OG image, Navigation/Homepage globals, Officials, Meetings
 
 ### Phase 10: Component Migration & Visual Fixes

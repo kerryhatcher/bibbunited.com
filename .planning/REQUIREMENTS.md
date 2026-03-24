@@ -20,7 +20,7 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 - [ ] **A11Y-02**: User can skip to main content via visible skip-to-content link on keyboard focus
 - [ ] **A11Y-03**: Mobile menu close button is not focusable when slide-out panel is hidden
 - [ ] **A11Y-04**: Footer links have visible high-contrast focus indicators on dark background
-- [ ] **A11Y-05**: All seed images have descriptive, context-specific alt text
+- [x] **A11Y-05**: All seed images have descriptive, context-specific alt text
 
 ### Component Migration
 
@@ -46,8 +46,8 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: Media files served with long-lived cache headers (Cache-Control: public, max-age=31536000)
-- [ ] **INFRA-02**: X-Powered-By response header is not exposed in production
+- [x] **INFRA-01**: Media files served with long-lived cache headers (Cache-Control: public, max-age=31536000)
+- [x] **INFRA-02**: X-Powered-By response header is not exposed in production
 - [ ] **INFRA-03**: Homepage has priority 1.0 in sitemap.xml
 
 ### Quality Assurance
@@ -104,7 +104,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | A11Y-02 | Phase 11 | Pending |
 | A11Y-03 | Phase 10 | Pending |
 | A11Y-04 | Phase 11 | Pending |
-| A11Y-05 | Phase 9 | Pending |
+| A11Y-05 | Phase 9 | Complete |
 | COMP-01 | Phase 10 | Pending |
 | COMP-02 | Phase 10 | Pending |
 | SEO-05 | Phase 12 | Pending |
@@ -118,8 +118,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-04 | Phase 11 | Pending |
 | UX-05 | Phase 11 | Pending |
 | UX-06 | Phase 11 | Pending |
-| INFRA-01 | Phase 9 | Pending |
-| INFRA-02 | Phase 9 | Pending |
+| INFRA-01 | Phase 9 | Complete |
+| INFRA-02 | Phase 9 | Complete |
 | INFRA-03 | Phase 12 | Pending |
 | QA-01 | Phase 13 | Pending |
 
