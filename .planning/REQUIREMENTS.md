@@ -13,7 +13,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **CONT-02**: User can create and edit news posts with title, body, publish date, and featured image
 - [ ] **CONT-03**: Each page and news post has a configurable call-to-action block (CTA text + link)
 - [ ] **CONT-04**: Editor can activate a site-wide urgent banner with custom message and optional link
-- [ ] **CONT-05**: Non-technical editors can publish and manage all content via Payload CMS admin UI
+- [x] **CONT-05**: Non-technical editors can publish and manage all content via Payload CMS admin UI
 
 ### Navigation
 
@@ -48,7 +48,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **DEPLOY-01**: Dockerized Next.js + Payload app as single container
 - [ ] **DEPLOY-02**: K8s manifests for deployment with Traefik ingress
 - [ ] **DEPLOY-03**: Cloudflare tunnel configuration with admin route cache bypass
-- [ ] **DEPLOY-04**: PostgreSQL connection configured for cluster database
+- [x] **DEPLOY-04**: PostgreSQL connection configured for cluster database
 - [ ] **DEPLOY-05**: Persistent storage for media uploads (survives pod restarts)
 
 ## v2 Requirements
@@ -97,7 +97,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONT-02 | Phase 1 | Pending |
 | CONT-03 | Phase 1 | Pending |
 | CONT-04 | Phase 1 | Pending |
-| CONT-05 | Phase 1 | Pending |
+| CONT-05 | Phase 1 | Complete |
 | NAV-01 | Phase 3 | Pending |
 | NAV-02 | Phase 3 | Pending |
 | NAV-03 | Phase 3 | Pending |
@@ -117,7 +117,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DEPLOY-01 | Phase 4 | Pending |
 | DEPLOY-02 | Phase 4 | Pending |
 | DEPLOY-03 | Phase 4 | Pending |
-| DEPLOY-04 | Phase 1 | Pending |
+| DEPLOY-04 | Phase 1 | Complete |
 | DEPLOY-05 | Phase 4 | Pending |
 
 **Coverage:**
