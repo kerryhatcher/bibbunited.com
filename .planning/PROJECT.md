@@ -12,17 +12,18 @@ Community members can find clear, actionable information about their local schoo
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] CMS-managed pages with rich text editor (headings, images, pull quotes, callouts, embeds, tables) — Validated in Phase 1: CMS Foundation
+- [x] CMS-managed news posts with title, body, publish date, featured image, author — Validated in Phase 1: CMS Foundation
+- [x] Call-to-action blocks on pages and news posts — Validated in Phase 1: CMS Foundation
+- [x] Site-wide urgent banner with toggle, message, optional link — Validated in Phase 1: CMS Foundation
+- [x] PostgreSQL-backed Payload CMS with draft/publish workflow — Validated in Phase 1: CMS Foundation
 
 ### Active
 
-- [ ] CMS-managed pages (deep-dive explainers and resource/reference pages)
-- [ ] CMS-managed news posts (event-driven breaking news and periodic summaries)
 - [ ] CMS-managed navigation menu with one-level dropdowns (internal + external links)
 - [ ] Bold activist visual design — strong colors, attention-grabbing headlines, urgency
 - [ ] Fully responsive, mobile-first layout
 - [ ] Homepage showcasing latest news and key pages
-- [ ] PostgreSQL-backed Payload CMS with multi-user support (2-3 editors)
 - [ ] Dockerized deployment to self-hosted K8s cluster via Traefik + Cloudflare tunnels
 - [ ] BIBB United branding (logo, color palette, typography)
 
@@ -55,7 +56,7 @@ Community members can find clear, actionable information about their local schoo
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Payload CMS 3.x with PostgreSQL | User-specified stack; Payload 3.x has first-class Next.js integration | -- Pending |
+| Payload CMS 3.x with PostgreSQL | User-specified stack; Payload 3.x has first-class Next.js integration | Validated — Phase 1 |
 | Self-hosted K8s deployment | User has existing infrastructure; avoids vendor lock-in and recurring cloud costs | -- Pending |
 | Bold activist visual direction | Site's purpose is advocacy — design should convey urgency and demand attention | -- Pending |
 | Two content types (pages + news) | Covers both evergreen reference content and timely updates | -- Pending |
@@ -78,4 +79,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-23 after initialization*
+*Last updated: 2026-03-24 after Phase 1 completion*
