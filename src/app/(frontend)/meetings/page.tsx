@@ -4,11 +4,19 @@ import configPromise from '@payload-config'
 import { Section } from '@/components/ui/Section'
 import { Calendar, Clock, MapPin, ExternalLink } from 'lucide-react'
 import { format, isPast } from 'date-fns'
+import { JsonLdScript, breadcrumbJsonLd } from '@/lib/jsonLd'
 
-export const metadata: Metadata = {
-  title: 'Meeting Schedule | BIBB United',
-  description:
-    'Upcoming school board and public meeting dates, times, and locations.',
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Meeting Schedule',
+    description:
+      'Upcoming school board and public meeting dates, times, and locations.',
+    openGraph: {
+      title: 'Meeting Schedule | BIBB United',
+      description:
+        'Upcoming school board and public meeting dates, times, and locations.',
+    },
+  }
 }
 
 export default async function MeetingsPage() {
@@ -29,6 +37,15 @@ export default async function MeetingsPage() {
 
   return (
     <Section>
+      <JsonLdScript
+        data={breadcrumbJsonLd([
+          { name: 'Home', url: 'https://www.bibbunited.com' },
+          {
+            name: 'Meeting Schedule',
+            url: 'https://www.bibbunited.com/meetings',
+          },
+        ])}
+      />
       <h1 className="text-4xl sm:text-5xl font-heading font-bold uppercase tracking-tight mb-4">
         Meeting Schedule
       </h1>

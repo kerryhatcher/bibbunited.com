@@ -1,4 +1,5 @@
 import React from 'react'
+import type { Metadata } from 'next'
 import { Barlow_Condensed, Inter } from 'next/font/google'
 import { getThemeMode } from '@/lib/getTheme'
 import { getNavigation } from '@/lib/getNavigation'
@@ -20,9 +21,25 @@ const inter = Inter({
   display: 'swap',
 })
 
-export const metadata = {
-  description: 'BIBB United - Civic advocacy for the BIBB community',
-  title: 'BIBB United',
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    metadataBase: new URL('https://www.bibbunited.com'),
+    title: {
+      default: 'BIBB United',
+      template: '%s | BIBB United',
+    },
+    description:
+      'Civic advocacy for the BIBB community -- informing and activating residents on local school system issues.',
+    openGraph: {
+      type: 'website',
+      siteName: 'BIBB United',
+      images: [{ url: '/og-default.png', width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      images: ['/og-default.png'],
+    },
+  }
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {

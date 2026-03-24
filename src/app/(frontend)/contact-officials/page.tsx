@@ -3,12 +3,24 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { Section } from '@/components/ui/Section'
 import { Mail, Phone, User } from 'lucide-react'
+import {
+  JsonLdScript,
+  governmentOrgJsonLd,
+  breadcrumbJsonLd,
+} from '@/lib/jsonLd'
 import type { Official, Media } from '@/payload-types'
 
-export const metadata: Metadata = {
-  title: 'Contact Your Officials | BIBB United',
-  description:
-    'Contact information for local officials — school board, county commission, and water board members.',
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Contact Your Officials',
+    description:
+      'Contact information for local officials -- school board, county commission, and water board members.',
+    openGraph: {
+      title: 'Contact Your Officials | BIBB United',
+      description:
+        'Contact information for local officials -- school board, county commission, and water board members.',
+    },
+  }
 }
 
 const bodyLabels: Record<string, string> = {
@@ -40,6 +52,33 @@ export default async function ContactOfficialsPage() {
 
   return (
     <Section>
+      <JsonLdScript
+        data={breadcrumbJsonLd([
+          { name: 'Home', url: 'https://www.bibbunited.com' },
+          {
+            name: 'Contact Your Officials',
+            url: 'https://www.bibbunited.com/contact-officials',
+          },
+        ])}
+      />
+      {bodyOrder.map((key) => {
+        const group = grouped[key]
+        if (!group || group.length === 0) return null
+        return (
+          <JsonLdScript
+            key={`jsonld-${key}`}
+            data={governmentOrgJsonLd(
+              bodyLabels[key] || key,
+              group.map((o) => ({
+                name: o.name,
+                role: o.role,
+                email: o.email || undefined,
+                phone: o.phone || undefined,
+              })),
+            )}
+          />
+        )
+      })}
       <h1 className="text-4xl sm:text-5xl font-heading font-bold uppercase tracking-tight mb-4">
         Contact Your Officials
       </h1>

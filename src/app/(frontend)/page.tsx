@@ -5,12 +5,20 @@ import { getHomepage } from '@/lib/getHomepage'
 import { HeroSpotlight } from '@/components/homepage/HeroSpotlight'
 import { LatestNews } from '@/components/homepage/LatestNews'
 import { TopicCallouts } from '@/components/homepage/TopicCallouts'
+import { JsonLdScript, organizationJsonLd, websiteJsonLd } from '@/lib/jsonLd'
 import type { NewsPost, Media, Page as PageType } from '@/payload-types'
 
-export const metadata: Metadata = {
-  title: 'BIBB United — Civic Advocacy for the BIBB Community',
-  description:
-    'Informing and activating BIBB community residents on local school system issues.',
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'BIBB United -- Civic Advocacy for the BIBB Community',
+    description:
+      'Informing and activating BIBB community residents on local school system issues.',
+    openGraph: {
+      title: 'BIBB United -- Civic Advocacy for the BIBB Community',
+      description:
+        'Informing and activating BIBB community residents on local school system issues.',
+    },
+  }
 }
 
 export default async function HomePage() {
@@ -54,6 +62,8 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLdScript data={organizationJsonLd()} />
+      <JsonLdScript data={websiteJsonLd()} />
       <HeroSpotlight stories={heroStories} />
       <LatestNews posts={latestNews.docs} />
       {topicCallouts.length > 0 && <TopicCallouts callouts={topicCallouts} />}

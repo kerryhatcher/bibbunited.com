@@ -7,6 +7,11 @@ import { RichTextRenderer } from '@/components/shared/RichTextRenderer'
 import { DateDisplay } from '@/components/shared/DateDisplay'
 import { PrintButton } from '@/components/shared/PrintButton'
 import { Button } from '@/components/ui/Button'
+import {
+  JsonLdScript,
+  newsArticleJsonLd,
+  breadcrumbJsonLd,
+} from '@/lib/jsonLd'
 import type { NewsPost, Media, User } from '@/payload-types'
 
 type Args = {
@@ -29,11 +34,39 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const result = await payload.find({
     collection: 'news-posts',
     where: { slug: { equals: slug } },
+    depth: 1,
     limit: 1,
   })
   const post = result.docs[0]
   if (!post) return { title: 'Not Found' }
-  return { title: `${post.title} | BIBB United` }
+
+  const title = post.meta?.title || post.title
+  const description = post.meta?.description || undefined
+  // Use SEO image override, fall back to featured image
+  const seoImage =
+    typeof post.meta?.image === 'object'
+      ? (post.meta.image as Media)?.url ?? null
+      : null
+  const featuredImg =
+    typeof post.featuredImage === 'object'
+      ? (post.featuredImage as Media)?.url ?? null
+      : null
+  const ogImage = seoImage || featuredImg
+
+  return {
+    title: `${title} | BIBB United`,
+    description,
+    openGraph: {
+      title: `${title} | BIBB United`,
+      description,
+      ...(ogImage && { images: [{ url: ogImage, width: 1200, height: 630 }] }),
+    },
+    twitter: {
+      title: `${title} | BIBB United`,
+      description,
+      ...(ogImage && { images: [ogImage] }),
+    },
+  }
 }
 
 export default async function NewsArticlePage({ params }: Args) {
@@ -61,6 +94,27 @@ export default async function NewsArticlePage({ params }: Args) {
 
   return (
     <>
+      <JsonLdScript
+        data={newsArticleJsonLd({
+          title: post.title,
+          slug: post.slug || '',
+          publishDate: post.publishDate,
+          updatedAt: post.updatedAt,
+          authorName: authorName || 'BIBB United',
+          imageUrl: featuredImage?.url || undefined,
+          description: post.meta?.description || undefined,
+        })}
+      />
+      <JsonLdScript
+        data={breadcrumbJsonLd([
+          { name: 'Home', url: 'https://www.bibbunited.com' },
+          { name: 'News', url: 'https://www.bibbunited.com/news' },
+          {
+            name: post.title,
+            url: `https://www.bibbunited.com/news/${post.slug}`,
+          },
+        ])}
+      />
       {featuredImage?.url && (
         <div className="w-full aspect-video relative">
           <img
