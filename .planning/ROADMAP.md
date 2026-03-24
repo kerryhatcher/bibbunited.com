@@ -140,6 +140,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 2. Brand & Design System | 0/2 | Planned    |  |
 | 3. Site Pages & Navigation | 1/3 | In progress | - |
 | 4. SEO & Production Deployment | 0/3 | Not started | - |
-| 5. Critical Build & Route Fixes | 0/2 | Not started | - |
+| 5. Critical Build & Route Fixes | 0/2 | Planned    |  |
 | 6. Responsive Device Testing | 0/0 | Not started | - |
 | 7. Audit Documentation Cleanup | 0/0 | Not started | - |

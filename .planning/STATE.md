@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Milestone complete
-stopped_at: Completed 04-02-PLAN.md
-last_updated: "2026-03-24T14:11:34.154Z"
+status: Ready to plan
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-03-24T15:59:13.549Z"
 progress:
-  total_phases: 4
-  completed_phases: 4
-  total_plans: 11
-  completed_plans: 11
+  total_phases: 7
+  completed_phases: 5
+  total_plans: 13
+  completed_plans: 13
 ---
 
 # Project State
@@ -19,11 +19,11 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-23)
 
 **Core value:** Community members can find clear, actionable information about their local school system and know exactly what to do about it.
-**Current focus:** Phase 04 — seo-production-deployment
+**Current focus:** Phase 05 — critical-build-route-fixes
 
 ## Current Position
 
-Phase: 04
+Phase: 06
 Plan: Not started
 
 ## Performance Metrics
@@ -56,6 +56,8 @@ Plan: Not started
 | Phase 04 P01 | 2min | 3 tasks | 6 files |
 | Phase 04 P03 | 3min | 3 tasks | 15 files |
 | Phase 04 P02 | 4min | 2 tasks | 7 files |
+| Phase 05 P02 | 1min | 1 tasks | 1 files |
+| Phase 05 P01 | 2min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -90,6 +92,8 @@ Recent decisions affecting current work:
 - [Phase 04]: GitOps pattern: CI builds to GHCR, updates manifests with SHA tags, ArgoCD syncs to cluster
 - [Phase 04]: JSON-LD rendered via React.createElement script tag with XSS unicode escaping
 - [Phase 04]: OG image fallback chain: SEO override > featuredImage > og-default.png from layout
+- [Phase 05]: News listing page follows existing card grid pattern with 50-post limit and published filter
+- [Phase 05]: Filter generateStaticParams by _status=published and guard null slugs
 
 ### Pending Todos
 
@@ -103,6 +107,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-24T14:06:32.245Z
-Stopped at: Completed 04-02-PLAN.md
+Last session: 2026-03-24T15:34:43.240Z
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None
