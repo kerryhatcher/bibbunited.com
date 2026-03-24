@@ -114,3 +114,11 @@ body {
 .prose img {
   border-radius: 0;
 }
+
+/* ===== Logo mode-dependent color ===== */
+.logo-bibb {
+  color: var(--color-navy);
+}
+[data-mode="urgent"] .logo-bibb {
+  color: #FFFFFF;
+}
