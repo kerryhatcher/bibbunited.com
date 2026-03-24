@@ -9,6 +9,25 @@ import { JsonLdScript, organizationJsonLd, websiteJsonLd } from '@/lib/jsonLd'
 import type { NewsPost, Media, Page as PageType } from '@/payload-types'
 
 export async function generateMetadata(): Promise<Metadata> {
+  const payload = await getPayload({ config: configPromise })
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || ''
+  const latestNews = await payload.find({
+    collection: 'news-posts',
+    limit: 1,
+    sort: '-publishDate',
+    depth: 1,
+    where: { _status: { equals: 'published' } },
+  })
+  const firstPost = latestNews.docs[0]
+  const featuredImg =
+    typeof firstPost?.featuredImage === 'object'
+      ? (firstPost.featuredImage as Media)?.url ?? null
+      : null
+  // Construct absolute URL: prepend serverUrl to relative media path
+  const ogImage = featuredImg
+    ? `${serverUrl}${featuredImg}`
+    : `${serverUrl}/og-default.png`
+
   return {
     title: 'BIBB United -- Civic Advocacy for the BIBB Community',
     description:
@@ -17,6 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'BIBB United -- Civic Advocacy for the BIBB Community',
       description:
         'Informing and activating BIBB community residents on local school system issues.',
+      images: [{ url: ogImage, width: 1200, height: 630 }],
     },
   }
 }
