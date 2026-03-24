@@ -17,9 +17,12 @@ export async function generateStaticParams() {
   const pages = await payload.find({
     collection: 'pages',
     limit: 100,
+    where: { _status: { equals: 'published' } },
     select: { slug: true },
   })
-  return pages.docs.map((page) => ({ slug: page.slug }))
+  return pages.docs
+    .filter((page): page is typeof page & { slug: string } => typeof page.slug === 'string')
+    .map((page) => ({ slug: page.slug }))
 }
 
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
