@@ -1,40 +1,16 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* ===== Community Mode (Light - default) ===== */
-:root {
-  --brand-bg-dominant: #FFFFFF;
-  --brand-bg-secondary: #1B2A4A;
-  --brand-accent: #DC2626;
-  --brand-text-primary: #111827;
-  --brand-text-secondary: #4B5563;
-  --brand-text-on-dark: #FFFFFF;
-  --brand-text-on-accent: #FFFFFF;
-  --brand-border: #D1D5DB;
-}
-
-/* ===== Urgent Mode (Dark) overrides ===== */
-[data-mode="urgent"] {
-  --brand-bg-dominant: #0F172A;
-  --brand-bg-secondary: #1E293B;
-  --brand-accent: #EF4444;
-  --brand-text-primary: #F8FAFC;
-  --brand-text-secondary: #94A3B8;
-  --brand-text-on-dark: #FFFFFF;
-  --brand-text-on-accent: #FFFFFF;
-  --brand-border: #334155;
-}
-
+/* ===== Register mode-switching tokens with Tailwind (initial = no static value) ===== */
 @theme {
-  /* Mode-switching colors (reference CSS vars) */
-  --color-bg-dominant: var(--brand-bg-dominant);
-  --color-bg-secondary: var(--brand-bg-secondary);
-  --color-accent: var(--brand-accent);
-  --color-text-primary: var(--brand-text-primary);
-  --color-text-secondary: var(--brand-text-secondary);
-  --color-text-on-dark: var(--brand-text-on-dark);
-  --color-text-on-accent: var(--brand-text-on-accent);
-  --color-border: var(--brand-border);
+  --color-bg-dominant: initial;
+  --color-bg-secondary: initial;
+  --color-accent: initial;
+  --color-text-primary: initial;
+  --color-text-secondary: initial;
+  --color-text-on-dark: initial;
+  --color-text-on-accent: initial;
+  --color-border: initial;
 
   /* Static colors (same in both modes) */
   --color-navy: #1B2A4A;
@@ -47,6 +23,30 @@
   /* Custom spacing */
   --spacing-section: 64px;
   --spacing-section-mobile: 32px;
+}
+
+/* ===== Community Mode (Light - default) ===== */
+:root {
+  --color-bg-dominant: #FFFFFF;
+  --color-bg-secondary: #1B2A4A;
+  --color-accent: #DC2626;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-on-dark: #FFFFFF;
+  --color-text-on-accent: #FFFFFF;
+  --color-border: #D1D5DB;
+}
+
+/* ===== Urgent Mode (Dark) overrides ===== */
+[data-mode="urgent"] {
+  --color-bg-dominant: #0F172A;
+  --color-bg-secondary: #1E293B;
+  --color-accent: #EF4444;
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-text-on-dark: #FFFFFF;
+  --color-text-on-accent: #FFFFFF;
+  --color-border: #334155;
 }
 
 /* ===== Base resets ===== */
@@ -87,12 +87,12 @@ body {
 
 /* ===== Typography prose overrides ===== */
 .prose {
-  --tw-prose-body: var(--brand-text-primary);
-  --tw-prose-headings: var(--brand-text-primary);
-  --tw-prose-links: var(--brand-accent);
-  --tw-prose-bold: var(--brand-text-primary);
-  --tw-prose-quotes: var(--brand-text-primary);
-  --tw-prose-quote-borders: var(--brand-accent);
+  --tw-prose-body: var(--color-text-primary);
+  --tw-prose-headings: var(--color-text-primary);
+  --tw-prose-links: var(--color-accent);
+  --tw-prose-bold: var(--color-text-primary);
+  --tw-prose-quotes: var(--color-text-primary);
+  --tw-prose-quote-borders: var(--color-accent);
   max-width: 65ch;
 }
 
@@ -116,9 +116,7 @@ body {
 }
 
 /* ===== Logo mode-dependent color ===== */
+/* Inherits from parent section: white on dark backgrounds, navy on light */
 .logo-bibb {
-  color: var(--color-navy);
-}
-[data-mode="urgent"] .logo-bibb {
-  color: #FFFFFF;
+  color: inherit;
 }
