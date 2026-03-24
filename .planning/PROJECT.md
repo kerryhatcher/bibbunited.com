@@ -49,6 +49,12 @@ Community members can find clear, actionable information about their local schoo
 - [x] Twitter Card metadata on all public pages — Validated in Phase 5
 - [x] Orphaned scaffold routes removed — Validated in Phase 5
 
+### Validated in Phase 6: Responsive Device Testing
+
+- [x] Fully responsive, mobile-first layout tested on real device sizes (DSGN-04) — Validated in Phase 6
+- [x] Playwright test suite: 115 tests across 5 viewports (320px, 375px, 768px, 1024px, 1440px)
+- [x] All 6 public routes verified for overflow, clipping, and navigation functionality
+
 ### Out of Scope
 
 - User accounts / login for visitors — this is a broadcast site, not a community platform
@@ -104,4 +110,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-24 after Phase 5 completion (build fixes and route completion)*
+*Last updated: 2026-03-24 after Phase 6 completion (responsive device testing — DSGN-04 satisfied)*
