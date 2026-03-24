@@ -1,220 +1,576 @@
-# Technology Stack
+# Technology Stack -- v1.1 Production Polish
 
-**Project:** BIBB United -- Civic Advocacy Website
-**Researched:** 2026-03-23
-**Overall Confidence:** MEDIUM (versions based on training data through May 2025; cannot verify latest releases as of March 2026 -- run `npm view <pkg> version` before scaffolding)
+**Project:** BIBB United
+**Milestone:** v1.1 Production Polish (25 UI/UX fixes)
+**Researched:** 2026-03-24
+**Scope:** No new dependencies. Configuration changes and migration patterns for existing stack.
 
-## Version Verification Required
+## Installed Stack (Verified)
 
-All version numbers below reflect the latest stable releases known through May 2025. Before starting development, verify current versions by running:
+| Technology | Installed Version | Purpose |
+|------------|------------------|---------|
+| Next.js | 16.2.1 | Full-stack framework |
+| React | 19.2.4 | UI rendering |
+| Tailwind CSS | 4.2.2 | Utility-first CSS |
+| Payload CMS | 3.80.0 | Headless CMS |
+| next-sitemap | 4.2.3 | Sitemap generation |
+| sharp | 0.34.2 | Image optimization |
+| lucide-react | 1.0.1 | Icons |
+| date-fns | 4.1.0 | Date formatting |
 
-```bash
-npm view next version
-npm view payload version
-npm view tailwindcss version
-npm view react version
-npm view @payloadcms/db-postgres version
-npm view @payloadcms/richtext-lexical version
-```
+**Important correction:** PROJECT.md and CLAUDE.md reference "Next.js 15" but the actual installed version is **Next.js 16.2.1**. All research below is based on the actual installed version.
 
-Update this document with actual verified versions before scaffolding the project.
+## No New Dependencies Required
+
+The v1.1 milestone requires zero new npm packages. All 25 fixes use existing dependencies with configuration or code-level changes only.
 
 ---
 
-## Recommended Stack
+## Migration Pattern: next/image (Issues H4)
 
-### Core Framework
+### What Changes
 
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Next.js | ^15.x | Full-stack React framework | Payload CMS 3.x is built on Next.js -- they share the same server process. Next.js App Router provides SSR/SSG for fast page loads (critical for civic engagement sites where mobile users on spotty connections need quick access). | MEDIUM |
-| React | ^19.x | UI rendering | Next.js 15 ships with React 19. Server Components reduce client bundle size, which matters for a content-heavy site. | MEDIUM |
-| TypeScript | ^5.x | Type safety | Payload 3.x is TypeScript-native and auto-generates types from your collections. Skipping TS means losing half of Payload's developer experience. Non-negotiable for this stack. | HIGH |
+Replace all `<img>` tags with `<Image>` from `next/image` for automatic WebP/AVIF conversion, responsive srcSet, lazy loading, and blur-up placeholders.
 
-### CMS
+**Confidence:** HIGH (verified against Next.js 16.2.1 official docs)
 
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Payload CMS | ^3.x | Headless CMS with admin UI | User-specified. Payload 3.x runs inside the same Next.js process (not a separate server), so there is one deployment artifact. The admin panel is built-in and requires zero frontend work. Perfect for 2-3 non-technical editors. | HIGH |
-| @payloadcms/db-postgres | ^3.x | PostgreSQL database adapter | Payload 3.x uses Drizzle ORM under the hood for PostgreSQL. User-specified database. Drizzle handles migrations automatically via `payload migrate`. | HIGH |
-| @payloadcms/richtext-lexical | ^3.x | Rich text editor | Lexical is Payload 3.x's default and recommended rich text editor (replaces Slate from v2). Built by Meta, actively maintained, excellent for structured content editing that non-technical editors need. | HIGH |
-| @payloadcms/plugin-seo | ^3.x | SEO metadata | Adds title, description, og:image fields to collections automatically. Essential for a civic advocacy site that needs to be discoverable and shareable on social media. | HIGH |
+### Next.js 16 Breaking Changes for Images
 
-### Styling
+These are version-specific gotchas that apply to this project:
 
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Tailwind CSS | ^4.x | Utility-first CSS | User-specified. Tailwind v4 (released early 2025) has a new CSS-first configuration approach -- no more `tailwind.config.js`, configuration happens in CSS via `@theme`. Faster builds with the new Oxide engine. | MEDIUM |
-| @tailwindcss/typography | ^0.5.x | Prose styling for CMS content | The `prose` class handles all the typography for CMS-rendered rich text content. Without it, you would need to manually style every HTML element that Lexical outputs. Essential for a content-heavy site. | HIGH |
+| Change | Default in 16.x | Action Needed |
+|--------|-----------------|---------------|
+| `images.qualities` | `[75]` only | No action -- quality 75 is appropriate for a civic content site. Only add more if editors need higher quality uploads. |
+| `images.minimumCacheTTL` | 14400 (4 hours) | No action -- the 4-hour default is better than the old 60-second default. Payload media rarely changes after upload. |
+| `images.imageSizes` | Removed 16px | No action -- 16px images are not used on this site. |
+| `priority` prop deprecated | Use `preload` instead | Use `preload` on above-the-fold images (hero spotlight, first news card). |
+| `images.localPatterns.search` | Required for query strings | Not applicable -- Payload media URLs use path-based routing, not query strings. |
+| Local IP restriction | Blocked by default | May need `dangerouslyAllowLocalIP: true` for local dev if testing with `localhost`. Not needed in production. |
 
-### Database
+### Payload CMS Media and next/image Integration
 
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| PostgreSQL | 16.x | Primary database | User-specified. Payload's Drizzle-based postgres adapter is production-ready. PostgreSQL 16 is the current stable release line. Use the official Docker image for K8s deployment. | HIGH |
+Payload serves media at `/api/media/file/{filename}`. Since this is a same-origin path (not an external URL), **no `remotePatterns` configuration is needed**. The Next.js image optimizer handles same-origin paths automatically.
 
-### Infrastructure / Deployment
+However, Payload also generates `imageSizes` (thumbnail: 400x300, card: 768xauto, hero: 1920xauto) at paths like `/api/media/file/{filename}-{size}.webp`. Use these pre-generated sizes with the `sizes` prop to avoid double-optimization.
 
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Docker | -- | Container runtime | Single Dockerfile builds the Next.js + Payload app. Multi-stage build: install deps, build, copy to slim runtime image. | HIGH |
-| Node.js | 20 LTS or 22 LTS | Runtime | Next.js 15 requires Node 18.17+. Use 20 LTS (supported through April 2026) or 22 LTS for longer runway. Pin in `.nvmrc` and Dockerfile. | MEDIUM |
-| Traefik | existing | Ingress / reverse proxy | Already in place on user's K8s cluster. No changes needed -- just configure Ingress resource or IngressRoute CRD. | HIGH |
-| Cloudflare Tunnels | existing | Public access | Already in place. Provides SSL termination and DDoS protection for free. | HIGH |
+### Recommended next.config.ts Changes
 
-### Supporting Libraries
+```typescript
+const nextConfig: NextConfig = {
+  output: 'standalone',
+  poweredByHeader: false, // Also fixes L3
+  // images config: defaults are good for this project
+  // qualities: [75] -- fine for content site
+  // minimumCacheTTL: 14400 -- fine for CMS media
+}
+```
 
-| Library | Version | Purpose | When to Use | Confidence |
-|---------|---------|---------|-------------|------------|
-| sharp | ^0.33.x | Image optimization | Required by Next.js `next/image` for server-side image processing. Must be explicitly installed for Docker deployments. | HIGH |
-| @payloadcms/storage-local | ^3.x | Local file storage | For media uploads (logos, article images). Stores to a persistent volume in K8s. Use this over S3 since the site is self-hosted and small-scale. | HIGH |
-| date-fns | ^4.x | Date formatting | For displaying "Published 2 days ago" on news posts and formatting meeting dates. Lightweight, tree-shakeable, no moment.js bloat. | MEDIUM |
-| lucide-react | latest | Icons | Clean, consistent icon set. MIT licensed. Covers all common UI icons (menu, arrow, external-link, calendar, etc.). Better than loading a full icon font. | MEDIUM |
-| next-sitemap | ^4.x | Sitemap generation | Auto-generates sitemap.xml from Next.js routes. Helps with SEO discovery for a civic info site. | MEDIUM |
+### Migration Pattern by Component
 
-### Development Tools
+**HeroSpotlight.tsx (client component):**
+```typescript
+import Image from 'next/image'
 
-| Tool | Version | Purpose | Why | Confidence |
-|------|---------|---------|-----|------------|
-| ESLint | ^9.x | Linting | ESLint 9 with flat config. Next.js ships `eslint-config-next` for framework-specific rules. | MEDIUM |
-| Prettier | ^3.x | Code formatting | Consistent code style. Use `prettier-plugin-tailwindcss` to auto-sort Tailwind classes. | HIGH |
-| prettier-plugin-tailwindcss | latest | Tailwind class sorting | Automatically sorts Tailwind utility classes in a consistent order. Prevents pointless diff noise and makes templates readable. | HIGH |
+// Use fill + sizes for responsive hero images
+<Image
+  src={story.featuredImage.url}
+  alt={story.featuredImage.alt || story.title}
+  fill
+  sizes="100vw"
+  className="object-cover"
+  preload={index === 0}  // Only preload first slide
+/>
+```
+
+**Card.tsx (server-compatible component):**
+```typescript
+import Image from 'next/image'
+
+// Use width/height for fixed-aspect cards
+<Image
+  src={imageSrc}
+  alt={imageAlt}
+  width={768}
+  height={432}
+  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+  className="w-full h-full object-cover"
+/>
+```
+
+**News article page (server component):**
+```typescript
+import Image from 'next/image'
+
+// Hero image with preload for LCP
+<Image
+  src={post.featuredImage.url}
+  alt={post.featuredImage.alt}
+  width={1200}
+  height={630}
+  sizes="(max-width: 768px) 100vw, 800px"
+  preload
+  className="w-full"
+/>
+```
+
+### Key Rules
+
+1. Use `fill` when the container determines size (hero spotlight). Parent must be `position: relative`.
+2. Use `width`/`height` when aspect ratio is known (cards, article heroes).
+3. Always provide `sizes` prop to prevent serving oversized images on mobile.
+4. Use `preload` (not the deprecated `priority`) on the LCP image of each page.
+5. The `alt` prop is required -- pull from Payload's `alt` field on the Media collection.
+
+---
+
+## Migration Pattern: next/link (Issue H3)
+
+### What Changes
+
+Replace all `<a href>` for internal routes with `<Link>` from `next/link` for client-side SPA navigation.
+
+**Confidence:** HIGH (no breaking changes to Link in Next.js 16)
+
+### Usage in Server Components vs Client Components
+
+`<Link>` works identically in both Server Components and Client Components in Next.js 16. No special handling needed.
+
+### Migration Pattern
+
+```typescript
+import Link from 'next/link'
+
+// Before
+<a href="/news/some-article">Read More</a>
+
+// After
+<Link href="/news/some-article">Read More</Link>
+```
+
+### Key Rules
+
+1. Use `<Link>` for all internal routes (starting with `/`).
+2. Keep `<a>` for external URLs (starting with `http`).
+3. The Card component needs conditional rendering: `<Link>` for internal `href`, `<a>` for external.
+4. `<Link>` renders an `<a>` tag in the DOM -- all existing className and aria attributes transfer directly.
+5. No `passHref` or `legacyBehavior` needed in Next.js 16.
+
+### Files to Update
+
+| File | Internal Links | Notes |
+|------|---------------|-------|
+| `src/components/layout/Header.tsx` | Nav items, logo | Check if href starts with `/` vs `http` |
+| `src/components/layout/Footer.tsx` | Footer nav, CTA buttons | Same internal/external check |
+| `src/components/ui/Button.tsx` | Button-as-link variants | Conditional Link vs a |
+| `src/components/ui/Card.tsx` | Card wrapper link | Always internal (news posts) |
+| `src/components/homepage/HeroSpotlight.tsx` | Story title links | Always `/news/{slug}` |
+| `src/components/homepage/LatestNews.tsx` | News card links | Always internal |
+| `src/app/(frontend)/news/[slug]/page.tsx` | Back links, related | Internal routes |
+
+---
+
+## Fix Pattern: Tailwind v4 CSS Variable Cascade (Issue C1)
+
+### Root Cause Analysis
+
+**Confidence:** HIGH (verified by reading the actual styles.css and understanding CSS specificity)
+
+The `text-text-on-dark` utility class generates `color: var(--color-text-on-dark)`. This works correctly when applied directly to an element. The problem is **CSS inheritance**, not Tailwind.
+
+The Footer component has a `bg-bg-secondary` (navy) background. Child elements like `<h2>`, `<p>`, and `<a>` do not have `text-text-on-dark` applied individually. They inherit `color` from `body`, which sets `color: var(--color-text-primary)` (#111827 -- dark gray). The child elements never see the `text-text-on-dark` variable.
+
+This is standard CSS behavior, not a Tailwind v4 bug. The `@theme { --color-text-on-dark: initial; }` registration with `initial` is correct -- it tells Tailwind to generate the utility class. The `:root` block correctly sets the actual value.
+
+### Fix Options (Ranked)
+
+**Option 1 (Recommended): Use `text-white` directly**
+Since `--color-text-on-dark` is `#FFFFFF` in both modes (community and urgent), replace `text-text-on-dark` with `text-white` on the Footer wrapper and ensure all children inherit white text. This is the simplest and most reliable approach.
+
+```html
+<footer class="bg-bg-secondary text-white">
+  <!-- All children inherit white text -->
+</footer>
+```
+
+**Option 2: Apply text color to every child element individually**
+More verbose, more fragile, no benefit over Option 1.
+
+**Option 3: Add CSS rule to force inheritance**
+```css
+.bg-bg-secondary { color: var(--color-text-on-dark); }
+```
+This couples background and text color, which may cause unexpected effects elsewhere.
+
+### Recommendation
+
+Use Option 1. The `text-text-on-dark` token exists for cases where you want semantic naming, but in the Footer component, `text-white` is clearer, works in both modes, and avoids the inheritance trap entirely.
+
+---
+
+## Fix Pattern: next-sitemap Dynamic Routes (Issue M4)
+
+### Current Problem
+
+The `next-sitemap.config.cjs` generates only static routes. News articles and CMS pages are not included.
+
+**Confidence:** HIGH (verified config file, next-sitemap docs)
+
+### Recommended Approach: additionalPaths
+
+Use `additionalPaths` to fetch all published content from Payload's REST API at build time:
+
+```javascript
+/** @type {import('next-sitemap').IConfig} */
+module.exports = {
+  siteUrl: 'https://www.bibbunited.com',
+  generateRobotsTxt: true,
+  robotsTxtOptions: {
+    policies: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: '/admin/',
+      },
+    ],
+  },
+  exclude: ['/admin/*', '/api/*'],
+  changefreq: 'weekly',
+  priority: 0.7,
+
+  additionalPaths: async (config) => {
+    const result = []
+
+    // Fetch news posts
+    try {
+      const newsRes = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/news-posts?limit=1000&depth=0`,
+      )
+      const newsData = await newsRes.json()
+      if (newsData.docs) {
+        for (const post of newsData.docs) {
+          result.push({
+            loc: `/news/${post.slug}`,
+            changefreq: 'monthly',
+            priority: 0.8,
+            lastmod: post.updatedAt || post.createdAt,
+          })
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to fetch news posts for sitemap:', e)
+    }
+
+    // Fetch CMS pages
+    try {
+      const pagesRes = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/pages?limit=1000&depth=0`,
+      )
+      const pagesData = await pagesRes.json()
+      if (pagesData.docs) {
+        for (const page of pagesData.docs) {
+          result.push({
+            loc: `/${page.slug}`,
+            changefreq: 'monthly',
+            priority: 0.6,
+            lastmod: page.updatedAt || page.createdAt,
+          })
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to fetch pages for sitemap:', e)
+    }
+
+    return result
+  },
+
+  // Fix L5: Homepage priority
+  transform: async (config, path) => {
+    const defaults = {
+      loc: path,
+      changefreq: config.changefreq,
+      priority: config.priority,
+      lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
+    }
+
+    if (path === '/') {
+      return { ...defaults, priority: 1.0, changefreq: 'daily' }
+    }
+    if (path.startsWith('/news')) {
+      return { ...defaults, priority: 0.8 }
+    }
+    return defaults
+  },
+}
+```
+
+### Alternative: Next.js App Router sitemap.ts
+
+Payload's official guide recommends using Next.js's built-in `app/sitemap.ts` instead of next-sitemap. This uses Payload's Local API (no network hop) and generates the sitemap at request time. However, since the project already uses next-sitemap and it works for static routes, extending it with `additionalPaths` is less disruptive.
+
+**Decision:** Stay with next-sitemap + `additionalPaths`. It runs at build time (postbuild script), requires no architectural change, and handles the small content volume of this site.
+
+---
+
+## Fix Pattern: Canonical URLs via Metadata API (Issue M2)
+
+### Implementation
+
+**Confidence:** HIGH (verified with Next.js 16 metadata API docs)
+
+Next.js metadata API supports `alternates.canonical` in `generateMetadata`. Since the root layout already sets `metadataBase`, canonical URLs can use relative paths.
+
+### Root Layout (global default)
+
+The root layout already has `metadataBase: new URL('https://www.bibbunited.com')`. Add `alternates.canonical` to the layout-level metadata:
+
+```typescript
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    metadataBase: new URL('https://www.bibbunited.com'),
+    alternates: {
+      canonical: './',  // Auto-resolves to current route path
+    },
+    // ... existing metadata
+  }
+}
+```
+
+### Per-Page Override (dynamic routes)
+
+For news articles and CMS pages, set canonical explicitly in `generateMetadata`:
+
+```typescript
+// src/app/(frontend)/news/[slug]/page.tsx
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+  return {
+    alternates: {
+      canonical: `/news/${slug}`,
+    },
+    // ... other metadata
+  }
+}
+```
+
+### Important: metadataBase Resolution
+
+With `metadataBase` set to `https://www.bibbunited.com`, a canonical of `/news/some-article` resolves to `https://www.bibbunited.com/news/some-article`. This is the correct behavior.
+
+---
+
+## Fix Pattern: Complete Open Graph Tags (Issue M3)
+
+### Current State
+
+The root layout sets `og:type`, `og:site_name`, and `og:image` globally. Missing: `og:url` on most pages, `og:description` on news articles.
+
+**Confidence:** HIGH (metadata API is well-documented)
+
+### Implementation
+
+Open Graph metadata merges hierarchically in Next.js. The root layout provides defaults; pages override specific fields.
+
+**Root layout additions:**
+```typescript
+openGraph: {
+  type: 'website',
+  siteName: 'BIBB United',
+  locale: 'en_US',
+  images: [{ url: '/og-default.png', width: 1200, height: 630, alt: 'BIBB United' }],
+},
+```
+
+**Per-page additions (news articles):**
+```typescript
+openGraph: {
+  type: 'article',
+  title: post.title,
+  description: post.meta?.description || excerpt,
+  url: `/news/${slug}`,
+  publishedTime: post.publishDate,
+  images: post.featuredImage
+    ? [{ url: post.featuredImage.url, width: 1200, height: 630, alt: post.featuredImage.alt }]
+    : undefined,
+},
+```
+
+**Per-page additions (static pages):**
+```typescript
+openGraph: {
+  url: `/${slug}`,
+  // title and description inherit from page metadata
+},
+```
+
+### og:url and canonical
+
+`og:url` should match the canonical URL. Since both use the same slug pattern, they stay in sync automatically.
+
+---
+
+## Fix Pattern: Payload Media Cache Headers (Issue M9)
+
+### The Problem
+
+Payload 3.x runs inside Next.js -- there is no Express middleware anymore. Media files served at `/api/media/file/*` have no cache-control headers.
+
+**Confidence:** MEDIUM (Payload 3.x removed Express middleware; the Next.js proxy approach is the recommended alternative, but official Payload docs are sparse on this specific topic)
+
+### Recommended Approach: Next.js Proxy (was Middleware)
+
+In Next.js 16, `middleware.ts` has been renamed to `proxy.ts`. Create a proxy that adds cache headers to media responses:
+
+```typescript
+// src/proxy.ts
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // Add cache headers to Payload media files
+  if (pathname.startsWith('/api/media/file/')) {
+    const response = NextResponse.next()
+    response.headers.set(
+      'Cache-Control',
+      'public, max-age=31536000, immutable'
+    )
+    return response
+  }
+
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: ['/api/media/file/:path*'],
+}
+```
+
+**Why `immutable`:** Payload media filenames include a hash or are unique per upload. The same URL always serves the same file. One year cache with `immutable` is safe.
+
+**Caveat:** In Next.js 16, the proxy runs in the Node.js runtime (not Edge). This is fine for self-hosted K8s. The proxy only adds a header -- it does not read the response body, so overhead is minimal.
+
+### Alternative: Traefik-Level Caching
+
+Since the site runs behind Traefik, you could add cache headers at the ingress level:
+
+```yaml
+# IngressRoute middleware
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: media-cache-headers
+spec:
+  headers:
+    customResponseHeaders:
+      Cache-Control: "public, max-age=31536000, immutable"
+```
+
+This avoids any Node.js processing but requires K8s manifest changes. The proxy approach is simpler for this milestone.
+
+**Decision:** Use `proxy.ts` for now. It keeps the fix in the application layer and is easier to test.
+
+---
+
+## Fix Pattern: Duplicate Title Template (Issue M1)
+
+### Root Cause
+
+The layout template is `%s | BIBB United`. Page-level `generateMetadata` in `news/[slug]/page.tsx` returns titles like `"Article Title | BIBB United"`, producing `"Article Title | BIBB United | BIBB United"`.
+
+**Confidence:** HIGH
+
+### Fix
+
+Page-level metadata should return only the page title without the suffix. The layout template adds the suffix:
+
+```typescript
+// In generateMetadata for news/[slug]/page.tsx
+return {
+  title: post.title,  // Not `${post.title} | BIBB United`
+  // ...
+}
+```
+
+Also check `[slug]/page.tsx` for the same pattern and the `generateTitle` function in `payload.config.ts` which appends ` | BIBB United` -- this is only used for Payload admin SEO preview, not for the frontend metadata.
+
+---
+
+## Configuration: poweredByHeader (Issue L3)
+
+Add to `next.config.ts`:
+
+```typescript
+const nextConfig: NextConfig = {
+  output: 'standalone',
+  poweredByHeader: false,  // Removes X-Powered-By: Next.js header
+  // ...
+}
+```
+
+**Confidence:** HIGH (stable Next.js config option)
+
+---
+
+## Turbopack Consideration
+
+Next.js 16 uses Turbopack by default. The current `next.config.ts` has a `webpack` configuration block (for `resolve.extensionAlias`). This means **`next build` will fail by default** in Next.js 16 because it detects a webpack config and refuses to run Turbopack with it.
+
+The current `package.json` build script does not include `--webpack` flag. This needs investigation:
+- Either the build is already using `--webpack` implicitly
+- Or the `withPayload` wrapper handles this
+- Or the build has been tested and works
+
+**Action needed:** Verify that `pnpm build` succeeds. If it fails, add `--webpack` to the build script or migrate the `extensionAlias` config to Turbopack format.
+
+**Confidence:** MEDIUM (the upgrade guide clearly states this is a breaking change, but the project is already running on 16.2.1, so it may have been resolved during initial setup)
 
 ---
 
 ## Alternatives Considered
 
-| Category | Recommended | Alternative | Why Not |
+| Fix Area | Recommended | Alternative | Why Not |
 |----------|-------------|-------------|---------|
-| Rich text editor | Lexical (@payloadcms/richtext-lexical) | Slate (@payloadcms/richtext-slate) | Slate is the legacy Payload editor, deprecated in favor of Lexical in 3.x. Lexical has better performance, extensibility, and active maintenance from Meta. |
-| Database | PostgreSQL via @payloadcms/db-postgres | MongoDB via @payloadcms/db-mongodb | User specified PostgreSQL. Additionally, PostgreSQL is better for structured civic data (meetings, contacts, budgets) and has stronger querying capabilities. |
-| CSS framework | Tailwind CSS v4 | CSS Modules / styled-components | User specified Tailwind. Additionally, Tailwind's utility approach is faster for building responsive layouts and the bold, high-contrast design this site needs. |
-| Image storage | @payloadcms/storage-local | @payloadcms/storage-s3 | S3 adds unnecessary complexity and cost for a small self-hosted site. Local storage with a K8s PersistentVolume is simpler and sufficient for this scale. If the site grows significantly, migration to S3 is straightforward later. |
-| Icons | lucide-react | Font Awesome / Heroicons | Lucide is tree-shakeable (only import what you use), MIT licensed, and has excellent React integration. Heroicons is also good but Lucide has a broader icon set. Font Awesome is bloated for this use case. |
-| Date library | date-fns | Day.js / Moment.js | Moment.js is deprecated and massive. Day.js is fine but date-fns is more tree-shakeable and has better TypeScript types. |
-| ORM | Drizzle (built into Payload) | Prisma | Not a choice -- Payload 3.x uses Drizzle internally for PostgreSQL. Do not add Prisma alongside it; that would be two ORMs fighting over the same database. If you need custom queries beyond Payload's Local API, use Drizzle directly via Payload's `db` property. |
-| Deployment | Docker on K8s | Vercel / Netlify | User has existing K8s infrastructure. Self-hosted avoids vendor lock-in and recurring costs. Payload 3.x works perfectly in Docker. |
-| State management | None (React Server Components) | Redux / Zustand | This is a content site, not a SPA. Server Components handle data fetching. There is no complex client-side state to manage. Adding a state management library would be over-engineering. |
-| Email / Newsletter | None (out of scope) | Resend / SendGrid | Explicitly deferred to v2 in PROJECT.md. |
-| Search | None (out of scope) | Algolia / Meilisearch | Explicitly deferred to v2 in PROJECT.md. Site will be small enough to navigate via menu. |
-| Analytics | None (defer) | Plausible / Umami | Not mentioned in requirements, but worth adding in a later phase. Both are privacy-friendly, self-hostable analytics that align with civic transparency values. Recommend Plausible for v2. |
+| Sitemap | next-sitemap additionalPaths | Next.js app/sitemap.ts | Already using next-sitemap; less disruptive to extend |
+| Media cache | Next.js proxy.ts | Traefik middleware | Keep fix in app layer; easier to test |
+| CSS variable fix | `text-white` directly | Fix @theme inheritance | Not a Tailwind bug; `text-white` is clearer |
+| Image component | next/image with fill/sizes | Keep `<img>` with lazy loading | next/image provides format conversion, srcset, and optimization for free |
+| OG completeness | Metadata API per-page | react-helmet / next-seo | Metadata API is built into Next.js 16; no extra dependency |
 
 ---
 
-## Payload CMS 3.x Architecture Notes
+## Build Configuration Changes Summary
 
-Payload 3.x is fundamentally different from 2.x. Key points for this project:
-
-1. **Single process:** Payload runs inside your Next.js app, not as a separate Express server. Your `next.config.mjs` wraps with `withPayload()`. One build, one deploy.
-
-2. **App Router required:** Payload 3.x uses Next.js App Router (`app/` directory), not Pages Router. All frontend routes use React Server Components by default.
-
-3. **Admin at `/admin`:** Payload serves its admin panel at `/admin` automatically. The `(payload)/` route group in your `app/` directory handles this. No separate admin app needed.
-
-4. **Collections = content types:** Each collection (pages, news-posts, media, users) gets a Payload config file defining fields, access control, and hooks. Payload auto-generates the admin UI and REST/GraphQL APIs.
-
-5. **Local API:** For SSR pages, use Payload's Local API (`payload.find()`, `payload.findByID()`) instead of hitting REST endpoints. It runs in-process with zero network overhead. This is the recommended pattern for Next.js Server Components.
-
-6. **Migrations:** `npx payload migrate:create` generates SQL migrations from schema changes. `npx payload migrate` applies them. Drizzle handles the SQL generation.
-
-7. **Blocks and fields:** Payload's block-based field type lets editors compose flexible page layouts from predefined components -- perfect for the mix of explainer pages and resource pages this site needs.
-
----
-
-## Installation
-
-```bash
-# Scaffold with Payload's official create tool (recommended for new projects)
-npx create-payload-app@latest bibbunited --db postgres
-
-# Or manual installation into an existing Next.js project:
-npm install payload @payloadcms/next @payloadcms/db-postgres @payloadcms/richtext-lexical
-
-# Styling
-npm install tailwindcss @tailwindcss/typography
-
-# Payload plugins
-npm install @payloadcms/plugin-seo @payloadcms/storage-local
-
-# Supporting libraries
-npm install sharp date-fns lucide-react next-sitemap
-
-# Dev dependencies
-npm install -D typescript @types/node @types/react eslint prettier prettier-plugin-tailwindcss eslint-config-next
+```typescript
+// next.config.ts -- required changes
+const nextConfig: NextConfig = {
+  output: 'standalone',
+  poweredByHeader: false,  // NEW: Remove X-Powered-By header (L3)
+  // webpack config stays as-is (or migrate to turbopack)
+}
 ```
 
-**Recommended approach:** Use `npx create-payload-app@latest` to scaffold. It generates the correct Next.js + Payload integration boilerplate, including the admin route group, payload.config.ts, and proper next.config.mjs with `withPayload()`. Then layer on Tailwind, plugins, and supporting libraries.
-
----
-
-## Environment Variables
-
-```bash
-# .env (never committed)
-DATABASE_URI=postgresql://user:password@localhost:5432/bibbunited
-PAYLOAD_SECRET=<random-32-char-string>  # Used for auth token signing
-NEXT_PUBLIC_SITE_URL=https://bibbunited.com  # For SEO and og:image URLs
+```javascript
+// next-sitemap.config.cjs -- required changes
+// Add: additionalPaths function to fetch CMS content
+// Add: transform function for per-route priority
 ```
 
----
-
-## What NOT to Use
-
-| Technology | Why Not |
-|------------|---------|
-| Payload CMS 2.x | Completely different architecture (separate Express server). Payload 3.x is the current major version. Do not follow 2.x tutorials. |
-| Pages Router (`pages/` directory) | Payload 3.x requires App Router. Mixing routers creates confusion and routing conflicts. |
-| Prisma | Payload 3.x uses Drizzle internally. Adding Prisma creates ORM conflicts. Use Payload's Local API or Drizzle directly. |
-| Redux / Zustand / Jotai | No complex client state in a content site. Server Components handle data fetching. |
-| Slate rich text editor | Deprecated in Payload 3.x. Lexical is the supported replacement. |
-| express / fastify (standalone) | Payload 3.x runs inside Next.js. No separate API server needed. |
-| MongoDB | User specified PostgreSQL. Additionally, relational data (civic records, budget breakdowns) maps better to PostgreSQL. |
-| CSS-in-JS (styled-components, emotion) | Conflicts with React Server Components (which render on the server). Tailwind is user-specified and works perfectly with RSC. |
-| Moment.js | Deprecated. Use date-fns. |
-| GraphQL client (Apollo, urql) | Payload's Local API is faster for server-side rendering (no network hop). Only use REST/GraphQL for external integrations, which are not in v1 scope. |
-
----
-
-## Docker Build Strategy
-
-```dockerfile
-# Multi-stage build for production
-FROM node:20-alpine AS base
-
-FROM base AS deps
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
-
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN npm run build
-
-FROM base AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/public ./public
-
-EXPOSE 3000
-CMD ["node", "server.js"]
+```typescript
+// src/proxy.ts -- NEW FILE
+// Add cache headers to /api/media/file/* requests
 ```
 
-Key considerations:
-- Use `output: 'standalone'` in `next.config.mjs` for Docker deployments. This creates a self-contained server without needing `node_modules`.
-- `sharp` must be available at build time for image optimization.
-- Mount a PersistentVolume at the media upload directory for file persistence across pod restarts.
+No changes to `package.json` dependencies. No new packages to install.
 
 ---
 
 ## Sources
 
-- Payload CMS 3.x documentation (payloadcms.com/docs) -- HIGH confidence for architecture patterns
-- Next.js documentation (nextjs.org/docs) -- HIGH confidence for App Router patterns
-- Tailwind CSS documentation (tailwindcss.com) -- HIGH confidence for utility patterns
-- npm registry -- version numbers could not be verified live; flagged as MEDIUM confidence
-
-**NOTE:** All version numbers should be verified against npm before project scaffolding. The specific minor/patch versions may have advanced since training data cutoff (May 2025). The major version recommendations (Next.js 15, React 19, Payload 3.x, Tailwind 4.x, Node 20 LTS) are very likely still current as of March 2026, but verify.
+- [Next.js 16 Upgrade Guide](https://nextjs.org/docs/app/guides/upgrading/version-16) -- HIGH confidence, official docs
+- [Next.js Image Component API Reference](https://nextjs.org/docs/app/api-reference/components/image) -- HIGH confidence, official docs
+- [Next.js generateMetadata API Reference](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) -- HIGH confidence, official docs
+- [next-sitemap GitHub](https://github.com/iamvishnusankar/next-sitemap) -- HIGH confidence, official repo
+- [Payload CMS Community Help: Cache Headers](https://payloadcms.com/community-help/discord/adding-modifying-api-cache-headers) -- MEDIUM confidence, community discussion
+- [Payload CMS Sitemap Guide](https://payloadcms.com/posts/guides/how-to-build-an-seo-friendly-sitemap-in-payload--nextjs) -- MEDIUM confidence, official guide
+- [Tailwind CSS v4 Theme Documentation](https://tailwindcss.com/docs/adding-custom-styles) -- HIGH confidence, official docs

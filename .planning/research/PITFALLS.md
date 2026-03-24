@@ -1,319 +1,368 @@
-# Domain Pitfalls
+# Domain Pitfalls: v1.1 Production Polish
 
-**Domain:** Civic advocacy website (Payload CMS 3.x + Next.js + PostgreSQL, self-hosted K8s)
-**Researched:** 2026-03-23
-**Confidence:** MEDIUM (based on training data through May 2025; web verification tools unavailable)
+**Domain:** Production polish fixes for Next.js 15 + Tailwind v4 + Payload CMS 3.x civic advocacy site
+**Researched:** 2026-03-24
+**Scope:** Pitfalls specific to adding 25 UI/UX fixes to an existing shipped v1.0 codebase
 
 ---
 
 ## Critical Pitfalls
 
-Mistakes that cause rewrites, data loss, or major architecture issues.
+Mistakes that cause regressions, broken pages, or require reverting multiple fixes.
 
-### Pitfall 1: Treating Payload CMS 3.x Like a Standalone Backend
+### Pitfall 1: next/image Migration Causes CLS Spikes When Fill Mode Parent Lacks Position Relative
 
-**What goes wrong:** Payload CMS 3.x is fundamentally different from Payload 2.x and most other headless CMSs. In 3.x, Payload runs *inside* your Next.js application -- it is a Next.js plugin, not a separate server. Developers who treat it as a decoupled backend (separate API server, separate deployment) will fight the architecture at every turn, create unnecessary complexity, and miss the entire point of the integration.
+**What goes wrong:** Replacing `<img>` with `<Image fill>` in components like `Card.tsx`, `HeroSpotlight.tsx`, and `news/[slug]/page.tsx` without ensuring the parent container has `position: relative` (or `absolute`/`fixed`). The image either overflows its container or collapses to 0 height, creating a massive CLS regression -- the exact opposite of what the migration intends.
 
-**Why it happens:** Developers familiar with headless CMS patterns (Strapi, Contentful, Sanity) assume Payload 3.x works the same way: API on one side, frontend on the other. Payload 2.x also ran as a separate Express server, so even Payload veterans carry the wrong mental model.
+**Why it happens:** The current code uses `<img className="w-full h-full object-cover">` inside containers with `aspect-video` or `aspect-[16/7]`. These containers implicitly size the `<img>` because it flows normally. `<Image fill>` uses `position: absolute` internally, so it no longer contributes to container height. If the parent only relies on child content for sizing, the container collapses.
 
-**Consequences:**
-- Unnecessary API fetch layers when you could use Payload's Local API directly in Server Components
-- Double deployment complexity (two containers instead of one)
-- Missed performance wins from server-side data access without HTTP round-trips
-- Confusing routing conflicts if you try to run Payload separately
+**Consequences:** CLS score jumps from 0.00 to 0.3+ (failing Core Web Vitals). Hero spotlight becomes invisible. News cards lose their image area. This is the single highest-risk regression in the entire milestone because the current CLS score is perfect.
 
 **Prevention:**
-- Start from `create-payload-app` with the Next.js template -- never try to bolt Payload onto an existing Next.js app initially
-- Use Payload's Local API (`payload.find()`, `payload.findByID()`) directly in React Server Components and Route Handlers -- no REST/GraphQL needed for your own frontend
-- Deploy as a single Next.js application, not separate frontend and CMS containers
-- Reserve REST/GraphQL endpoints for external integrations only (if ever needed)
+- Every `<Image fill>` parent MUST have `className="relative"` AND explicit dimensions (via `aspect-video`, `aspect-[16/7]`, or fixed height).
+- Audit each replacement site individually. The pattern differs per component:
+  - `Card.tsx` line 23: Parent `<div className="w-full aspect-video overflow-hidden">` -- add `relative`.
+  - `HeroSpotlight.tsx` line 59: Parent `<div className="min-w-full relative h-full">` -- already has `relative`, safe.
+  - `news/[slug]/page.tsx` line 122: Parent `<div className="w-full aspect-video relative">` -- already has `relative`, safe.
+  - `contact-officials/page.tsx` line 123-125: Needs audit for parent positioning.
+- Test CLS with Lighthouse after EVERY image migration, not just at the end.
 
-**Detection:** If you see `fetch('http://localhost:3000/api/...')` in your own Server Components, you are doing it wrong.
+**Detection:** Lighthouse CLS > 0.01 on any page. Visual: images either invisible or overflowing viewport.
 
-**Phase:** Must be understood in Phase 1 (project scaffolding). Getting this wrong poisons every subsequent phase.
+**Confidence:** HIGH -- this is the #1 documented cause of CLS regressions in next/image migrations.
 
 ---
 
-### Pitfall 2: Payload + PostgreSQL Migration Chaos
+### Pitfall 2: next/image With Payload CMS Media URLs Requires Correct `sizes` Prop AND May Need `remotePatterns`
 
-**What goes wrong:** Payload 3.x with the `@payloadcms/db-postgres` adapter uses Drizzle ORM under the hood. Schema changes in your Payload collections generate database migrations. Developers who do not understand this migration pipeline will end up with broken databases, lost data in production, or migration conflicts between environments.
+**What goes wrong:** Using `<Image>` with Payload media URLs like `/api/media/file/seed-test-image.jpg` without the `sizes` prop causes the browser to download the largest image variant (potentially 3840px wide) on all devices. Alternatively, if the Payload server URL changes or images are served from a different domain in production (e.g., via CDN), `<Image>` throws an "Un-configured Host" error and the page crashes.
 
-**Why it happens:** Payload abstracts the database layer so well that developers forget there *is* a database migration layer. They modify collection schemas, restart the dev server (which auto-pushes schema changes in development mode), and never learn to generate or manage proper migration files. Then they deploy to production and the database is out of sync.
+**Why it happens:** Payload CMS 3.x serves media through its API at `/api/media/file/[filename]`. These are same-origin relative URLs in development but could become absolute URLs if `NEXT_PUBLIC_SERVER_URL` is set or if a CDN fronts the media. The current codebase constructs image URLs as `img?.url` which returns relative paths like `/api/media/file/seed-test-image.jpg`. Next.js Image optimization works with these relative paths by default, but:
+1. Without `sizes`, the `srcset` defaults to `100vw` -- every device downloads the largest variant.
+2. Payload's `url` field sometimes returns absolute URLs (depending on `serverURL` config), which need `remotePatterns`.
 
-**Consequences:**
-- Production database out of sync with code
-- Data loss from destructive schema changes applied without migration review
-- Migration conflicts when multiple developers change collections simultaneously
-- Inability to roll back bad schema changes
+**Consequences:** Without `sizes`: 5-10x bandwidth waste on mobile (1200px image for a 363px card). Without `remotePatterns`: hard crash in production if URL format changes.
 
 **Prevention:**
-- Learn the Payload migration commands early: `payload migrate:create`, `payload migrate`, `payload migrate:status`
-- Never rely on `push` mode (auto-sync) outside of local development
-- Always generate explicit migration files for any collection schema change before merging to main
-- Review generated SQL in migration files before applying -- Payload/Drizzle may generate destructive operations (DROP COLUMN) for what seems like a minor change
-- Back up the production database before running migrations
-- Store migration files in version control alongside code
+- Add `sizes` prop to every `<Image>` based on its actual rendered size:
+  - Hero spotlight: `sizes="100vw"` (full-width)
+  - News cards (grid): `sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"`
+  - Article hero: `sizes="100vw"`
+  - Official photos: `sizes="96px"` (small thumbnails)
+- Add `remotePatterns` to `next.config.ts` as a defensive measure:
+  ```typescript
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'www.bibbunited.com', pathname: '/api/media/**' },
+      { protocol: 'http', hostname: 'localhost', pathname: '/api/media/**' },
+    ],
+  },
+  ```
+- Verify that `sharp` is available in the Docker build (it is -- `package.json` lists `sharp: ^0.34.2`).
 
-**Detection:** If your `migrations/` directory is empty but you have been changing collections for weeks, you have a ticking time bomb.
+**Detection:** Network tab shows 1200px images loaded on mobile viewport. Build error mentioning "Un-configured Host."
 
-**Phase:** Must be established in Phase 1 (database setup). Migration discipline is a habit, not a feature you bolt on later.
+**Confidence:** HIGH -- directly observed in the codebase.
 
 ---
 
-### Pitfall 3: Ignoring Content Modeling Up Front
+### Pitfall 3: Tailwind v4 `@theme initial` Tokens Do Not Cascade -- The Footer Contrast Bug Pattern Will Repeat
 
-**What goes wrong:** Teams rush to build pages and components without carefully designing their Payload collections, fields, and relationships first. They end up with collections that are too flat (everything in one giant "Page" collection), too granular (dozens of tiny collections with complex relationships), or structurally unable to support the content strategy.
+**What goes wrong:** The footer contrast bug (C1) is caused by `text-text-on-dark` not working because `@theme { --color-text-on-dark: initial; }` registers the token for Tailwind utility generation but does NOT set a value in the cascade. Child elements that do not explicitly receive the class inherit `color` from `body` (which is `--color-text-primary: #111827` -- dark gray), not from the parent's `text-text-on-dark` class. The fix for C1 (swapping to `text-white`) is correct, but the same pattern will bite ANY component that tries to use `text-text-on-dark`, `text-text-on-accent`, or `bg-bg-secondary` via inheritance rather than direct application.
 
-**Why it happens:** Developers want to see UI fast. Content modeling feels like "planning" rather than "building." For a civic advocacy site specifically, the content is deceptively simple ("just articles and pages") so teams skip the modeling step.
+**Why it happens:** Tailwind v4's `@theme { --variable: initial; }` syntax tells Tailwind "this is a valid token, generate utilities for it" but sets the CSS custom property to `initial` (which means "use the inherited value" per CSS spec). The actual values are set in `:root {}`. When `text-text-on-dark` is applied to a parent element, it sets `color: var(--color-text-on-dark)` which resolves to `#FFFFFF`. But child elements that do NOT have this class applied inherit `color` from their computed value chain -- which may come from `body { color: var(--color-text-primary); }` rather than the parent, depending on specificity and cascade order.
 
-**Consequences:**
-- Editors fight the admin UI because the content structure does not match their mental model
-- Rewriting collections means rewriting all frontend queries and components
-- Loss of content when restructuring collections in production
-- Feature requests like "I want to tag this article with the related board meeting" become impossible without a collection rewrite
+**Consequences:** Invisible or low-contrast text in any dark-background section (footer, hero overlay, urgent banner, accent-background CTAs). This will recur whenever a new component is added to a dark section.
 
 **Prevention:**
-- Map out all content types *before* writing any Payload collection config:
-  - **Pages** (evergreen reference content): What fields? Flexible layout blocks or fixed structure?
-  - **News Posts** (timely updates): Categories? Tags? Related pages? Author attribution?
-  - **Navigation**: Payload Global or collection? How do dropdowns work?
-  - **Shared elements**: CTAs, contact cards, meeting schedules -- are these blocks, globals, or standalone collections?
-- Interview the editorial team (even informally): "Walk me through publishing a budget explainer. What information do you need to enter?"
-- Use Payload's block-based fields for flexible page layouts rather than trying to predict every page structure
-- Design for the *editorial workflow*, not just the data model
+- Apply text color classes DIRECTLY to every text element in dark sections. Do not rely on inheritance from a parent `text-text-on-dark`.
+- For the footer fix, apply `text-white` to the footer container AND every child text element (`h2`, `p`, `span`, `a` tags).
+- Document this as a project convention: "In Tailwind v4 with `@theme initial`, color utilities must be applied directly to elements, not relied upon via CSS inheritance."
+- Consider adding a utility class in `styles.css` that forces color inheritance:
+  ```css
+  .force-text-white, .force-text-white * { color: #fff; }
+  ```
 
-**Detection:** If an editor says "Where do I put this?" or "I had to copy-paste the same info into three places," your content model is wrong.
+**Detection:** Visual inspection of any dark-background section. Lighthouse accessibility audit (contrast ratios below 4.5:1).
 
-**Phase:** Phase 1 (content modeling) -- this must be done before building any frontend components or pages.
+**Confidence:** HIGH -- root cause confirmed in the codebase at `styles.css` lines 6-13 and `Footer.tsx` line 7.
 
 ---
 
-### Pitfall 4: Docker Image Bloat and Cold Start Catastrophe
+### Pitfall 4: Next.js Metadata Template Produces Double Site Name When Page Metadata Includes Suffix
 
-**What goes wrong:** The combined Payload CMS + Next.js application produces a large Docker image (often 1GB+) with slow cold starts. On a self-hosted K8s cluster with limited resources, this means slow deployments, pod restart failures due to health check timeouts, and OOM kills.
+**What goes wrong:** The layout defines `title: { template: '%s | BIBB United' }` (layout.tsx line 29). When page-level `generateMetadata` returns `title: "Article Title | BIBB United"`, the result is "Article Title | BIBB United | BIBB United". This is issue M1.
 
-**Why it happens:** Payload 3.x bundles a full Next.js app plus an admin panel (React app) plus database adapters plus rich text editors (Lexical/Slate) plus file upload handling. Without careful optimization, the node_modules directory and build output are massive. Next.js itself has known cold-start overhead in server mode.
+**Why it happens:** Next.js metadata merging is shallow. The page title string replaces `%s` in the template literally. If the page title already includes the suffix, it gets doubled. The current code in `news/[slug]/page.tsx` line 60 explicitly appends ` | BIBB United` to the title.
 
-**Consequences:**
-- Pod restarts take 30-60 seconds (or more), causing visible downtime on a small cluster
-- K8s health checks fail during slow starts, triggering restart loops (CrashLoopBackOff)
-- Memory usage spikes during builds, potentially killing the build pod
-- Large images slow down CI/CD pipelines and image pulls
+**Consequences:** Ugly titles in browser tabs, search results, and social shares. Google may truncate or penalize duplicate-looking titles.
 
 **Prevention:**
-- Use multi-stage Docker builds: build stage with all dev dependencies, production stage with only runtime dependencies
-- Use `next build` with `output: 'standalone'` in `next.config.js` -- this produces a minimal self-contained output
-- Set generous `initialDelaySeconds` on K8s liveness/readiness probes (60-90 seconds)
-- Set appropriate memory limits (512MB minimum, 1GB recommended for Payload + Next.js)
-- Use `.dockerignore` aggressively: exclude `.git`, `node_modules`, `.next/cache`, test files
-- Consider enabling Next.js ISR (Incremental Static Regeneration) for public-facing pages to reduce runtime compute
+- Page-level `generateMetadata` must return the title WITHOUT the suffix. The layout template handles it.
+- For the homepage, use `title: { absolute: 'BIBB United -- Civic Advocacy for the BIBB Community' }` to opt out of the template for that one page (since the homepage title should not follow the "%s | BIBB United" pattern).
+- Audit ALL `generateMetadata` exports across:
+  - `src/app/(frontend)/page.tsx` (homepage -- needs `absolute`)
+  - `src/app/(frontend)/news/[slug]/page.tsx` (remove ` | BIBB United` suffix)
+  - `src/app/(frontend)/[slug]/page.tsx` (check for suffix)
+  - `src/app/(frontend)/news/page.tsx` (check for suffix)
+  - `src/app/(frontend)/contact-officials/page.tsx` (check for suffix)
+  - `src/app/(frontend)/meetings/page.tsx` (check for suffix)
 
-**Detection:** If your Docker image exceeds 500MB or pod startup takes more than 45 seconds, optimize immediately.
+**Detection:** View page source or browser tab title on any article page.
 
-**Phase:** Phase 3 or whenever Docker/deployment is set up. But the `output: 'standalone'` config should be set in Phase 1.
-
----
-
-### Pitfall 5: Rich Text Editor Configuration Debt
-
-**What goes wrong:** Payload 3.x defaults to the Lexical rich text editor. Teams accept the defaults, build out all their content, then realize the editor does not support what their editors need (or supports too much, producing inconsistent content). Changing the rich text configuration after content exists is painful because the stored data format changes.
-
-**Why it happens:** Lexical is powerful but its configuration in Payload is different from typical WYSIWYG setups. The default features may include things you don't want (arbitrary HTML, deeply nested structures) or lack things you do want (callout blocks, embedded CTAs, specific heading levels). Teams discover this after editors have already created content.
-
-**Consequences:**
-- Editors produce inconsistent or broken-looking content because the editor allows too much formatting freedom
-- Content migration required if switching editor configuration after content is written
-- Frontend rendering becomes unpredictable when the rich text structure varies wildly
-- Civic advocacy content (budget tables, action items, official quotes) needs specific formatting that generic rich text may not handle well
-
-**Prevention:**
-- Configure the Lexical editor *explicitly* in Phase 1 -- do not accept defaults
-- Restrict features to only what editors need: headings (H2-H4 only), bold, italic, links, lists, block quotes, and a few custom blocks (callout, CTA, embedded contact card)
-- Remove features editors should NOT use: arbitrary font sizes, colors, alignment, tables (unless specifically needed)
-- Create custom Lexical blocks for recurring civic content patterns: "Action Item" block, "Official Contact" block, "Meeting Date" block
-- Test the editor experience with a real editorial workflow before building frontend rendering
-- Document the allowed formatting in an editorial style guide
-
-**Detection:** If your rich text rendering component has more than 20 node-type cases, or if editors are asking "how do I make this look right?", your editor config needs tightening.
-
-**Phase:** Must be configured in Phase 1 (collection setup) and validated with editors in Phase 2 (content entry testing).
+**Confidence:** HIGH -- directly observed in the codebase.
 
 ---
 
 ## Moderate Pitfalls
 
-### Pitfall 6: Server Component vs. Client Component Boundary Confusion
+Mistakes that cause visible bugs or wasted effort but are fixable without major rework.
 
-**What goes wrong:** Next.js App Router (which Payload 3.x uses) requires developers to understand the server/client component boundary. Interactive elements (dropdowns, mobile menus, forms) need `"use client"` directives, but data fetching should stay on the server. Teams either make everything a Client Component (losing SSR benefits and leaking Payload's Local API to the client bundle) or try to keep everything server-side and cannot add interactivity.
+### Pitfall 5: next/link in a `use client` Component Requires Branching on Link Type
 
-**Why it happens:** The App Router's mental model is genuinely confusing, especially for developers coming from Pages Router or Create React App backgrounds. Payload's Local API only works server-side, adding another constraint.
+**What goes wrong:** `Header.tsx` has `'use client'` at line 1. Replacing `<a href>` with `<Link href>` works fine in client components -- `next/link` is designed for both. However, the `renderLink` function (line 111) constructs an `<a>` element with spread props (`linkProps`). Replacing this with `<Link>` requires changing the prop types: `Link` uses `href` as a required prop (not spread from `HTMLAnchorElement`), and does not accept `target="_blank"` the same way.
+
+**Why it happens:** The current `renderLink` function creates a generic `<a>` with dynamically computed props. `Link` has a different API -- it does not extend `AnchorHTMLAttributes` in the same way. Additionally, `next/link` should NOT be used for external URLs.
+
+**Consequences:** TypeScript compilation errors. If ignored with `@ts-ignore`, the `target="_blank"` behavior for external links may not work correctly with `Link`.
 
 **Prevention:**
-- Establish a clear pattern early: data-fetching wrapper (Server Component) passes data as props to interactive leaf (Client Component)
-- Never import `payload` or call `getPayload()` in a `"use client"` file
-- Create a `components/` directory split: `components/server/` and `components/client/` (or use a naming convention like `*.client.tsx`)
-- For the navigation menu (dropdown + mobile hamburger), fetch nav data in a Server Component layout and pass it to a Client Component `<NavMenu items={items} />`
+- For internal links (`type === 'internal'`): use `<Link href={href}>`.
+- For external links (`type === 'external'` or `newTab === true`): keep as `<a>` tag. `next/link` should NOT be used for external URLs.
+- Refactor `renderLink` to branch on link type:
+  ```tsx
+  function renderLink(item: NavLink, className: string) {
+    const href = resolveHref(item)
+    if (item.type === 'external' || item.newTab) {
+      return <a href={href} className={className} target="_blank" rel="noopener noreferrer">{item.label}</a>
+    }
+    return <Link href={href} className={className}>{item.label}</Link>
+  }
+  ```
+- Apply the same pattern in `Footer.tsx`, `Button.tsx`, and `Card.tsx`.
+- `Footer.tsx` is a Server Component (no `'use client'`) -- `Link` works there too.
+- `Button.tsx` has no `'use client'` directive but is used inside client components. It should still use `Link` for internal hrefs.
 
-**Detection:** If you see `getPayload()` or `payload.find()` in a file with `"use client"`, you have a boundary violation. If your client bundle is unexpectedly large, check for server-only code leaking in.
+**Detection:** TypeScript errors during build. External links not opening in new tabs.
 
-**Phase:** Establish the pattern in Phase 1 (scaffolding). Enforce consistently through all phases.
+**Confidence:** HIGH -- directly observed in codebase analysis.
 
 ---
 
-### Pitfall 7: Neglecting Payload Admin Panel Customization for Non-Technical Editors
+### Pitfall 6: Skip-to-Content Link Hidden Behind Sticky Header (z-index: 50)
 
-**What goes wrong:** Developers leave the Payload admin panel in its default state -- raw field names, no descriptions, no field-level help text, no custom labels. Non-technical editors open the admin panel and see "slug," "publishedAt," "meta.description" and have no idea what to do.
+**What goes wrong:** Adding a skip-to-content link as the first child of `<body>` but styling it with `z-index` lower than the sticky header's `z-50` (z-index: 50). When the user presses Tab and the skip link appears, it renders BEHIND the sticky header and is invisible despite being focused.
 
-**Why it happens:** Developers understand the data model intuitively. They test CMS entry themselves and it "works fine." They forget that the 2-3 editors who will actually use this daily have no context about field names or content architecture.
+**Why it happens:** The header has `className="sticky top-0 z-50"`. A skip link using typical CSS like `top: 0; z-index: 40` will be covered by the header.
+
+**Consequences:** Skip link is technically present (passes automated audits) but visually invisible (fails manual testing and real keyboard users).
 
 **Prevention:**
-- Add `label` and `admin.description` to every field in every collection
-- Use `admin.placeholder` to show example content ("e.g., Budget Analysis: Where Your Tax Dollars Go")
-- Group related fields with `admin.group` or use tabs for complex collections
-- Set sensible `defaultValue` for fields where appropriate (e.g., `publishedAt` defaults to now)
-- Use `admin.condition` to hide fields that are not relevant based on other field values
-- Create a "Dashboard" or custom admin view with a quick-start guide for editors
-- Add field validation with helpful error messages ("Title must be under 80 characters for social sharing")
+- Skip link must have `z-index` HIGHER than 50. Use `z-[9999]` or at minimum `z-[60]`.
+- Position it with `fixed top-0 left-0` or `absolute` -- NOT relative.
+- Style it to be visually hidden by default, visible on focus:
+  ```tsx
+  <a
+    href="#main-content"
+    className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[9999] focus:bg-accent focus:text-white focus:px-4 focus:py-2 focus:font-bold"
+  >
+    Skip to main content
+  </a>
+  ```
+- Add `id="main-content"` and `tabIndex={-1}` to `<main>` so focus actually lands there (not just scroll).
+- The `tabIndex={-1}` is critical in React SPAs -- without it, pressing Tab after activating the skip link sends focus back to the top of the page.
 
-**Detection:** Watch a non-technical person try to create a news post. If they hesitate on any field for more than 5 seconds, that field needs better labeling.
+**Detection:** Keyboard test: Tab once on page load. If skip link is not visible above the header, it fails.
 
-**Phase:** Phase 2 (content type buildout). Should be part of the definition of done for every collection.
+**Confidence:** HIGH -- well-documented accessibility pattern.
 
 ---
 
-### Pitfall 8: SEO and Social Sharing as an Afterthought
+### Pitfall 7: Mobile Menu `inert` Attribute Must Be Applied Bidirectionally
 
-**What goes wrong:** Civic advocacy sites live and die by shareability. When someone shares a budget breakdown or meeting recap on Facebook, Twitter/X, or a community group, the link preview (Open Graph image, title, description) determines whether anyone clicks. Teams build the whole site, then bolt on meta tags at the end, resulting in broken previews, missing images, or generic descriptions.
+**What goes wrong:** Using `inert` only on the off-screen mobile panel (to prevent focus when closed) misses the other half: when the panel IS open, main page content behind the overlay should be `inert` to prevent focus from escaping the menu.
 
-**Why it happens:** SEO/OG feels like a polish task, not a core feature. Developers focus on the page content rendering and forget that most people will encounter the content as a link preview in a social media feed or messaging app.
+**Why it happens:** The H6 fix specifies adding `inert` to the panel when closed. But the reverse is equally important: when the panel is open, users should not be able to Tab into the header, main content, or footer behind the overlay.
 
-**Consequences:**
-- Shared links show generic "BIBB United" title with no preview image -- low click-through
-- Google indexes pages with missing or duplicate meta descriptions
-- Pages lack canonical URLs, causing duplicate content issues
-- No structured data for local organization/civic content
+**Consequences:** Keyboard users can Tab out of the open mobile menu into invisible content behind the overlay. Screen readers announce content that is visually hidden.
 
 **Prevention:**
-- Add SEO fields (meta title, meta description, OG image) to every content collection from day one -- use a reusable Payload field group
-- Generate `<head>` metadata in Next.js `generateMetadata()` functions for every route
-- Create a default OG image template (branded BIBB United card) used when no specific image is set
-- Test social sharing with Facebook's Sharing Debugger and Twitter Card Validator before launch
-- Add `robots.txt` and `sitemap.xml` generation (Next.js has built-in support via `app/sitemap.ts`)
+- When mobile menu is closed: `inert` on the slide-out panel div.
+- When mobile menu is open: `inert` on main page content (or use the overlay's `aria-hidden` pattern plus focus trapping).
+- The `inert` attribute has 93%+ browser support as of 2025 -- safe to use without polyfill.
+- Implementation challenge: the current `Header.tsx` is a client component that renders the mobile panel as a sibling of the main header content, all within the `<header>` element. To make main page content `inert`, you need to restructure so the mobile panel and the rest of the page are siblings, or lift the mobile state to the layout level.
+- Note: React 19 handles boolean `inert` correctly. Pass `inert={true}` when active, `inert={undefined}` (not `false`) to remove the attribute entirely -- passing `false` may render `inert="false"` which still makes the element inert in some browsers.
 
-**Detection:** Paste any page URL into the Facebook Sharing Debugger. If the preview looks wrong or generic, SEO metadata is broken.
+**Detection:** Open mobile menu, press Tab repeatedly. Focus should cycle within the menu only.
 
-**Phase:** SEO field structure in Phase 1 (content modeling). Metadata rendering in Phase 2 (frontend). Testing in Phase 3 (pre-launch).
+**Confidence:** MEDIUM -- `inert` attribute handling in React 19 may need runtime verification.
 
 ---
 
-### Pitfall 9: Traefik + Cloudflare Tunnel Routing Conflicts
+### Pitfall 8: Open Graph Metadata Shallow Merge Erases Parent Layout OG Tags
 
-**What goes wrong:** Running Next.js/Payload behind Traefik with Cloudflare tunnels introduces routing complexity. Payload's admin panel, API routes, and Next.js pages all share the same application but may need different caching, authentication, or routing rules. Misconfigured Traefik IngressRoutes can cause the admin panel to be cached by Cloudflare (serving stale or wrong content), API responses to be cached when they should not be, or WebSocket connections for Payload's live preview to fail.
+**What goes wrong:** When a page defines its own `openGraph` in `generateMetadata`, it completely replaces (not merges) the layout-level `openGraph`. This means page-level OG tags lose `og:site_name` and `og:type` defined in the layout, because Next.js metadata merging is shallow -- child `openGraph` objects replace parent `openGraph` objects entirely.
 
-**Why it happens:** Each layer (Cloudflare, Traefik, Next.js) has its own routing and caching logic. Developers test locally (no proxy layers) and everything works. In production, the proxy chain introduces behaviors not seen in development.
+**Why it happens:** The layout (lines 33-37) defines `openGraph: { type: 'website', siteName: 'BIBB United', images: [...] }`. The homepage page.tsx (lines 35-40) defines its own `openGraph: { title: ..., description: ..., images: [...] }` WITHOUT `type` or `siteName`. The page-level object replaces the layout-level one, so `type` and `siteName` are lost.
 
-**Consequences:**
-- Admin panel serves cached pages from Cloudflare -- editors see stale data or get logged out
-- API POST/PATCH requests fail or return cached GET responses
-- File uploads fail due to request body size limits in Traefik or Cloudflare
-- HTTPS/WSS issues with Payload Live Preview
-- CORS errors when the admin panel tries to reach API routes through the proxy chain
+**Consequences:** Missing `og:type` and `og:site_name` on pages that define their own OG metadata. Social media previews may render incorrectly.
 
 **Prevention:**
-- Set Cloudflare cache rules to bypass cache for `/admin/*` and `/api/*` paths
-- Configure Traefik to pass correct headers: `X-Forwarded-For`, `X-Forwarded-Proto`, `X-Forwarded-Host`
-- Set `serverURL` in Payload config to the full public URL (e.g., `https://bibbunited.com`)
-- Increase Traefik's request body size limit for file uploads (default is often too small): set `maxRequestBodyBytes` in middleware
-- Set Cloudflare's upload limit appropriately (free tier is 100MB, which should be fine)
-- Test the full proxy chain (Cloudflare -> Traefik -> Pod) for both admin and public paths before launch
+- Every page-level `generateMetadata` that includes `openGraph` must also include `type` and `siteName`:
+  ```typescript
+  openGraph: {
+    type: 'article',  // or 'website' for non-article pages
+    siteName: 'BIBB United',
+    title: '...',
+    description: '...',
+    images: [...],
+  },
+  ```
+- Alternatively, create a shared `baseOpenGraph` object imported into every `generateMetadata`:
+  ```typescript
+  export const baseOpenGraph = { siteName: 'BIBB United' }
+  // In page: openGraph: { ...baseOpenGraph, type: 'article', title: '...', ... }
+  ```
+- This applies to ALL pages: homepage, news listing, news articles, slug pages, contact, meetings.
 
-**Detection:** If the admin panel works on `localhost:3000` but breaks behind the proxy, your routing/caching/header config is wrong.
+**Detection:** View page source; search for `og:type` and `og:site_name` meta tags.
 
-**Phase:** Phase 3 (deployment). Must be tested end-to-end before any content is entered in production.
+**Confidence:** HIGH -- confirmed by Next.js docs: "Merging is shallow. Duplicate keys are replaced based on ordering."
 
 ---
 
-### Pitfall 10: No Media/Upload Strategy
+### Pitfall 9: next-sitemap Build-Time Generation Misses CMS Dynamic Routes
 
-**What goes wrong:** Payload CMS handles file uploads (images for articles, documents like PDFs of public records). Without a deliberate storage strategy, files end up stored on the local filesystem inside the Docker container. When the pod restarts, all uploaded files are gone.
+**What goes wrong:** `next-sitemap` runs as `postbuild` (package.json line 9) and generates the sitemap from the `.next` build output. It only includes routes that Next.js statically generated at build time. CMS-managed pages (via `[slug]` route) and news articles (via `news/[slug]`) are only included if `generateStaticParams` was called during build AND the database was accessible during build.
 
-**Why it happens:** Payload defaults to local filesystem storage. In development this works perfectly. Developers do not realize the problem until the first production pod restart wipes all uploaded images.
+**Why it happens:** The current `next-sitemap.config.cjs` has no `additionalPaths` or server-side sitemap configuration. It relies entirely on static file output. If the build runs without database access (common in CI/CD), `generateStaticParams` returns empty arrays, and dynamic pages are omitted.
 
-**Consequences:**
-- All uploaded images and documents lost on pod restart
-- Broken images across the entire site after any deployment
-- Editors re-upload content repeatedly
+**Consequences:** News articles and CMS pages are invisible to search engines. This is issue M4. For a civic advocacy site that depends on discoverability, this is a significant SEO gap.
 
 **Prevention:**
-- Use a persistent volume (PV) in K8s mounted to Payload's upload directory, OR
-- Use an S3-compatible object storage adapter (`@payloadcms/storage-s3` or compatible) with MinIO or a similar self-hosted solution on the K8s cluster, OR
-- Use Cloudflare R2 (S3-compatible, generous free tier) as the storage backend
-- Decide this in Phase 1 and configure it before any content is entered
-- Whichever option is chosen, ensure backups are configured
+- Option A (recommended): Use `additionalPaths` in `next-sitemap.config.cjs` to query Payload at build time:
+  ```javascript
+  additionalPaths: async (config) => {
+    // Requires DATABASE_URI available at build time
+    const result = []
+    // Fetch published news posts
+    // Fetch published pages
+    // Return as { loc: '/news/slug', changefreq: 'weekly', priority: 0.7 }
+    return result
+  },
+  ```
+- Option B: Switch to Next.js built-in `sitemap.ts` (App Router) which runs at request time and can query the database dynamically. This avoids the build-time dependency entirely.
+- Option C: Ensure the build environment (Docker, CI) has database access so `generateStaticParams` populates correctly.
+- For homepage priority (L5): Add `transform` function to set priority per route:
+  ```javascript
+  transform: async (config, path) => ({
+    loc: path,
+    changefreq: config.changefreq,
+    priority: path === '/' ? 1.0 : config.priority,
+    lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
+  }),
+  ```
 
-**Detection:** If your Dockerfile does not mount a volume for `/app/media` (or wherever uploads go), uploads will be lost on restart.
+**Detection:** Check `public/sitemap-0.xml` after build. Count URLs -- should match total published pages + posts + static routes.
 
-**Phase:** Must be decided in Phase 1 (architecture) and implemented in Phase 2 (before editors start uploading content).
+**Confidence:** HIGH -- confirmed by examining `next-sitemap.config.cjs` and `package.json` postbuild script.
+
+---
+
+### Pitfall 10: Removing `pt-16` From Main Hides Content Behind Sticky Header
+
+**What goes wrong:** Issue M5 says `pt-16` on `<main>` creates unnecessary whitespace. But the sticky header is `h-16` (64px). Removing `pt-16` means the first content on every page renders BEHIND the sticky header, hidden from view.
+
+**Why it happens:** The reviewer noted the padding seems unnecessary. But it IS necessary for a `sticky top-0` header -- the main content needs to be offset by the header height so the first element is visible. The issue is that `pt-16` is the correct approach but may need refinement for pages with full-bleed hero images.
+
+**Consequences:** Removing `pt-16` hides the top 64px of every page behind the header. H1 headings, hero images, and breadcrumbs become invisible.
+
+**Prevention:**
+- Do NOT blindly remove `pt-16`. Instead, evaluate per-page:
+  - Pages with full-bleed hero (homepage with HeroSpotlight): the hero could extend behind the header with internal top padding, so main `pt-16` can be kept or the hero can handle it.
+  - Pages without hero (Contact Officials, Meetings, News listing): `pt-16` is correct and necessary.
+- Consider moving padding to individual page layouts or using `scroll-padding-top: 4rem` on `html` for anchor link behavior.
+- If removing `pt-16` from `<main>`, each page component must add its own top padding. This is more flexible but more error-prone (one missed page = content hidden behind header).
+
+**Detection:** After removing padding, check every page visually. Content hidden behind header = regression.
+
+**Confidence:** HIGH -- the sticky header REQUIRES content offset. The review recommendation to simply remove it is misleading.
 
 ---
 
 ## Minor Pitfalls
 
-### Pitfall 11: Overengineering for Future Civic Topics
+### Pitfall 11: Seed Script Navigation Population Must Use Correct Payload Relationship Format
 
-**What goes wrong:** The PROJECT.md notes the site should "support expanding to other civic topics later." Teams interpret this as a requirement to build a multi-topic taxonomy, topic-scoped navigation, and abstract content architecture now. This adds weeks of complexity to v1 for a feature that may never ship.
+**What goes wrong:** Adding navigation items to the seed script requires knowing the exact data shape Payload expects for the `Navigation` global's `items` field, including relationship references to pages. Using the wrong format (e.g., passing a page ID as a number instead of `{ relationTo: 'pages', value: pageId }`) silently fails or creates broken links.
 
 **Prevention:**
-- Build v1 exclusively for the school system topic. No topic taxonomy, no topic routing.
-- Structure content so that *adding* a topic later is straightforward (e.g., adding a "category" field to collections) but do not build the abstraction until it is needed.
-- Document the future expansion path in architecture docs so the team knows the plan without building it now.
+- Check the `Navigation` global's field schema before writing seed data.
+- Create pages FIRST, capture their IDs, then populate navigation with correct relationship format.
+- Use `overrideAccess: true` for global updates in seed scripts.
+- Test navigation rendering after seeding, not just successful API calls.
 
-**Phase:** Phase 1 decision. Resist scope creep in every subsequent phase.
+**Confidence:** MEDIUM -- depends on exact Payload schema definitions not fully audited.
 
 ---
 
-### Pitfall 12: Skipping Accessible Design for Activist Aesthetic
+### Pitfall 12: Canonical URL Must Match Actual Page URL Including Trailing Slash Behavior
 
-**What goes wrong:** Bold, urgent, activist-style design (strong colors, large type, attention-grabbing elements) can easily violate WCAG accessibility guidelines. Low contrast text on colored backgrounds, missing alt text on advocacy graphics, non-focusable interactive elements -- all common in "bold design" implementations.
+**What goes wrong:** Adding `alternates: { canonical: 'https://www.bibbunited.com/news' }` when Next.js serves the page at `https://www.bibbunited.com/news/` (or vice versa) creates a canonical mismatch. Search engines may treat these as different URLs.
 
 **Prevention:**
-- Check all color combinations against WCAG AA contrast ratios (4.5:1 for normal text, 3:1 for large text)
-- Ensure the bold typography scale remains readable (minimum 16px body text)
-- All interactive elements must be keyboard navigable
-- All images need meaningful alt text (especially important for civic content -- screen reader users are also constituents)
-- Use Lighthouse accessibility audit on every page before launch
+- Use `metadataBase` (already set in layout.tsx line 26) and relative canonical paths.
+- Set `trailingSlash` consistently in `next.config.ts` if needed.
+- For dynamic pages, construct canonical from the actual route parameters:
+  ```typescript
+  alternates: { canonical: `/news/${slug}` }
+  ```
+- `metadataBase` handles prepending the domain automatically.
 
-**Phase:** Phase 2 (design implementation). Accessibility must be validated as part of every component's definition of done.
+**Confidence:** HIGH -- well-documented SEO pattern.
 
 ---
 
-### Pitfall 13: Not Testing Payload's Draft/Publish Workflow
+### Pitfall 13: Users Collection Schema Change (displayName) Requires Database Migration
 
-**What goes wrong:** Payload has built-in draft/publish functionality (`versions.drafts: true` on collections). Teams either do not enable it (editors accidentally publish unfinished content) or enable it without testing the editorial workflow (drafts do not show up correctly on the frontend, published content requires a page refresh, etc.).
+**What goes wrong:** Adding a `displayName` field to the `Users` collection (fix for H5 -- admin email exposure) requires a Payload database migration. If the migration is not created and run, the field exists in the admin UI but queries crash or return undefined.
 
 **Prevention:**
-- Enable drafts on News Posts from the start -- editors need to save work-in-progress
-- Consider whether Pages need drafts (probably yes for longer explainers)
-- Ensure frontend queries filter by `_status: 'published'` so draft content does not appear on the live site
-- Test the full workflow: create draft -> preview -> edit -> publish -> verify on frontend
+- After adding the field to the collection schema, run `pnpm payload migrate:create` to generate the migration.
+- Run `pnpm payload migrate` before deploying.
+- Set a default value or make the field optional to avoid breaking existing users.
+- Update the seed script to include `displayName` for the seed user.
+- Update `news/[slug]/page.tsx` to read `displayName` first, fall back to "BIBB United Staff" (never email).
 
-**Detection:** If an editor saves a half-written post and it appears on the live site, your draft filtering is broken.
-
-**Phase:** Phase 2 (collection configuration). Test in Phase 2 before editors start using the system.
+**Confidence:** HIGH -- Payload 3.x uses Drizzle migrations for schema changes.
 
 ---
 
-### Pitfall 14: Neglecting Payload Seed Data and Dev Environment Reproducibility
+### Pitfall 14: Replacing Seed Images Breaks Idempotency Check
 
-**What goes wrong:** Without seed data, every developer (and every fresh environment) starts with an empty CMS. Testing frontend components requires manually creating content through the admin panel every time. This slows down development and makes CI/CD testing impossible.
+**What goes wrong:** The seed script checks for existing media by alt text: `where: { alt: { equals: 'BIBB United test image for seed data' } }`. If you change the alt text (fix M10 -- descriptive alt text) or replace the image, the idempotency check fails and creates duplicate media on re-run.
 
 **Prevention:**
-- Create a seed script early that populates: at least one page of each type, several news posts with varying content lengths, navigation structure, sample uploaded images
-- Use Payload's Local API in the seed script for reliable data creation
-- Run the seed script in CI and in Docker development environments
-- Keep seed data in version control
+- Use a stable identifier for seed media (e.g., filename) rather than alt text for idempotency checks.
+- Update the idempotency check to match on filename: `where: { filename: { equals: 'seed-hero-image.jpg' } }`.
+- Create multiple distinct seed images with different filenames and descriptive alt texts.
+- Consider a cleanup step at the start of the seed script that removes previous seed data before re-creating.
 
-**Phase:** Phase 1 or early Phase 2. The earlier you have seed data, the faster every subsequent phase moves.
+**Confidence:** HIGH -- directly observed in `src/seed.ts` lines 33-36.
+
+---
+
+### Pitfall 15: Active Nav Indicator Using `usePathname()` May Cause Hydration Mismatch
+
+**What goes wrong:** Adding an active page indicator (M8) in the Header requires knowing the current pathname. `usePathname()` from `next/navigation` works in client components, but during SSR the pathname may differ from the client if there is any URL normalization (trailing slashes, encoded characters). This can cause a hydration mismatch warning.
+
+**Prevention:**
+- Use `usePathname()` in the Header (already a client component) and compare against nav item hrefs.
+- Ensure comparison logic handles edge cases: trailing slashes, case sensitivity, and partial matches (e.g., `/news` should highlight for `/news/article-slug`).
+- Use `startsWith()` for section-level highlighting rather than exact match.
+- This is low risk in practice but worth testing across all nav items after implementation.
+
+**Confidence:** MEDIUM -- hydration mismatches are environment-specific.
 
 ---
 
@@ -321,26 +370,40 @@ Mistakes that cause rewrites, data loss, or major architecture issues.
 
 | Phase Topic | Likely Pitfall | Mitigation |
 |-------------|---------------|------------|
-| Project scaffolding | Treating Payload as separate backend (#1) | Use `create-payload-app`, single Next.js deployment |
-| Database setup | Migration ignorance (#2) | Learn migration commands on day one, never use push mode in prod |
-| Content modeling | Poor collection design (#3) | Design content model before writing code; interview editors |
-| Rich text config | Editor misconfiguration (#5) | Explicitly configure Lexical features; restrict, don't expand |
-| Frontend development | Server/Client boundary confusion (#6) | Establish pattern in scaffolding; enforce in code review |
-| Admin panel UX | Unusable for editors (#7) | Add labels/descriptions to every field; user-test with editors |
-| Design implementation | Accessibility violations (#12) | WCAG AA contrast checks on all color combinations |
-| Deployment (Docker/K8s) | Image bloat + cold starts (#4) | Multi-stage builds, standalone output, generous health check delays |
-| Deployment (Networking) | Proxy routing conflicts (#9) | Bypass cache for /admin/* and /api/*; test full proxy chain |
-| Media handling | Upload loss on restart (#10) | Persistent volume or S3-compatible storage from day one |
-| Pre-launch | SEO/social sharing broken (#8) | Test OG previews with platform debuggers; add sitemap |
-| Content entry | Draft/publish confusion (#13) | Enable drafts, filter by status on frontend, test full workflow |
+| Footer contrast fix (C1) | Tailwind v4 `@theme initial` cascade issue repeats in other dark sections | Apply `text-white` directly to ALL child elements, not just container |
+| Navigation seed (C2) | Relationship format mismatch silently fails | Verify Payload global schema before writing seed data |
+| Hero empty state (C3) | Returning `null` breaks layout if parent expects a block-level element | Return a minimal placeholder or empty fragment, test layout flow |
+| Seed image replacement (C4) | New images with different alt text break idempotency | Update idempotency check to use filename, not alt text |
+| Homepage H1 (H1) | `sr-only` H1 may not satisfy all SEO auditors | Consider a visible H1 in the hero or above Latest News section |
+| Skip-to-content (H2) | Hidden behind z-50 sticky header | Use z-[9999] and `fixed` positioning on focus |
+| next/link migration (H3) | External links should NOT use `<Link>` | Branch on link type: internal uses Link, external uses anchor tag |
+| next/image migration (H4) | CLS regression from missing `relative` on parent | Audit every replacement site for parent positioning and add `sizes` |
+| Admin email fix (H5) | Requires database migration for new field | Run `payload migrate:create` and `payload migrate` |
+| Focus trap fix (H6) | Fixing panel focus but not trapping focus when open | Apply `inert` to BOTH panel (when closed) AND main content (when open) |
+| Duplicate titles (M1) | Homepage title gets template applied incorrectly | Use `title: { absolute: '...' }` for homepage |
+| Canonical URLs (M2) | Trailing slash mismatch with actual served URL | Use `metadataBase` with relative paths |
+| OG tags (M3) | Shallow merge erases parent layout OG properties | Include `siteName` and `type` in every page-level openGraph |
+| Sitemap (M4) | Build-time generation misses CMS pages | Use `additionalPaths` or switch to App Router `sitemap.ts` |
+| Main padding (M5) | Removing pt-16 hides content behind sticky header | Keep pt-16 or add per-page top padding; do not simply remove |
+| Active nav (M8) | `usePathname()` edge cases with trailing slashes | Use `startsWith()` for section-level matching |
+| OG default image (L2) | 1200x630 image not optimized or compressed | Generate a compressed branded OG image asset |
+| X-Powered-By (L3) | Payload may add its own header separately from Next.js | Check both Next.js config AND Payload config |
+| Sitemap priority (L5) | next-sitemap transform function must return ALL required fields | Copy all default fields in transform, not just priority |
 
 ## Sources
 
-- Payload CMS 3.x documentation and architecture (training data, May 2025 cutoff) -- MEDIUM confidence
-- Next.js App Router patterns and known issues (training data) -- MEDIUM confidence
-- Drizzle ORM / Payload migration system (training data) -- MEDIUM confidence
-- Docker + K8s deployment patterns for Node.js apps (training data) -- HIGH confidence (well-established patterns)
-- Cloudflare / Traefik proxy chain behavior (training data) -- MEDIUM confidence
-- Civic advocacy and community website UX patterns (training data) -- MEDIUM confidence
-
-**Note:** Web verification tools were unavailable during this research session. All findings are based on training data through May 2025. Payload CMS 3.x was generally available by that date, so core architectural claims should be accurate, but specific API details or new features added after May 2025 should be verified against current Payload documentation before implementation.
+- [Next.js Image Component docs](https://nextjs.org/docs/app/api-reference/components/image)
+- [Next.js generateMetadata docs](https://nextjs.org/docs/app/api-reference/functions/generate-metadata)
+- [Next.js metadata merging behavior](https://medium.com/@davegray_86804/next-js-ordering-and-merging-metadata-df22c19d93f4)
+- [Tailwind CSS v4.0 announcement](https://tailwindcss.com/blog/tailwindcss-v4)
+- [Tailwind v4 data-theme inheritance discussion](https://github.com/tailwindlabs/tailwindcss/discussions/17115)
+- [WebAIM: Skip Navigation Links](https://webaim.org/techniques/skipnav/)
+- [Sticky header skip link conflicts](https://dubbot.com/dubblog/2025/gettin-out-of-a-sticky-situation.html)
+- [MDN: HTML inert global attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inert)
+- [Can I Use: inert attribute (93%+ support)](https://caniuse.com/mdn-html_global_attributes_inert)
+- [next-sitemap npm documentation](https://www.npmjs.com/package/next-sitemap)
+- [Payload CMS dynamic sitemap guide](https://payloadcms.com/posts/guides/how-to-build-an-seo-friendly-sitemap-in-payload--nextjs)
+- [Next.js Image CLS best practices](https://pagepro.co/blog/nextjs-image-component-performance-cwv/)
+- [CLS-safe CMS images in Next.js](https://medium.com/@nicholasrussellconsulting/industry-standard-practices-for-rendering-cls-safe-cms-images-in-next-js-bf99fcc8d7e3)
+- [Next.js Image optimization guide](https://eastondev.com/blog/en/posts/dev/20251219-nextjs-image-optimization/)
+- Direct codebase analysis of `src/` directory (2026-03-24)
