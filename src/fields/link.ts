@@ -1,12 +1,12 @@
-import type { Field } from 'payload'
+import type { CollectionSlug, Field } from 'payload'
 
 interface LinkFieldOptions {
-  relationTo?: string[]
+  relationTo?: CollectionSlug[]
   disableLabel?: boolean
 }
 
 export function linkFields(options?: LinkFieldOptions): Field[] {
-  const { relationTo = ['pages'], disableLabel = false } = options || {}
+  const { relationTo = ['pages'] as CollectionSlug[], disableLabel = false } = options || {}
 
   const fields: Field[] = []
 
