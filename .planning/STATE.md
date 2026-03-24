@@ -110,8 +110,15 @@ None yet.
 - Exact package versions should be verified with `npm view` before scaffolding
 - Tailwind v4 may need manual setup if `create-payload-app` generates v3 config
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260324-koh | Fix postbuild script to use next-sitemap --config next-sitemap.config.cjs | 2026-03-24 | 4956e61 | [260324-koh-fix-postbuild-script-to-use-next-sitemap](./quick/260324-koh-fix-postbuild-script-to-use-next-sitemap/) |
+
 ## Session Continuity
 
+Last activity: 2026-03-24 - Completed quick task 260324-koh: Fix postbuild script to use next-sitemap --config next-sitemap.config.cjs
 Last session: 2026-03-24T17:52:26.967Z
 Stopped at: Completed 07-01-PLAN.md
 Resume file: None
