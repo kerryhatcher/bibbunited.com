@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Production Polish
-status: Ready to execute
-stopped_at: Completed 09-01-PLAN.md
-last_updated: "2026-03-24T23:06:00.424Z"
+status: Phase complete — ready for verification
+stopped_at: Completed 09-02-PLAN.md
+last_updated: "2026-03-24T23:11:53.396Z"
 last_activity: 2026-03-24
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -39,6 +39,8 @@ Recent decisions affecting current work:
 - [v1.1 Roadmap]: displayName DB migration in Phase 9 before byline code change in Phase 11
 - [Phase 09]: displayName field optional -- byline falls back to BIBB United Staff
 - [Phase 09]: Cache headers on /media and /api/media only -- Next.js handles /_next/static automatically
+- [Phase 09]: OG image uploaded as Payload media item -- layout.tsx /og-default.png remains fallback until Phase 12
+- [Phase 09]: Navigation uses external type with URL for collection listing routes (/news, /officials, /meetings)
 
 ### Roadmap Evolution
 
@@ -65,5 +67,5 @@ None.
 ## Session Continuity
 
 Last activity: 2026-03-24
-Stopped at: Completed 09-01-PLAN.md
+Stopped at: Completed 09-02-PLAN.md
 Resume file: None

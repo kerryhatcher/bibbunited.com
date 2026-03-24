@@ -10,9 +10,9 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 ### Visual Appearance
 
 - [ ] **VIS-01**: Footer text is readable with proper contrast on dark background (WCAG 4.5:1 minimum)
-- [ ] **VIS-02**: Navigation menu is populated with all site sections in both desktop and mobile views
-- [ ] **VIS-03**: Hero spotlight displays featured news content on homepage instead of empty dark rectangle
-- [ ] **VIS-04**: Seed images are visually distinct and high-contrast against card backgrounds
+- [x] **VIS-02**: Navigation menu is populated with all site sections in both desktop and mobile views
+- [x] **VIS-03**: Hero spotlight displays featured news content on homepage instead of empty dark rectangle
+- [x] **VIS-04**: Seed images are visually distinct and high-contrast against card backgrounds
 
 ### Accessibility
 
@@ -33,7 +33,7 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 - [ ] **SEO-06**: All pages have canonical URLs via Next.js metadata API
 - [ ] **SEO-07**: All pages have complete Open Graph tags (url, type, site_name, image, description)
 - [ ] **SEO-08**: News articles and all CMS pages appear in sitemap.xml
-- [ ] **SEO-09**: Default branded 1200x630 OG image exists for pages without custom images
+- [x] **SEO-09**: Default branded 1200x630 OG image exists for pages without custom images
 
 ### UX Polish
 
@@ -97,9 +97,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | VIS-01 | Phase 10 | Pending |
-| VIS-02 | Phase 9 | Pending |
-| VIS-03 | Phase 9 | Pending |
-| VIS-04 | Phase 9 | Pending |
+| VIS-02 | Phase 9 | Complete |
+| VIS-03 | Phase 9 | Complete |
+| VIS-04 | Phase 9 | Complete |
 | A11Y-01 | Phase 11 | Pending |
 | A11Y-02 | Phase 11 | Pending |
 | A11Y-03 | Phase 10 | Pending |
@@ -111,7 +111,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEO-06 | Phase 12 | Pending |
 | SEO-07 | Phase 12 | Pending |
 | SEO-08 | Phase 12 | Pending |
-| SEO-09 | Phase 9 | Pending |
+| SEO-09 | Phase 9 | Complete |
 | UX-01 | Phase 11 | Pending |
 | UX-02 | Phase 11 | Pending |
 | UX-03 | Phase 11 | Pending |

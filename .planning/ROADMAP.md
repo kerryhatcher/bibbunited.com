@@ -45,7 +45,7 @@
 **Plans**: 2 plans
 Plans:
 - [x] 09-01-PLAN.md -- Users displayName field, DB migration, Next.js cache/security headers
-- [ ] 09-02-PLAN.md -- Seed script overhaul: images, OG image, Navigation/Homepage globals, Officials, Meetings
+- [x] 09-02-PLAN.md -- Seed script overhaul: images, OG image, Navigation/Homepage globals, Officials, Meetings
 
 ### Phase 10: Component Migration & Visual Fixes
 **Goal**: All internal links use client-side navigation, all images are optimized via next/image, and critical visual bugs (footer contrast, keyboard trap) are resolved
