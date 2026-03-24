@@ -30,7 +30,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **DSGN-01**: Bold activist visual design with strong colors, large headlines, and urgency
 - [x] **DSGN-02**: BIBB United brand identity (logo, color palette, typography)
-- [x] **DSGN-03**: Clear, scannable homepage with latest news, key topic callouts, and hero section
+- [ ] **DSGN-03**: Clear, scannable homepage with latest news, key topic callouts, and hero section
 - [ ] **DSGN-04**: Fully responsive, mobile-first layout tested on real device sizes
 - [x] **DSGN-05**: WCAG 2.1 AA accessible design (color contrast, keyboard nav, semantic HTML, alt text)
 - [x] **DSGN-06**: Content freshness signals (last updated timestamps, recent activity indicators)
@@ -38,14 +38,14 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### SEO & Sharing
 
-- [x] **SEO-01**: OpenGraph and Twitter Card meta tags on all pages and posts
-- [ ] **SEO-02**: JSON-LD structured data for articles and organization
-- [x] **SEO-03**: Auto-generated sitemap.xml
+- [ ] **SEO-01**: OpenGraph and Twitter Card meta tags on all pages and posts
+- [x] **SEO-02**: JSON-LD structured data for articles and organization
+- [ ] **SEO-03**: Auto-generated sitemap.xml
 - [x] **SEO-04**: Meta descriptions configurable per page/post in CMS
 
 ### Deployment
 
-- [x] **DEPLOY-01**: Dockerized Next.js + Payload app as single container
+- [ ] **DEPLOY-01**: Dockerized Next.js + Payload app as single container
 - [x] **DEPLOY-02**: K8s manifests for deployment with Traefik ingress
 - [x] **DEPLOY-03**: Cloudflare tunnel configuration with admin route cache bypass
 - [x] **DEPLOY-04**: PostgreSQL connection configured for cluster database
@@ -105,16 +105,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CIVX-02 | Phase 3 | Complete |
 | DSGN-01 | Phase 2 | Complete |
 | DSGN-02 | Phase 2 | Complete |
-| DSGN-03 | Phase 3 | Complete |
-| DSGN-04 | Phase 2 | Pending |
+| DSGN-03 | Phase 3, Phase 5 | Pending |
+| DSGN-04 | Phase 2, Phase 6 | Pending |
 | DSGN-05 | Phase 2 | Complete |
 | DSGN-06 | Phase 3 | Complete |
 | DSGN-07 | Phase 3 | Complete |
-| SEO-01 | Phase 4 | Complete |
-| SEO-02 | Phase 4 | Pending |
-| SEO-03 | Phase 4 | Complete |
+| SEO-01 | Phase 4, Phase 5 | Pending |
+| SEO-02 | Phase 4 | Complete |
+| SEO-03 | Phase 4, Phase 5 | Pending |
 | SEO-04 | Phase 4 | Complete |
-| DEPLOY-01 | Phase 4 | Complete |
+| DEPLOY-01 | Phase 4, Phase 5 | Pending |
 | DEPLOY-02 | Phase 4 | Complete |
 | DEPLOY-03 | Phase 4 | Complete |
 | DEPLOY-04 | Phase 1 | Complete |
@@ -127,4 +127,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-03-23*
-*Last updated: 2026-03-23 after roadmap creation*
+*Last updated: 2026-03-24 after gap closure phase creation*

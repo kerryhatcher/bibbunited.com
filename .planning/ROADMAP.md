@@ -16,6 +16,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 2: Brand & Design System** - BIBB United visual identity and Tailwind-based component system with bold activist aesthetic
 - [ ] **Phase 3: Site Pages & Navigation** - Public-facing homepage, content templates, CMS-managed navigation, and civic action pages
 - [ ] **Phase 4: SEO & Production Deployment** - Search engine optimization, social sharing metadata, Docker containerization, and K8s deployment
+- [ ] **Phase 5: Critical Build & Route Fixes** - Fix generateStaticParams build failure, add /news listing route, complete Twitter Card metadata, remove orphaned scaffold route
+- [ ] **Phase 6: Responsive Device Testing** - Automated Playwright testing at mobile/tablet/desktop viewports to satisfy DSGN-04
+- [ ] **Phase 7: Audit Documentation Cleanup** - Fix SUMMARY.md frontmatter gaps and VERIFICATION.md body/frontmatter mismatch
 
 ## Phase Details
 
@@ -87,6 +90,41 @@ Plans:
 - [ ] 04-02-PLAN.md -- OpenGraph/Twitter metadata and JSON-LD structured data on all page routes
 - [x] 04-03-PLAN.md -- Docker multi-stage build, K8s manifests (dev/prod), GitHub Actions CI/CD pipeline
 
+### Phase 5: Critical Build & Route Fixes
+**Goal**: Production build succeeds and all navigation links resolve to valid routes
+**Depends on**: Phase 4
+**Requirements**: DEPLOY-01, SEO-03, DSGN-03, SEO-01
+**Gap Closure**: Closes critical integration and flow gaps from v1.0 audit
+**Success Criteria** (what must be TRUE):
+  1. `next build` completes without errors (generateStaticParams for /news/[slug] fixed)
+  2. `/news` listing route exists and renders published news posts
+  3. "View All News" and Footer "News" links navigate to the /news listing (not 404)
+  4. Twitter Card metadata is present on contact-officials and meetings pages
+  5. Orphaned `src/app/my-route/route.ts` is removed
+**Plans**: 0 plans (pending `/gsd:plan-phase 5`)
+
+### Phase 6: Responsive Device Testing
+**Goal**: DSGN-04 is fully satisfied with automated responsive testing evidence at real device sizes
+**Depends on**: Phase 5
+**Requirements**: DSGN-04
+**Gap Closure**: Closes the only unsatisfied v1.0 requirement
+**Success Criteria** (what must be TRUE):
+  1. Playwright tests verify layout at mobile (320px, 375px), tablet (768px), and desktop (1024px, 1440px) viewports
+  2. No layout breakage, overflow, or unreadable text at any tested viewport
+  3. Navigation menu is functional at all viewport sizes
+**Plans**: 0 plans (pending `/gsd:plan-phase 6`)
+
+### Phase 7: Audit Documentation Cleanup
+**Goal**: All 10 partial documentation gaps are resolved — SUMMARY.md frontmatter and VERIFICATION.md body match actual status
+**Depends on**: Phase 5
+**Requirements**: DEPLOY-04, NAV-01, NAV-02, CIVX-01, CIVX-02, DSGN-03, DEPLOY-01, DEPLOY-02, DEPLOY-03, DEPLOY-05
+**Gap Closure**: Closes 10 partial requirement documentation gaps from v1.0 audit
+**Success Criteria** (what must be TRUE):
+  1. SUMMARY.md files (01-01, 02-02, 03-01, 03-03, 04-03) include correct `requirements_completed` frontmatter
+  2. Phase 3 VERIFICATION.md body matches frontmatter status (both say passed)
+  3. All 26 v1 requirements show as satisfied in a re-audit
+**Plans**: 0 plans (pending `/gsd:plan-phase 7`)
+
 ## Progress
 
 **Execution Order:**
@@ -98,3 +136,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 2. Brand & Design System | 0/2 | Planned    |  |
 | 3. Site Pages & Navigation | 1/3 | In progress | - |
 | 4. SEO & Production Deployment | 0/3 | Not started | - |
+| 5. Critical Build & Route Fixes | 0/0 | Not started | - |
+| 6. Responsive Device Testing | 0/0 | Not started | - |
+| 7. Audit Documentation Cleanup | 0/0 | Not started | - |
