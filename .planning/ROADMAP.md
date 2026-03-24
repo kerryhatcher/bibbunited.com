@@ -66,7 +66,7 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 03-01-PLAN.md -- CMS data layer (Officials, Meetings, Navigation, Homepage), site chrome (Header, Footer, UrgentBannerBar), layout integration, print CSS
+- [x] 03-01-PLAN.md -- CMS data layer (Officials, Meetings, Navigation, Homepage), site chrome (Header, Footer, UrgentBannerBar), layout integration, print CSS
 - [ ] 03-02-PLAN.md -- Page templates (news article, static page), shared content components (RichTextRenderer, DateDisplay, PrintButton)
 - [ ] 03-03-PLAN.md -- Homepage (hero spotlight, latest news, topic callouts), civic action pages (Contact Officials, Meeting Schedule)
 
