@@ -101,7 +101,11 @@ Plans:
   3. "View All News" and Footer "News" links navigate to the /news listing (not 404)
   4. Twitter Card metadata is present on contact-officials and meetings pages
   5. Orphaned `src/app/my-route/route.ts` is removed
-**Plans**: 0 plans (pending `/gsd:plan-phase 5`)
+**Plans**: 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md -- Fix generateStaticParams null slug crash, add Twitter Card metadata, delete orphaned route
+- [ ] 05-02-PLAN.md -- Create /news listing page with card grid, metadata, and JSON-LD
 
 ### Phase 6: Responsive Device Testing
 **Goal**: DSGN-04 is fully satisfied with automated responsive testing evidence at real device sizes
@@ -136,6 +140,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 2. Brand & Design System | 0/2 | Planned    |  |
 | 3. Site Pages & Navigation | 1/3 | In progress | - |
 | 4. SEO & Production Deployment | 0/3 | Not started | - |
-| 5. Critical Build & Route Fixes | 0/0 | Not started | - |
+| 5. Critical Build & Route Fixes | 0/2 | Not started | - |
 | 6. Responsive Device Testing | 0/0 | Not started | - |
 | 7. Audit Documentation Cleanup | 0/0 | Not started | - |
