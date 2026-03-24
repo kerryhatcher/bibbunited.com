@@ -1,0 +1,23 @@
+:root {
+  --font-mono: 'Roboto Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+  line-height: 32px;
+  -webkit-font-smoothing: antialiased;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui;
+  margin: 0;
+}
