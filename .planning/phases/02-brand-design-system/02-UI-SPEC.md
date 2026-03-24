@@ -22,7 +22,7 @@ created: 2026-03-24
 | Component library | none (custom components, no Radix/Base UI) |
 | Icon library | lucide-react |
 | Heading font | Barlow Condensed (700) via next/font/google |
-| Body font | Inter (400, 600) via next/font/google |
+| Body font | Inter (400, 700) via next/font/google |
 
 **Source:** D-06, D-07, D-09 from CONTEXT.md. Font choices within Claude's discretion: Barlow Condensed selected for its protest-poster impact at condensed widths while maintaining legibility; Inter selected for clean readability on long-form civic content.
 
@@ -41,11 +41,12 @@ Declared values (multiples of 4):
 | xl | 32px | Section padding on mobile |
 | 2xl | 48px | Section padding on tablet+ |
 | 3xl | 64px | Major section breaks, page-level vertical rhythm |
-| 4xl | 80px | Hero section vertical padding |
 
-Exceptions: Touch targets minimum 44px height (buttons, interactive elements) per WCAG 2.1 AA. This is not a spacing token but a minimum component size constraint.
+Component size constraints (not spacing tokens):
+- Touch targets: minimum 44px height (buttons, interactive elements) per WCAG 2.1 AA.
+- Hero section vertical padding: minimum 80px. This is a component-level size constraint driven by D-16 ("generous spacing between sections"), not a reusable spacing token.
 
-**Source:** Claude's discretion (Tailwind spacing scale). D-16 from CONTEXT.md ("generous spacing between sections") drives the inclusion of 4xl at 80px.
+**Source:** Claude's discretion (Tailwind spacing scale). D-16 from CONTEXT.md ("generous spacing between sections") drives the 80px hero constraint.
 
 ---
 
@@ -53,11 +54,15 @@ Exceptions: Touch targets minimum 44px height (buttons, interactive elements) pe
 
 | Role | Size | Weight | Line Height | Transform | Font |
 |------|------|--------|-------------|-----------|------|
-| Body | 16px | 400 (regular) | 1.5 | none | Inter |
-| Label | 14px | 600 (semibold) | 1.4 | uppercase | Inter |
+| Body / Label | 16px | 400 (regular); 700 (bold) for labels | 1.5 | none; uppercase for labels | Inter |
 | Heading (h3/h4) | 20px | 700 (bold) | 1.3 | none | Barlow Condensed |
 | Heading (h1/h2) | 32px | 700 (bold) | 1.15 | uppercase | Barlow Condensed |
 | Display | 48px | 700 (bold) | 1.1 | uppercase | Barlow Condensed |
+
+Font sizes: 4 (16, 20, 32, 48).
+Font weights: 2 (400 regular, 700 bold).
+
+Labels use 16px bold uppercase Inter instead of a separate 14px size. This maintains visual distinction while keeping the type scale tight.
 
 **Responsive scaling for Display:** 36px on mobile (<640px), 48px on tablet+ (>=640px).
 **Responsive scaling for h1/h2:** 24px on mobile (<640px), 32px on tablet+ (>=640px).
@@ -127,7 +132,7 @@ Accent is NEVER used for: backgrounds of content areas, body text, disabled stat
 | Property | Value | Source |
 |----------|-------|--------|
 | Border radius | 0px (all components) | D-13 |
-| Button primary | bg-accent, text-white, uppercase, font-heading, 600 weight | D-14 |
+| Button primary | bg-accent, text-white, uppercase, font-heading, 700 weight | D-14 |
 | Button secondary | border-2 border-accent, bg-transparent, text-accent, uppercase, hover:bg-accent hover:text-white | D-14 |
 | Card | full-bleed image top, content below, 0px radius, 1px border | D-15 |
 | Focus ring | 2px solid accent color, 2px offset | Claude's discretion |
