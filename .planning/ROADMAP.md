@@ -95,5 +95,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. CMS Foundation | 0/3 | Planned    |  |
 | 2. Brand & Design System | 0/2 | Planned    |  |
-| 3. Site Pages & Navigation | 0/3 | Planned | - |
+| 3. Site Pages & Navigation | 1/3 | In progress | - |
 | 4. SEO & Production Deployment | 0/2 | Not started | - |
