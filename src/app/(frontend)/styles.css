@@ -120,3 +120,40 @@ body {
 .logo-bibb {
   color: inherit;
 }
+
+/* ===== Print styles (DSGN-07) ===== */
+@media print {
+  /* Hide all site chrome */
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* Clean print layout */
+  body {
+    color: #000 !important;
+    background: #fff !important;
+    font-size: 12pt;
+  }
+
+  /* Remove padding for sticky header */
+  main {
+    padding-top: 0 !important;
+  }
+
+  /* Show URLs next to links in prose content */
+  .prose a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  /* Remove decorative borders/shadows */
+  * {
+    box-shadow: none !important;
+  }
+
+  /* Ensure images print */
+  img {
+    max-width: 100% !important;
+  }
+}
