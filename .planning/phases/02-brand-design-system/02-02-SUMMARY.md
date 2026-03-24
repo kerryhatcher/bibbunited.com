@@ -30,6 +30,8 @@ new-patterns:
   - name: "Logo with inherited color"
     file: src/components/ui/Logo.tsx
     usage: ".logo-bibb uses color:inherit for context-aware base color"
+
+requirements-completed: []
 ---
 
 ## What was built
