@@ -12,7 +12,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **CONT-01**: User can create and edit rich text pages with headings, images, pull quotes, and embedded content
 - [x] **CONT-02**: User can create and edit news posts with title, body, publish date, and featured image
 - [x] **CONT-03**: Each page and news post has a configurable call-to-action block (CTA text + link)
-- [ ] **CONT-04**: Editor can activate a site-wide urgent banner with custom message and optional link
+- [x] **CONT-04**: Editor can activate a site-wide urgent banner with custom message and optional link
 - [x] **CONT-05**: Non-technical editors can publish and manage all content via Payload CMS admin UI
 
 ### Navigation
@@ -28,11 +28,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Design & UX
 
-- [ ] **DSGN-01**: Bold activist visual design with strong colors, large headlines, and urgency
-- [ ] **DSGN-02**: BIBB United brand identity (logo, color palette, typography)
+- [x] **DSGN-01**: Bold activist visual design with strong colors, large headlines, and urgency
+- [x] **DSGN-02**: BIBB United brand identity (logo, color palette, typography)
 - [ ] **DSGN-03**: Clear, scannable homepage with latest news, key topic callouts, and hero section
 - [ ] **DSGN-04**: Fully responsive, mobile-first layout tested on real device sizes
-- [ ] **DSGN-05**: WCAG 2.1 AA accessible design (color contrast, keyboard nav, semantic HTML, alt text)
+- [x] **DSGN-05**: WCAG 2.1 AA accessible design (color contrast, keyboard nav, semantic HTML, alt text)
 - [ ] **DSGN-06**: Content freshness signals (last updated timestamps, recent activity indicators)
 - [ ] **DSGN-07**: Print-friendly CSS stylesheet for articles
 
@@ -96,18 +96,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONT-01 | Phase 1 | Complete |
 | CONT-02 | Phase 1 | Complete |
 | CONT-03 | Phase 1 | Complete |
-| CONT-04 | Phase 1 | Pending |
+| CONT-04 | Phase 1 | Complete |
 | CONT-05 | Phase 1 | Complete |
 | NAV-01 | Phase 3 | Pending |
 | NAV-02 | Phase 3 | Pending |
 | NAV-03 | Phase 3 | Pending |
 | CIVX-01 | Phase 3 | Pending |
 | CIVX-02 | Phase 3 | Pending |
-| DSGN-01 | Phase 2 | Pending |
-| DSGN-02 | Phase 2 | Pending |
+| DSGN-01 | Phase 2 | Complete |
+| DSGN-02 | Phase 2 | Complete |
 | DSGN-03 | Phase 3 | Pending |
 | DSGN-04 | Phase 2 | Pending |
-| DSGN-05 | Phase 2 | Pending |
+| DSGN-05 | Phase 2 | Complete |
 | DSGN-06 | Phase 3 | Pending |
 | DSGN-07 | Phase 3 | Pending |
 | SEO-01 | Phase 4 | Pending |

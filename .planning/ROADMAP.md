@@ -49,8 +49,8 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 02-01-PLAN.md -- Tailwind v4 design tokens, fonts, SiteTheme Global, PostCSS config
-- [ ] 02-02-PLAN.md -- UI components (Button, Card, Section, Logo), favicon, showcase page, visual verification
+- [x] 02-01-PLAN.md -- Tailwind v4 design tokens, fonts, SiteTheme Global, PostCSS config
+- [x] 02-02-PLAN.md -- UI components (Button, Card, Section, Logo), favicon, showcase page, visual verification
 
 ### Phase 3: Site Pages & Navigation
 **Goal**: Visitors can browse the complete public-facing site -- homepage, content pages, news posts, civic action pages -- via CMS-managed navigation
@@ -94,6 +94,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. CMS Foundation | 0/3 | Planned    |  |
-| 2. Brand & Design System | 0/2 | Not started | - |
+| 2. Brand & Design System | 0/2 | Planned    |  |
 | 3. Site Pages & Navigation | 0/3 | Not started | - |
 | 4. SEO & Production Deployment | 0/2 | Not started | - |
