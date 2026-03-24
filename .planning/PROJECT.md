@@ -18,9 +18,14 @@ Community members can find clear, actionable information about their local schoo
 - [x] Site-wide urgent banner with toggle, message, optional link — Validated in Phase 1: CMS Foundation
 - [x] PostgreSQL-backed Payload CMS with draft/publish workflow — Validated in Phase 1: CMS Foundation
 
-### Active
+### Validated in Phase 4: SEO & Production Deployment
 
-- [ ] Dockerized deployment to self-hosted K8s cluster via Traefik + Cloudflare tunnels
+- [x] SEO metadata (OpenGraph, Twitter Cards) with CMS-configurable overrides — Validated in Phase 4
+- [x] JSON-LD structured data (NewsArticle, Organization, GovernmentOrganization, BreadcrumbList, WebSite) — Validated in Phase 4
+- [x] Auto-generated sitemap.xml and robots.txt — Validated in Phase 4
+- [x] Dockerized deployment to self-hosted K8s cluster via Traefik + Cloudflare tunnels — Validated in Phase 4
+- [x] GitHub Actions CI/CD pipeline with GHCR and ArgoCD GitOps — Validated in Phase 4
+- [x] Persistent media storage across pod restarts — Validated in Phase 4
 
 ### Validated in Phase 2: Brand & Design System
 
@@ -67,7 +72,9 @@ Community members can find clear, actionable information about their local schoo
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Payload CMS 3.x with PostgreSQL | User-specified stack; Payload 3.x has first-class Next.js integration | Validated — Phase 1 |
-| Self-hosted K8s deployment | User has existing infrastructure; avoids vendor lock-in and recurring cloud costs | -- Pending |
+| Self-hosted K8s deployment | User has existing infrastructure; avoids vendor lock-in and recurring cloud costs | Validated — Phase 4 |
+| SEO + JSON-LD structured data | Civic advocacy site needs discoverability; rich snippets improve search presence | Validated — Phase 4 |
+| GitOps with ArgoCD | CI builds to GHCR, updates manifests, ArgoCD syncs — zero-touch deployments | Validated — Phase 4 |
 | Bold activist visual direction | Site's purpose is advocacy — design should convey urgency and demand attention | Validated — Phase 2 |
 | Two content types (pages + news) | Covers both evergreen reference content and timely updates | Validated — Phase 3 |
 | CMS-managed navigation + civic pages | Navigation, Officials, Meetings all CMS-managed for editorial independence | Validated — Phase 3 |
@@ -90,4 +97,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-24 after Phase 3 completion*
+*Last updated: 2026-03-24 after Phase 4 completion (final phase of v1.0 milestone)*
