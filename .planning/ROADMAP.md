@@ -80,11 +80,12 @@ Plans:
   3. Sitemap.xml is auto-generated and includes all published pages and posts
   4. The app runs as a single Docker container deployed to K8s with Traefik ingress and Cloudflare tunnel, with admin routes bypassing cache
   5. Media uploads persist across pod restarts via persistent storage
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
+- [ ] 04-01-PLAN.md -- Payload SEO plugin wiring, sitemap/robots generation, OG fallback image, Next.js standalone config
+- [ ] 04-02-PLAN.md -- OpenGraph/Twitter metadata and JSON-LD structured data on all page routes
+- [ ] 04-03-PLAN.md -- Docker multi-stage build, K8s manifests (dev/prod), GitHub Actions CI/CD pipeline
 
 ## Progress
 
@@ -96,4 +97,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. CMS Foundation | 0/3 | Planned    |  |
 | 2. Brand & Design System | 0/2 | Planned    |  |
 | 3. Site Pages & Navigation | 1/3 | In progress | - |
-| 4. SEO & Production Deployment | 0/2 | Not started | - |
+| 4. SEO & Production Deployment | 0/3 | Not started | - |
