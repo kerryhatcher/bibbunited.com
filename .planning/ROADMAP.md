@@ -19,6 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 5: Critical Build & Route Fixes** - Fix generateStaticParams build failure, add /news listing route, complete Twitter Card metadata, remove orphaned scaffold route
 - [ ] **Phase 6: Responsive Device Testing** - Automated Playwright testing at mobile/tablet/desktop viewports to satisfy DSGN-04
 - [ ] **Phase 7: Audit Documentation Cleanup** - Fix SUMMARY.md frontmatter gaps and VERIFICATION.md body/frontmatter mismatch
+- [ ] **Phase 8: Tech Debt Cleanup** - Accessibility contrast fixes, deployment hardening, seed data for test coverage, deployment documentation
 
 ## Phase Details
 
@@ -135,6 +136,25 @@ Plans:
 Plans:
 - [x] 07-01-PLAN.md -- Fix SUMMARY.md frontmatter gaps, correct VERIFICATION.md body/frontmatter mismatch, re-audit 26/26 requirements
 
+### Phase 8: Tech Debt Cleanup
+**Goal:** Resolve all accumulated tech debt from v1.0 audit -- fix accessibility contrast issues, harden deployment fragilities, add DB seed data for full Playwright test coverage, and document external setup items
+**Requirements**: DSGN-05 (hardening), DEPLOY-05 (hardening), SEO-01 (hardening)
+**Depends on:** Phase 7
+**Gap Closure:** Closes 10 tech debt items from v1.0 audit
+**Success Criteria** (what must be TRUE):
+  1. Footer text meets WCAG AA contrast requirements against navy background
+  2. Red accent color verified at or above 4.5:1 contrast ratio
+  3. Media staticDir uses absolute path resistant to WORKDIR changes
+  4. Homepage OpenGraph image dynamically uses featured article image
+  5. Seed data enables all Playwright tests to execute with zero skips
+  6. Deployment runbook documents Cloudflare DNS, Docker build DB, and JSON-LD validation
+**Plans:** 3 plans
+
+Plans:
+- [ ] 08-01-PLAN.md -- Footer contrast fix, red color verification, Media staticDir hardening, homepage OG image
+- [ ] 08-02-PLAN.md -- Deployment documentation (Cloudflare DNS, Docker build DB, JSON-LD validation)
+- [ ] 08-03-PLAN.md -- Seed script for test content, full Playwright test suite verification
+
 ## Progress
 
 **Execution Order:**
@@ -149,14 +169,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 5. Critical Build & Route Fixes | 0/2 | Planned    |  |
 | 6. Responsive Device Testing | 0/1 | Planned    |  |
 | 7. Audit Documentation Cleanup | 0/1 | Not started | - |
-
-### Phase 8: Tech Debt Cleanup
-
-**Goal:** Resolve all accumulated tech debt from v1.0 audit — fix accessibility contrast issues, harden deployment fragilities, add DB seed data for full Playwright test coverage, and document external setup items
-**Requirements**: DSGN-05 (hardening), DEPLOY-05 (hardening), SEO-01 (hardening)
-**Depends on:** Phase 7
-**Gap Closure:** Closes 10 tech debt items from v1.0 audit
-**Plans:** 0 plans
-
-Plans:
-- [ ] TBD (run /gsd:plan-phase 8 to break down)
+| 8. Tech Debt Cleanup | 0/3 | Planned    |  |
