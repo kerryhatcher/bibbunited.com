@@ -1,0 +1,106 @@
+import React from 'react'
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import configPromise from '@payload-config'
+import { getPayload } from 'payload'
+import { RichTextRenderer } from '@/components/shared/RichTextRenderer'
+import { DateDisplay } from '@/components/shared/DateDisplay'
+import { PrintButton } from '@/components/shared/PrintButton'
+import { Button } from '@/components/ui/Button'
+import type { NewsPost, Media, User } from '@/payload-types'
+
+type Args = {
+  params: Promise<{ slug: string }>
+}
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise })
+  const posts = await payload.find({
+    collection: 'news-posts',
+    limit: 100,
+    select: { slug: true },
+  })
+  return posts.docs.map((post) => ({ slug: post.slug }))
+}
+
+export async function generateMetadata({ params }: Args): Promise<Metadata> {
+  const { slug } = await params
+  const payload = await getPayload({ config: configPromise })
+  const result = await payload.find({
+    collection: 'news-posts',
+    where: { slug: { equals: slug } },
+    limit: 1,
+  })
+  const post = result.docs[0]
+  if (!post) return { title: 'Not Found' }
+  return { title: `${post.title} | BIBB United` }
+}
+
+export default async function NewsArticlePage({ params }: Args) {
+  const { slug } = await params
+  const payload = await getPayload({ config: configPromise })
+  const result = await payload.find({
+    collection: 'news-posts',
+    where: { slug: { equals: slug } },
+    depth: 2,
+    limit: 1,
+  })
+
+  const post = result.docs[0] as NewsPost | undefined
+  if (!post) notFound()
+
+  const authorName =
+    typeof post.author === 'object'
+      ? (post.author as User).email
+      : ''
+
+  const featuredImage =
+    typeof post.featuredImage === 'object'
+      ? (post.featuredImage as Media)
+      : null
+
+  return (
+    <>
+      {featuredImage?.url && (
+        <div className="w-full aspect-video relative">
+          <img
+            src={featuredImage.url}
+            alt={featuredImage.alt || post.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
+      <article className="px-4 sm:px-6 lg:px-8 py-8 max-w-4xl mx-auto">
+        <h1 className="text-4xl sm:text-5xl font-heading font-bold uppercase tracking-tight mb-4">
+          {post.title}
+        </h1>
+
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4">
+          {authorName && (
+            <span className="text-text-secondary text-sm">
+              By {authorName}
+            </span>
+          )}
+          <DateDisplay
+            publishDate={post.publishDate}
+            updatedAt={post.updatedAt}
+            variant="full"
+          />
+        </div>
+
+        <div className="mb-8">
+          <PrintButton />
+        </div>
+
+        <RichTextRenderer data={post.body} />
+
+        {post.cta?.text && post.cta?.link && (
+          <div className="mt-12 pt-8 border-t border-border text-center">
+            <Button href={post.cta.link}>{post.cta.text}</Button>
+          </div>
+        )}
+      </article>
+    </>
+  )
+}
