@@ -85,7 +85,7 @@ Plans:
 Plans:
 - [ ] 04-01-PLAN.md -- Payload SEO plugin wiring, sitemap/robots generation, OG fallback image, Next.js standalone config
 - [ ] 04-02-PLAN.md -- OpenGraph/Twitter metadata and JSON-LD structured data on all page routes
-- [ ] 04-03-PLAN.md -- Docker multi-stage build, K8s manifests (dev/prod), GitHub Actions CI/CD pipeline
+- [x] 04-03-PLAN.md -- Docker multi-stage build, K8s manifests (dev/prod), GitHub Actions CI/CD pipeline
 
 ## Progress
 

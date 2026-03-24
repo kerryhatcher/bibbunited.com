@@ -17,39 +17,39 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Navigation
 
-- [ ] **NAV-01**: Site has a CMS-managed navigation menu with one level of dropdown sub-items
-- [ ] **NAV-02**: Menu items support both internal page links and external URLs
-- [ ] **NAV-03**: Site has an About / Mission page accessible from navigation
+- [x] **NAV-01**: Site has a CMS-managed navigation menu with one level of dropdown sub-items
+- [x] **NAV-02**: Menu items support both internal page links and external URLs
+- [x] **NAV-03**: Site has an About / Mission page accessible from navigation
 
 ### Civic Action
 
-- [ ] **CIVX-01**: Site has a Contact Your Officials page with names, roles, emails, and phone numbers
-- [ ] **CIVX-02**: Site has a Meeting Schedule page showing upcoming school board meeting dates, times, and locations
+- [x] **CIVX-01**: Site has a Contact Your Officials page with names, roles, emails, and phone numbers
+- [x] **CIVX-02**: Site has a Meeting Schedule page showing upcoming school board meeting dates, times, and locations
 
 ### Design & UX
 
 - [x] **DSGN-01**: Bold activist visual design with strong colors, large headlines, and urgency
 - [x] **DSGN-02**: BIBB United brand identity (logo, color palette, typography)
-- [ ] **DSGN-03**: Clear, scannable homepage with latest news, key topic callouts, and hero section
+- [x] **DSGN-03**: Clear, scannable homepage with latest news, key topic callouts, and hero section
 - [ ] **DSGN-04**: Fully responsive, mobile-first layout tested on real device sizes
 - [x] **DSGN-05**: WCAG 2.1 AA accessible design (color contrast, keyboard nav, semantic HTML, alt text)
-- [ ] **DSGN-06**: Content freshness signals (last updated timestamps, recent activity indicators)
-- [ ] **DSGN-07**: Print-friendly CSS stylesheet for articles
+- [x] **DSGN-06**: Content freshness signals (last updated timestamps, recent activity indicators)
+- [x] **DSGN-07**: Print-friendly CSS stylesheet for articles
 
 ### SEO & Sharing
 
-- [ ] **SEO-01**: OpenGraph and Twitter Card meta tags on all pages and posts
+- [x] **SEO-01**: OpenGraph and Twitter Card meta tags on all pages and posts
 - [ ] **SEO-02**: JSON-LD structured data for articles and organization
-- [ ] **SEO-03**: Auto-generated sitemap.xml
-- [ ] **SEO-04**: Meta descriptions configurable per page/post in CMS
+- [x] **SEO-03**: Auto-generated sitemap.xml
+- [x] **SEO-04**: Meta descriptions configurable per page/post in CMS
 
 ### Deployment
 
-- [ ] **DEPLOY-01**: Dockerized Next.js + Payload app as single container
-- [ ] **DEPLOY-02**: K8s manifests for deployment with Traefik ingress
-- [ ] **DEPLOY-03**: Cloudflare tunnel configuration with admin route cache bypass
+- [x] **DEPLOY-01**: Dockerized Next.js + Payload app as single container
+- [x] **DEPLOY-02**: K8s manifests for deployment with Traefik ingress
+- [x] **DEPLOY-03**: Cloudflare tunnel configuration with admin route cache bypass
 - [x] **DEPLOY-04**: PostgreSQL connection configured for cluster database
-- [ ] **DEPLOY-05**: Persistent storage for media uploads (survives pod restarts)
+- [x] **DEPLOY-05**: Persistent storage for media uploads (survives pod restarts)
 
 ## v2 Requirements
 
@@ -98,27 +98,27 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONT-03 | Phase 1 | Complete |
 | CONT-04 | Phase 1 | Complete |
 | CONT-05 | Phase 1 | Complete |
-| NAV-01 | Phase 3 | Pending |
-| NAV-02 | Phase 3 | Pending |
-| NAV-03 | Phase 3 | Pending |
-| CIVX-01 | Phase 3 | Pending |
-| CIVX-02 | Phase 3 | Pending |
+| NAV-01 | Phase 3 | Complete |
+| NAV-02 | Phase 3 | Complete |
+| NAV-03 | Phase 3 | Complete |
+| CIVX-01 | Phase 3 | Complete |
+| CIVX-02 | Phase 3 | Complete |
 | DSGN-01 | Phase 2 | Complete |
 | DSGN-02 | Phase 2 | Complete |
-| DSGN-03 | Phase 3 | Pending |
+| DSGN-03 | Phase 3 | Complete |
 | DSGN-04 | Phase 2 | Pending |
 | DSGN-05 | Phase 2 | Complete |
-| DSGN-06 | Phase 3 | Pending |
-| DSGN-07 | Phase 3 | Pending |
-| SEO-01 | Phase 4 | Pending |
+| DSGN-06 | Phase 3 | Complete |
+| DSGN-07 | Phase 3 | Complete |
+| SEO-01 | Phase 4 | Complete |
 | SEO-02 | Phase 4 | Pending |
-| SEO-03 | Phase 4 | Pending |
-| SEO-04 | Phase 4 | Pending |
-| DEPLOY-01 | Phase 4 | Pending |
-| DEPLOY-02 | Phase 4 | Pending |
-| DEPLOY-03 | Phase 4 | Pending |
+| SEO-03 | Phase 4 | Complete |
+| SEO-04 | Phase 4 | Complete |
+| DEPLOY-01 | Phase 4 | Complete |
+| DEPLOY-02 | Phase 4 | Complete |
+| DEPLOY-03 | Phase 4 | Complete |
 | DEPLOY-04 | Phase 1 | Complete |
-| DEPLOY-05 | Phase 4 | Pending |
+| DEPLOY-05 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 26 total
