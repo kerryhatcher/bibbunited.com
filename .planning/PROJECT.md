@@ -20,12 +20,22 @@ Community members can find clear, actionable information about their local schoo
 
 ### Active
 
-- [ ] CMS-managed navigation menu with one-level dropdowns (internal + external links)
-- [ ] Bold activist visual design — strong colors, attention-grabbing headlines, urgency
-- [ ] Fully responsive, mobile-first layout
-- [ ] Homepage showcasing latest news and key pages
 - [ ] Dockerized deployment to self-hosted K8s cluster via Traefik + Cloudflare tunnels
-- [ ] BIBB United branding (logo, color palette, typography)
+
+### Validated in Phase 2: Brand & Design System
+
+- [x] Bold activist visual design — strong colors, attention-grabbing headlines, urgency
+- [x] Fully responsive, mobile-first layout
+- [x] BIBB United branding (logo, color palette, typography)
+
+### Validated in Phase 3: Site Pages & Navigation
+
+- [x] CMS-managed navigation menu with one-level dropdowns (internal + external links)
+- [x] Homepage showcasing latest news and key pages
+- [x] Contact Officials page with officials grouped by governing body
+- [x] Meeting Schedule page with upcoming/past meetings
+- [x] Content freshness signals (Published/Updated dates, relative time)
+- [x] Print-friendly article output
 
 ### Out of Scope
 
@@ -58,8 +68,9 @@ Community members can find clear, actionable information about their local schoo
 |----------|-----------|---------|
 | Payload CMS 3.x with PostgreSQL | User-specified stack; Payload 3.x has first-class Next.js integration | Validated — Phase 1 |
 | Self-hosted K8s deployment | User has existing infrastructure; avoids vendor lock-in and recurring cloud costs | -- Pending |
-| Bold activist visual direction | Site's purpose is advocacy — design should convey urgency and demand attention | -- Pending |
-| Two content types (pages + news) | Covers both evergreen reference content and timely updates | -- Pending |
+| Bold activist visual direction | Site's purpose is advocacy — design should convey urgency and demand attention | Validated — Phase 2 |
+| Two content types (pages + news) | Covers both evergreen reference content and timely updates | Validated — Phase 3 |
+| CMS-managed navigation + civic pages | Navigation, Officials, Meetings all CMS-managed for editorial independence | Validated — Phase 3 |
 
 ## Evolution
 
@@ -79,4 +90,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-24 after Phase 1 completion*
+*Last updated: 2026-03-24 after Phase 3 completion*
