@@ -2,7 +2,14 @@
 
 ## What This Is
 
-A civic advocacy website for the BIBB community, starting with local school system issues. The site informs residents about what's happening — budgets, policies, board decisions — and activates them to take action: attend meetings, contact officials, and get involved. Bold, urgent design that demands attention. Powered by Payload CMS so a small editorial team can publish content without touching code.
+A civic advocacy website for the BIBB community, starting with local school system issues. The site informs residents about what's happening -- budgets, policies, board decisions -- and activates them to take action: attend meetings, contact officials, and get involved. Bold, urgent design with dual-mode color switching (community/urgent) that demands attention. Powered by Payload CMS 3.x so a small editorial team can publish content without touching code. Deployed as a single Docker container on self-hosted K8s.
+
+## Current State
+
+**Version:** v1.0 MVP (shipped 2026-03-24)
+**Codebase:** 6,045 LOC (TypeScript/TSX/CSS), 185 files
+**Test coverage:** 160 Playwright e2e tests across 5 viewports
+**Requirements:** 26/26 v1 requirements satisfied
 
 ## Core Value
 
@@ -12,102 +19,95 @@ Community members can find clear, actionable information about their local schoo
 
 ### Validated
 
-- [x] CMS-managed pages with rich text editor (headings, images, pull quotes, callouts, embeds, tables) — Validated in Phase 1: CMS Foundation
-- [x] CMS-managed news posts with title, body, publish date, featured image, author — Validated in Phase 1: CMS Foundation
-- [x] Call-to-action blocks on pages and news posts — Validated in Phase 1: CMS Foundation
-- [x] Site-wide urgent banner with toggle, message, optional link — Validated in Phase 1: CMS Foundation
-- [x] PostgreSQL-backed Payload CMS with draft/publish workflow — Validated in Phase 1: CMS Foundation
+- ✓ Rich text pages with headings, images, pull quotes, callouts, embeds, tables (CONT-01) -- v1.0
+- ✓ News posts with title, body, publish date, featured image (CONT-02) -- v1.0
+- ✓ Call-to-action blocks on pages and news posts (CONT-03) -- v1.0
+- ✓ Site-wide urgent banner with toggle, message, optional link (CONT-04) -- v1.0
+- ✓ Non-technical editors manage all content via Payload CMS admin (CONT-05) -- v1.0
+- ✓ CMS-managed navigation menu with one-level dropdowns (NAV-01) -- v1.0
+- ✓ Menu items support internal page links and external URLs (NAV-02) -- v1.0
+- ✓ About/Mission page accessible from navigation (NAV-03) -- v1.0
+- ✓ Contact Your Officials page with names, roles, emails, phones (CIVX-01) -- v1.0
+- ✓ Meeting Schedule page with upcoming school board meetings (CIVX-02) -- v1.0
+- ✓ Bold activist visual design with strong colors and urgency (DSGN-01) -- v1.0
+- ✓ BIBB United brand identity: logo, color palette, typography (DSGN-02) -- v1.0
+- ✓ Clear, scannable homepage with latest news, callouts, hero (DSGN-03) -- v1.0
+- ✓ Fully responsive, mobile-first layout at 5 viewport sizes (DSGN-04) -- v1.0
+- ✓ WCAG 2.1 AA accessible design (DSGN-05) -- v1.0
+- ✓ Content freshness signals with timestamps (DSGN-06) -- v1.0
+- ✓ Print-friendly CSS for articles (DSGN-07) -- v1.0
+- ✓ OpenGraph and Twitter Card meta tags on all pages (SEO-01) -- v1.0
+- ✓ JSON-LD structured data for articles and organization (SEO-02) -- v1.0
+- ✓ Auto-generated sitemap.xml (SEO-03) -- v1.0
+- ✓ CMS-configurable meta descriptions (SEO-04) -- v1.0
+- ✓ Dockerized Next.js + Payload single container (DEPLOY-01) -- v1.0
+- ✓ K8s manifests with Traefik ingress (DEPLOY-02) -- v1.0
+- ✓ Cloudflare tunnel with admin route cache bypass (DEPLOY-03) -- v1.0
+- ✓ PostgreSQL connection configured (DEPLOY-04) -- v1.0
+- ✓ Persistent media storage across pod restarts (DEPLOY-05) -- v1.0
 
-### Validated in Phase 4: SEO & Production Deployment
+### Active
 
-- [x] SEO metadata (OpenGraph, Twitter Cards) with CMS-configurable overrides — Validated in Phase 4
-- [x] JSON-LD structured data (NewsArticle, Organization, GovernmentOrganization, BreadcrumbList, WebSite) — Validated in Phase 4
-- [x] Auto-generated sitemap.xml and robots.txt — Validated in Phase 4
-- [x] Dockerized deployment to self-hosted K8s cluster via Traefik + Cloudflare tunnels — Validated in Phase 4
-- [x] GitHub Actions CI/CD pipeline with GHCR and ArgoCD GitOps — Validated in Phase 4
-- [x] Persistent media storage across pod restarts — Validated in Phase 4
-
-### Validated in Phase 2: Brand & Design System
-
-- [x] Bold activist visual design — strong colors, attention-grabbing headlines, urgency
-- [x] Fully responsive, mobile-first layout
-- [x] BIBB United branding (logo, color palette, typography)
-
-### Validated in Phase 3: Site Pages & Navigation
-
-- [x] CMS-managed navigation menu with one-level dropdowns (internal + external links)
-- [x] Homepage showcasing latest news and key pages
-- [x] Contact Officials page with officials grouped by governing body
-- [x] Meeting Schedule page with upcoming/past meetings
-- [x] Content freshness signals (Published/Updated dates, relative time)
-- [x] Print-friendly article output
-
-### Validated in Phase 5: Critical Build & Route Fixes
-
-- [x] `next build` completes without errors (null-safe generateStaticParams) — Validated in Phase 5
-- [x] /news listing page with card grid, metadata, and JSON-LD — Validated in Phase 5
-- [x] Twitter Card metadata on all public pages — Validated in Phase 5
-- [x] Orphaned scaffold routes removed — Validated in Phase 5
-
-### Validated in Phase 6: Responsive Device Testing
-
-- [x] Fully responsive, mobile-first layout tested on real device sizes (DSGN-04) — Validated in Phase 6
-- [x] Playwright test suite: 115 tests across 5 viewports (320px, 375px, 768px, 1024px, 1440px)
-- [x] All 6 public routes verified for overflow, clipping, and navigation functionality
+(No active requirements -- next milestone not yet planned)
 
 ### Out of Scope
 
-- User accounts / login for visitors — this is a broadcast site, not a community platform
-- Comments or discussion — advocacy happens in person and on existing social channels
-- E-commerce / donations — not in v1
-- Email newsletter — defer to v2
-- Search — defer to v2 (site will be small enough to navigate via menu)
-- OAuth / social login for CMS — Payload's built-in auth is sufficient for a small team
+- User accounts / visitor login -- broadcast site, not a community platform
+- Comments or discussion forums -- moderation complexity with no clear value
+- Donation / payment processing -- PCI compliance concerns; link to hosted solution
+- Full-text search -- site small enough (<50 pages) to navigate via menu
+- Event RSVP / ticketing -- over-engineering for public meetings
+- Multi-language support (i18n) -- significant complexity, defer if needed
+- Real-time notifications / push -- social media serves this function
+- Admin analytics dashboard -- use external tool (Plausible, Umami)
+- AI-generated content -- undermines credibility for civic trust content
+- OAuth / social login for CMS -- Payload's built-in auth is sufficient
 
 ## Context
 
-- **Community:** BIBB is a local community with an active school system that needs better civic engagement and transparency
-- **Content strategy:** Mix of long-form explainer pages (budget breakdowns, policy analysis) and timely news posts (meeting recaps, breaking developments), plus resource pages (contacts, schedules, public records links)
+- **Community:** BIBB is a local community with an active school system needing better civic engagement and transparency
+- **Content strategy:** Mix of long-form explainer pages and timely news posts, plus resource pages (contacts, schedules)
 - **Editorial team:** 2-3 people managing content through Payload CMS admin panel
-- **Civic topics:** School system is first; the site architecture should support expanding to other civic topics later (but this is not a v1 requirement)
-- **Infrastructure:** User has existing K8s cluster with Traefik ingress and Cloudflare tunnels — deployment target is a Docker container
+- **Infrastructure:** Self-hosted K8s cluster with Traefik ingress and Cloudflare tunnels
+- **Codebase:** Next.js 15 + React 19 + Tailwind v4 + Payload CMS 3.x + PostgreSQL
+- **Shipped:** v1.0 MVP on 2026-03-24 with 8 phases, 18 plans, 26/26 requirements
 
 ## Constraints
 
-- **Tech stack**: Next.js + React + Tailwind CSS + Payload CMS 3.x — user-specified, non-negotiable
-- **Database**: PostgreSQL — required by deployment environment and user preference
-- **Hosting**: Self-hosted K8s with Traefik + Cloudflare tunnels — no cloud PaaS
-- **Branding**: Needs to be created from scratch — no existing logo or color palette
+- **Tech stack**: Next.js + React + Tailwind CSS + Payload CMS 3.x -- non-negotiable
+- **Database**: PostgreSQL -- required by deployment environment
+- **Hosting**: Self-hosted K8s with Traefik + Cloudflare tunnels -- no cloud PaaS
 - **Content team**: Must be manageable by non-technical editors through Payload admin UI
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Payload CMS 3.x with PostgreSQL | User-specified stack; Payload 3.x has first-class Next.js integration | Validated — Phase 1 |
-| Self-hosted K8s deployment | User has existing infrastructure; avoids vendor lock-in and recurring cloud costs | Validated — Phase 4 |
-| SEO + JSON-LD structured data | Civic advocacy site needs discoverability; rich snippets improve search presence | Validated — Phase 4 |
-| GitOps with ArgoCD | CI builds to GHCR, updates manifests, ArgoCD syncs — zero-touch deployments | Validated — Phase 4 |
-| Bold activist visual direction | Site's purpose is advocacy — design should convey urgency and demand attention | Validated — Phase 2 |
-| Two content types (pages + news) | Covers both evergreen reference content and timely updates | Validated — Phase 3 |
-| CMS-managed navigation + civic pages | Navigation, Officials, Meetings all CMS-managed for editorial independence | Validated — Phase 3 |
+| Payload CMS 3.x with PostgreSQL | User-specified stack; Payload 3.x has first-class Next.js integration | ✓ Good -- v1.0 |
+| Self-hosted K8s deployment | User has existing infrastructure; avoids vendor lock-in | ✓ Good -- v1.0 |
+| SEO + JSON-LD structured data | Civic advocacy needs discoverability; rich snippets improve search | ✓ Good -- v1.0 |
+| GitOps with ArgoCD | CI builds to GHCR, ArgoCD syncs -- zero-touch deployments | ✓ Good -- v1.0 |
+| Bold activist visual direction | Site's purpose is advocacy -- design conveys urgency | ✓ Good -- v1.0 |
+| Two content types (pages + news) | Covers evergreen reference content and timely updates | ✓ Good -- v1.0 |
+| CMS-managed navigation + civic pages | Navigation, Officials, Meetings all CMS-managed for editorial independence | ✓ Good -- v1.0 |
+| Tailwind v4 CSS-first config | Dual-mode color switching via CSS variables; no tailwind.config.js needed | ✓ Good -- v1.0 |
+| Lexical rich text editor | Payload 3.x default; extensible with custom blocks (PullQuote, Callout, Embed) | ✓ Good -- v1.0 |
+| DOM assertions over pixel-diff testing | CMS content changes; structural assertions are more stable than screenshots | ✓ Good -- v1.0 |
+| Seed script for test data | Enables full Playwright test coverage without manual setup | ✓ Good -- v1.0 |
+
+## Next Milestone Goals
+
+Not yet planned. Run `/gsd:new-milestone` to define v1.1 scope.
+
+Potential areas for v1.1:
+- Topic taxonomy/tags (TAXO-01, TAXO-02 from v2 backlog)
+- Email newsletter subscription (ENGMT-01, ENGMT-02 from v2 backlog)
+- Resource links page (RSRC-01 from v2 backlog)
+- Analytics integration (Plausible/Umami)
 
 ## Evolution
 
 This document evolves at phase transitions and milestone boundaries.
 
-**After each phase transition** (via `/gsd:transition`):
-1. Requirements invalidated? -> Move to Out of Scope with reason
-2. Requirements validated? -> Move to Validated with phase reference
-3. New requirements emerged? -> Add to Active
-4. Decisions to log? -> Add to Key Decisions
-5. "What This Is" still accurate? -> Update if drifted
-
-**After each milestone** (via `/gsd:complete-milestone`):
-1. Full review of all sections
-2. Core Value check — still the right priority?
-3. Audit Out of Scope — reasons still valid?
-4. Update Context with current state
-
 ---
-*Last updated: 2026-03-24 after Phase 7 completion (audit documentation cleanup — 26/26 v1 requirements fully satisfied across all 3 sources)*
+*Last updated: 2026-03-24 after v1.0 milestone completion*
