@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.planning
+.playwright-mcp
+.claude
+*.md
+!README.md
+docker-compose*.yml
+.env*
+argocd/
+.github/
