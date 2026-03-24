@@ -182,83 +182,17 @@ export interface Page {
      */
     link?: string | null;
   };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "news-posts".
- */
-export interface NewsPost {
-  id: number;
-  title: string;
-  /**
-   * Auto-generated from title. Edit to override.
-   */
-  slug?: string | null;
-  /**
-   * Select the author of this post
-   */
-  author: number | User;
-  publishDate: string;
-  featuredImage: number | Media;
-  body: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  /**
-   * Add a call-to-action button to this content
-   */
-  cta?: {
+  meta?: {
+    title?: string | null;
+    description?: string | null;
     /**
-     * e.g., "Attend the next board meeting", "Contact your representative"
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    text?: string | null;
-    /**
-     * Full URL including https://
-     */
-    link?: string | null;
+    image?: (number | null) | Media;
   };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -307,6 +241,88 @@ export interface Media {
       filename?: string | null;
     };
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "news-posts".
+ */
+export interface NewsPost {
+  id: number;
+  title: string;
+  /**
+   * Auto-generated from title. Edit to override.
+   */
+  slug?: string | null;
+  /**
+   * Select the author of this post
+   */
+  author: number | User;
+  publishDate: string;
+  featuredImage: number | Media;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Add a call-to-action button to this content
+   */
+  cta?: {
+    /**
+     * e.g., "Attend the next board meeting", "Contact your representative"
+     */
+    text?: string | null;
+    /**
+     * Full URL including https://
+     */
+    link?: string | null;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -553,6 +569,13 @@ export interface PagesSelect<T extends boolean = true> {
         text?: T;
         link?: T;
       };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -573,6 +596,13 @@ export interface NewsPostsSelect<T extends boolean = true> {
     | {
         text?: T;
         link?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;
