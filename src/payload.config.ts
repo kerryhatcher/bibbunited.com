@@ -9,8 +9,12 @@ import { Pages } from './collections/Pages'
 import { NewsPosts } from './collections/NewsPosts'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
+import { Officials } from './collections/Officials'
+import { Meetings } from './collections/Meetings'
 import { UrgentBanner } from './globals/UrgentBanner'
 import { SiteTheme } from './globals/SiteTheme'
+import { Navigation } from './globals/Navigation'
+import { Homepage } from './globals/Homepage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,8 +26,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, NewsPosts, Media, Users],
-  globals: [UrgentBanner, SiteTheme],
+  collections: [Pages, NewsPosts, Media, Users, Officials, Meetings],
+  globals: [UrgentBanner, SiteTheme, Navigation, Homepage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
