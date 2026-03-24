@@ -62,13 +62,13 @@ Plans:
   3. Contact Your Officials page displays names, roles, emails, and phone numbers for local officials
   4. Meeting Schedule page shows upcoming school board meeting dates, times, and locations
   5. Content pages and news posts display "last updated" timestamps, and articles have a print-friendly layout
-**Plans**: TBD
+**Plans**: 3 plans
 **UI hint**: yes
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
-- [ ] 03-03: TBD
+- [ ] 03-01-PLAN.md -- CMS data layer (Officials, Meetings, Navigation, Homepage), site chrome (Header, Footer, UrgentBannerBar), layout integration, print CSS
+- [ ] 03-02-PLAN.md -- Page templates (news article, static page), shared content components (RichTextRenderer, DateDisplay, PrintButton)
+- [ ] 03-03-PLAN.md -- Homepage (hero spotlight, latest news, topic callouts), civic action pages (Contact Officials, Meeting Schedule)
 
 ### Phase 4: SEO & Production Deployment
 **Goal**: The site is discoverable by search engines, shareable on social media, and running in production on the K8s cluster
@@ -95,5 +95,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. CMS Foundation | 0/3 | Planned    |  |
 | 2. Brand & Design System | 0/2 | Planned    |  |
-| 3. Site Pages & Navigation | 0/3 | Not started | - |
+| 3. Site Pages & Navigation | 0/3 | Planned | - |
 | 4. SEO & Production Deployment | 0/2 | Not started | - |
