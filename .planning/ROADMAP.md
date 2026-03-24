@@ -116,7 +116,10 @@ Plans:
   1. Playwright tests verify layout at mobile (320px, 375px), tablet (768px), and desktop (1024px, 1440px) viewports
   2. No layout breakage, overflow, or unreadable text at any tested viewport
   3. Navigation menu is functional at all viewport sizes
-**Plans**: 0 plans (pending `/gsd:plan-phase 6`)
+**Plans**: 1 plan
+
+Plans:
+- [ ] 06-01-PLAN.md -- Playwright setup, responsive test suite for all 6 public routes at 5 viewports, screenshot evidence
 
 ### Phase 7: Audit Documentation Cleanup
 **Goal**: All 10 partial documentation gaps are resolved — SUMMARY.md frontmatter and VERIFICATION.md body match actual status
@@ -141,5 +144,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 3. Site Pages & Navigation | 1/3 | In progress | - |
 | 4. SEO & Production Deployment | 0/3 | Not started | - |
 | 5. Critical Build & Route Fixes | 0/2 | Planned    |  |
-| 6. Responsive Device Testing | 0/0 | Not started | - |
+| 6. Responsive Device Testing | 0/1 | Planned    |  |
 | 7. Audit Documentation Cleanup | 0/0 | Not started | - |
