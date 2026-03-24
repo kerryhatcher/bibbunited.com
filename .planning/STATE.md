@@ -2,14 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Milestone complete
-stopped_at: Completed 07-01-PLAN.md
-last_updated: "2026-03-24T17:56:34.965Z"
+status: Phase complete — ready for verification
+stopped_at: Completed 08-03-PLAN.md
+last_updated: "2026-03-24T20:44:37.451Z"
+last_activity: 2026-03-24
 progress:
-  total_phases: 7
-  completed_phases: 7
-  total_plans: 15
-  completed_plans: 15
+  total_phases: 8
+  completed_phases: 8
+  total_plans: 18
+  completed_plans: 18
 ---
 
 # Project State
@@ -19,12 +20,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Community members can find clear, actionable information about their local school system and know exactly what to do about it.
-**Current focus:** Phase 07 — audit-documentation-cleanup
+**Current focus:** Phase 08 — tech-debt-cleanup
 
 ## Current Position
 
-Phase: 07
-Plan: Not started
+Phase: 08 (tech-debt-cleanup) — EXECUTING
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -60,6 +61,9 @@ Plan: Not started
 | Phase 05 P01 | 2min | 2 tasks | 5 files |
 | Phase 06 P01 | 7min | 2 tasks | 12 files |
 | Phase 07 P01 | 9min | 2 tasks | 3 files |
+| Phase 08 P02 | 1min | 1 tasks | 1 files |
+| Phase 08 P01 | 2min | 2 tasks | 3 files |
+| Phase 08 P03 | 11min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -99,6 +103,15 @@ Recent decisions affecting current work:
 - [Phase 06]: Chromium-only Playwright install; DOM assertions over pixel-diff for CMS stability
 - [Phase 07]: 02-02-SUMMARY.md gets empty requirements-completed: [] since no unique requirements attributed
 - [Phase 07]: Phase 3 VERIFICATION.md gaps frontmatter preserved as historical audit trail; body updated to reflect resolved state
+- [Phase 08]: Created DEPLOYMENT.md runbook documenting Cloudflare DNS, Docker build PostgreSQL, JSON-LD validation, and media persistence
+- [Phase 08]: Red accent #DC2626 passes WCAG AA at 4.79:1 -- no color change needed
+- [Phase 08]: Media staticDir uses import.meta.url pattern matching payload.config.ts convention
+- [Phase 08]: Seed script uses title-based lookup for idempotency since slug hook auto-generates from title on create
+- [Phase 08]: Used node --env-file for seed script environment loading (Node 22 native, no dotenv dependency)
+
+### Roadmap Evolution
+
+- Phase 8 added: Tech Debt Cleanup
 
 ### Pending Todos
 
@@ -118,7 +131,7 @@ None yet.
 
 ## Session Continuity
 
-Last activity: 2026-03-24 - Completed quick task 260324-koh: Fix postbuild script to use next-sitemap --config next-sitemap.config.cjs
-Last session: 2026-03-24T17:52:26.967Z
-Stopped at: Completed 07-01-PLAN.md
+Last activity: 2026-03-24
+Last session: 2026-03-24T20:44:37.448Z
+Stopped at: Completed 08-03-PLAN.md
 Resume file: None

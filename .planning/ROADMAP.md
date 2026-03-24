@@ -151,9 +151,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 08-01-PLAN.md -- Footer contrast fix, red color verification, Media staticDir hardening, homepage OG image
-- [ ] 08-02-PLAN.md -- Deployment documentation (Cloudflare DNS, Docker build DB, JSON-LD validation)
-- [ ] 08-03-PLAN.md -- Seed script for test content, full Playwright test suite verification
+- [x] 08-01-PLAN.md -- Footer contrast fix, red color verification, Media staticDir hardening, homepage OG image
+- [x] 08-02-PLAN.md -- Deployment documentation (Cloudflare DNS, Docker build DB, JSON-LD validation)
+- [x] 08-03-PLAN.md -- Seed script for test content, full Playwright test suite verification
 
 ## Progress
 
