@@ -149,3 +149,14 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 5. Critical Build & Route Fixes | 0/2 | Planned    |  |
 | 6. Responsive Device Testing | 0/1 | Planned    |  |
 | 7. Audit Documentation Cleanup | 0/1 | Not started | - |
+
+### Phase 8: Tech Debt Cleanup
+
+**Goal:** Resolve all accumulated tech debt from v1.0 audit — fix accessibility contrast issues, harden deployment fragilities, add DB seed data for full Playwright test coverage, and document external setup items
+**Requirements**: DSGN-05 (hardening), DEPLOY-05 (hardening), SEO-01 (hardening)
+**Depends on:** Phase 7
+**Gap Closure:** Closes 10 tech debt items from v1.0 audit
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 8 to break down)
