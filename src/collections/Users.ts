@@ -8,6 +8,13 @@ export const Users: CollectionConfig = {
   auth: true,
   fields: [
     // Email added by default
-    // Add more fields as needed
+    {
+      name: 'displayName',
+      type: 'text',
+      label: 'Display Name',
+      admin: {
+        description: 'Public name shown on article bylines. Falls back to "BIBB United Staff" if empty.',
+      },
+    },
   ],
 }
