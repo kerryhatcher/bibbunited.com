@@ -14,7 +14,7 @@
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
-    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx src/seed.ts",
+    "seed": "node --no-deprecation --env-file=.env --import tsx/esm src/seed.ts",
     "test:e2e": "npx playwright test",
     "test:e2e:ui": "npx playwright test --ui"
   },
