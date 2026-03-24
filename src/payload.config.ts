@@ -9,6 +9,7 @@ import { Pages } from './collections/Pages'
 import { NewsPosts } from './collections/NewsPosts'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
+import { UrgentBanner } from './globals/UrgentBanner'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -21,6 +22,7 @@ export default buildConfig({
     },
   },
   collections: [Pages, NewsPosts, Media, Users],
+  globals: [UrgentBanner],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
