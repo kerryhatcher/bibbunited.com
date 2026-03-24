@@ -1,23 +1,116 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* ===== Community Mode (Light - default) ===== */
 :root {
-  --font-mono: 'Roboto Mono', monospace;
+  --brand-bg-dominant: #FFFFFF;
+  --brand-bg-secondary: #1B2A4A;
+  --brand-accent: #DC2626;
+  --brand-text-primary: #111827;
+  --brand-text-secondary: #4B5563;
+  --brand-text-on-dark: #FFFFFF;
+  --brand-text-on-accent: #FFFFFF;
+  --brand-border: #D1D5DB;
 }
 
+/* ===== Urgent Mode (Dark) overrides ===== */
+[data-mode="urgent"] {
+  --brand-bg-dominant: #0F172A;
+  --brand-bg-secondary: #1E293B;
+  --brand-accent: #EF4444;
+  --brand-text-primary: #F8FAFC;
+  --brand-text-secondary: #94A3B8;
+  --brand-text-on-dark: #FFFFFF;
+  --brand-text-on-accent: #FFFFFF;
+  --brand-border: #334155;
+}
+
+@theme {
+  /* Mode-switching colors (reference CSS vars) */
+  --color-bg-dominant: var(--brand-bg-dominant);
+  --color-bg-secondary: var(--brand-bg-secondary);
+  --color-accent: var(--brand-accent);
+  --color-text-primary: var(--brand-text-primary);
+  --color-text-secondary: var(--brand-text-secondary);
+  --color-text-on-dark: var(--brand-text-on-dark);
+  --color-text-on-accent: var(--brand-text-on-accent);
+  --color-border: var(--brand-border);
+
+  /* Static colors (same in both modes) */
+  --color-navy: #1B2A4A;
+  --color-crimson: #DC2626;
+
+  /* Fonts (reference next/font CSS variables) */
+  --font-heading: var(--font-barlow-condensed), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+
+  /* Custom spacing */
+  --spacing-section: 64px;
+  --spacing-section-mobile: 32px;
+}
+
+/* ===== Base resets ===== */
 * {
   box-sizing: border-box;
 }
 
 html {
-  font-size: 18px;
-  line-height: 32px;
   -webkit-font-smoothing: antialiased;
 }
 
-html,
-body {
+html, body {
   height: 100%;
 }
 
 body {
-  font-family: system-ui;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-dominant);
   margin: 0;
+}
+
+/* ===== Global heading typography (per D-08) ===== */
+@layer base {
+  h1, h2 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+  }
+}
+
+/* ===== Typography prose overrides ===== */
+.prose {
+  --tw-prose-body: var(--brand-text-primary);
+  --tw-prose-headings: var(--brand-text-primary);
+  --tw-prose-links: var(--brand-accent);
+  --tw-prose-bold: var(--brand-text-primary);
+  --tw-prose-quotes: var(--brand-text-primary);
+  --tw-prose-quote-borders: var(--brand-accent);
+  max-width: 65ch;
+}
+
+.prose h2,
+.prose h3 {
+  font-family: var(--font-heading);
+}
+
+.prose h2 {
+  text-transform: uppercase;
+}
+
+.prose blockquote {
+  border-left-width: 4px;
+  font-style: italic;
+  font-size: 1.125rem;
+}
+
+.prose img {
+  border-radius: 0;
 }
