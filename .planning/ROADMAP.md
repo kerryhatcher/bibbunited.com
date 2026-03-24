@@ -42,7 +42,10 @@
   2. Users collection has a displayName field and the seed user has a display name set
   3. A branded 1200x630 OG default image exists at a known public path
   4. Media files are served with long-lived cache headers and the X-Powered-By header is suppressed
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 09-01-PLAN.md -- Users displayName field, DB migration, Next.js cache/security headers
+- [ ] 09-02-PLAN.md -- Seed script overhaul: images, OG image, Navigation/Homepage globals, Officials, Meetings
 
 ### Phase 10: Component Migration & Visual Fixes
 **Goal**: All internal links use client-side navigation, all images are optimized via next/image, and critical visual bugs (footer contrast, keyboard trap) are resolved
@@ -103,7 +106,7 @@
 | 6. Responsive Device Testing | v1.0 | 1/1 | Complete | 2026-03-24 |
 | 7. Audit Documentation Cleanup | v1.0 | 1/1 | Complete | 2026-03-24 |
 | 8. Tech Debt Cleanup | v1.0 | 3/3 | Complete | 2026-03-24 |
-| 9. Foundation & Config | v1.1 | 0/0 | Not started | - |
+| 9. Foundation & Config | v1.1 | 0/2 | Planning | - |
 | 10. Component Migration & Visual Fixes | v1.1 | 0/0 | Not started | - |
 | 11. Accessibility, Layout & UX Polish | v1.1 | 0/0 | Not started | - |
 | 12. SEO & Metadata | v1.1 | 0/0 | Not started | - |
