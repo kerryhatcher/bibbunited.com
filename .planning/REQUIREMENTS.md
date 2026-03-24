@@ -9,9 +9,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Content Management
 
-- [ ] **CONT-01**: User can create and edit rich text pages with headings, images, pull quotes, and embedded content
-- [ ] **CONT-02**: User can create and edit news posts with title, body, publish date, and featured image
-- [ ] **CONT-03**: Each page and news post has a configurable call-to-action block (CTA text + link)
+- [x] **CONT-01**: User can create and edit rich text pages with headings, images, pull quotes, and embedded content
+- [x] **CONT-02**: User can create and edit news posts with title, body, publish date, and featured image
+- [x] **CONT-03**: Each page and news post has a configurable call-to-action block (CTA text + link)
 - [ ] **CONT-04**: Editor can activate a site-wide urgent banner with custom message and optional link
 - [x] **CONT-05**: Non-technical editors can publish and manage all content via Payload CMS admin UI
 
@@ -93,9 +93,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONT-01 | Phase 1 | Pending |
-| CONT-02 | Phase 1 | Pending |
-| CONT-03 | Phase 1 | Pending |
+| CONT-01 | Phase 1 | Complete |
+| CONT-02 | Phase 1 | Complete |
+| CONT-03 | Phase 1 | Complete |
 | CONT-04 | Phase 1 | Pending |
 | CONT-05 | Phase 1 | Complete |
 | NAV-01 | Phase 3 | Pending |

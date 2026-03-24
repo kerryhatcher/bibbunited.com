@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-stopped_at: Completed 01-01-PLAN.md (Project Scaffold)
-last_updated: "2026-03-24T05:57:45.111Z"
+stopped_at: Completed 01-02-PLAN.md (Content Collections)
+last_updated: "2026-03-24T06:02:49.724Z"
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 3
-  completed_plans: 0
+  completed_plans: 2
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-23)
 ## Current Position
 
 Phase: 01 (CMS Foundation) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -47,6 +47,7 @@ Plan: 2 of 3
 
 *Updated after each plan completion*
 | Phase 01-cms-foundation P01 | 5min | 2 tasks | 29 files |
+| Phase 01 P02 | 2min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -60,6 +61,8 @@ Recent decisions affecting current work:
 - Tailwind CSS v4 config differs significantly from v3; verify scaffolding output
 - [Phase 01-cms-foundation]: Manual project setup from Payload blank template (create-payload-app has TTY issues in automated environments)
 - [Phase 01-cms-foundation]: @payloadcms/storage-local does not exist on npm; Payload uses local filesystem storage by default
+- [Phase 01-cms-foundation]: Embed block implemented as BlocksFeature block with URL field (not custom Lexical node)
+- [Phase 01-cms-foundation]: HeadingFeature restricted to h2/h3/h4 (h1 reserved for page title)
 
 ### Pending Todos
 
@@ -73,6 +76,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-24T05:57:45.107Z
-Stopped at: Completed 01-01-PLAN.md (Project Scaffold)
+Last session: 2026-03-24T06:02:49.721Z
+Stopped at: Completed 01-02-PLAN.md (Content Collections)
 Resume file: None

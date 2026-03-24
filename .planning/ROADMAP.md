@@ -32,8 +32,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md -- Scaffold project, PostgreSQL config, Media collection, reusable fields (slug, CTA)
-- [ ] 01-02-PLAN.md -- Lexical editor blocks, Pages and NewsPosts collections with drafts and rich text
+- [x] 01-01-PLAN.md -- Scaffold project, PostgreSQL config, Media collection, reusable fields (slug, CTA)
+- [x] 01-02-PLAN.md -- Lexical editor blocks, Pages and NewsPosts collections with drafts and rich text
 - [ ] 01-03-PLAN.md -- UrgentBanner global, final config wiring, admin panel verification
 
 ### Phase 2: Brand & Design System
