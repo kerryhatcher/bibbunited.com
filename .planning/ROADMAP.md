@@ -45,12 +45,12 @@ Plans:
   2. Tailwind design tokens (colors, fonts, spacing) are configured and produce consistent styling across components
   3. Core UI components (buttons, cards, headers, CTAs) render correctly on mobile, tablet, and desktop viewports
   4. Color contrast ratios meet WCAG 2.1 AA standards and all components use semantic HTML with keyboard navigation support
-**Plans**: TBD
+**Plans**: 2 plans
 **UI hint**: yes
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md -- Tailwind v4 design tokens, fonts, SiteTheme Global, PostCSS config
+- [ ] 02-02-PLAN.md -- UI components (Button, Card, Section, Logo), favicon, showcase page, visual verification
 
 ### Phase 3: Site Pages & Navigation
 **Goal**: Visitors can browse the complete public-facing site -- homepage, content pages, news posts, civic action pages -- via CMS-managed navigation
