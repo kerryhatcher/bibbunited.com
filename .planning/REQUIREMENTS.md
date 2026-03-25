@@ -10,7 +10,7 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 ### Visual Appearance
 
 - [x] **VIS-01**: Footer text is readable with proper contrast on dark background (WCAG 4.5:1 minimum)
-- [ ] **VIS-02**: Navigation menu is populated with all site sections in both desktop and mobile views
+- [x] **VIS-02**: Navigation menu is populated with all site sections in both desktop and mobile views
 - [x] **VIS-03**: Hero spotlight displays featured news content on homepage instead of empty dark rectangle
 - [x] **VIS-04**: Seed images are visually distinct and high-contrast against card backgrounds
 
@@ -38,7 +38,7 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 ### UX Polish
 
 - [x] **UX-01**: Article bylines show display name instead of admin email address
-- [ ] **UX-02**: Current page is visually indicated in navigation with active styling and aria-current
+- [x] **UX-02**: Current page is visually indicated in navigation with active styling and aria-current
 - [x] **UX-03**: News cards show excerpt or summary text to help readers assess relevance
 - [x] **UX-04**: Empty states on civic pages use actionable messaging with fallback links
 - [x] **UX-05**: Footer CTA button does not link to the current page
@@ -97,7 +97,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | VIS-01 | Phase 10 | Complete |
-| VIS-02 | Phase 14 | Pending |
+| VIS-02 | Phase 14 | Complete |
 | VIS-03 | Phase 9 | Complete |
 | VIS-04 | Phase 9 | Complete |
 | A11Y-01 | Phase 11 | Complete |
@@ -113,7 +113,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEO-08 | Phase 12 | Complete |
 | SEO-09 | Phase 9 | Complete |
 | UX-01 | Phase 11 | Complete |
-| UX-02 | Phase 14 | Pending |
+| UX-02 | Phase 14 | Complete |
 | UX-03 | Phase 11 | Complete |
 | UX-04 | Phase 11 | Complete |
 | UX-05 | Phase 11 | Complete |
@@ -130,4 +130,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-03-24*
-*Last updated: 2026-03-24 after roadmap creation*
+*Last updated: 2026-03-25 after Phase 14 gap closure*

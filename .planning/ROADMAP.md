@@ -118,7 +118,7 @@ Plans:
   4. All completed requirement traceability entries show "Complete" status
 **Plans**: 1 plan
 Plans:
-- [ ] 14-01-PLAN.md -- Fix seed URL and re-seed database, update REQUIREMENTS.md and ROADMAP.md documentation drift
+- [x] 14-01-PLAN.md -- Fix seed URL and re-seed database, update REQUIREMENTS.md and ROADMAP.md documentation drift
 
 ## Progress
 
