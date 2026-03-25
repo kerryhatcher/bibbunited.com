@@ -1,16 +1,16 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* ===== Register mode-switching tokens with Tailwind (initial = no static value) ===== */
+/* ===== Community Mode tokens (Light - default) ===== */
 @theme {
-  --color-bg-dominant: initial;
-  --color-bg-secondary: initial;
-  --color-accent: initial;
-  --color-text-primary: initial;
-  --color-text-secondary: initial;
-  --color-text-on-dark: initial;
-  --color-text-on-accent: initial;
-  --color-border: initial;
+  --color-bg-dominant: #FFFFFF;
+  --color-bg-secondary: #1B2A4A;
+  --color-accent: #DC2626;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-on-dark: #FFFFFF;
+  --color-text-on-accent: #FFFFFF;
+  --color-border: #D1D5DB;
 
   /* Static colors (same in both modes) */
   --color-navy: #1B2A4A;
@@ -23,18 +23,6 @@
   /* Custom spacing */
   --spacing-section: 64px;
   --spacing-section-mobile: 32px;
-}
-
-/* ===== Community Mode (Light - default) ===== */
-:root {
-  --color-bg-dominant: #FFFFFF;
-  --color-bg-secondary: #1B2A4A;
-  --color-accent: #DC2626;
-  --color-text-primary: #111827;
-  --color-text-secondary: #4B5563;
-  --color-text-on-dark: #FFFFFF;
-  --color-text-on-accent: #FFFFFF;
-  --color-border: #D1D5DB;
 }
 
 /* ===== Urgent Mode (Dark) overrides ===== */
