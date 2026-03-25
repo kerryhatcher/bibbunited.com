@@ -84,7 +84,7 @@ export default async function NewsArticlePage({ params }: Args) {
 
   const authorName =
     typeof post.author === 'object'
-      ? (post.author as User).displayName || 'BIBB United Staff'
+      ? (post.author as User)?.displayName || 'BIBB United Staff'
       : 'BIBB United Staff'
 
   const featuredImage =

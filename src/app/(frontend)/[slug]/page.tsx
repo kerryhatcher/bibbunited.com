@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
 
   return generatePageMeta({
     title: page.meta?.title || page.title,
-    description: page.meta?.description || undefined,
+    description: page.meta?.description || page.title + ' - BIBB United community information and resources',
     slug,
     image: seoImage,
   })
