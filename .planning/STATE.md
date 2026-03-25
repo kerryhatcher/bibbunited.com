@@ -73,9 +73,10 @@ None.
 | 260324-vt1 | Make header background solid white instead of theme-dependent | 2026-03-25 | 7bddf40 | [260324-vt1-make-the-top-menu-solid-white-instead-of](./quick/260324-vt1-make-the-top-menu-solid-white-instead-of/) |
 | 260324-vxb | Fix footer text contrast - text-white instead of text-text-on-dark | 2026-03-25 | b31e6b0 | [260324-vxb-fix-footer-text-contrast-text-nearly-unr](./quick/260324-vxb-fix-footer-text-contrast-text-nearly-unr/) |
 | 260324-wer | Fix header broken in dark theme - restore bg-bg-dominant | 2026-03-25 | 1b1bf3a | [260324-wer-fix-header-broken-in-dark-theme-restore-](./quick/260324-wer-fix-header-broken-in-dark-theme-restore-/) |
+| 260324-wou | Dark mode header background matches footer navy | 2026-03-25 | 58e6e0d | [260324-wou-dark-mode-header-background-matches-foot](./quick/260324-wou-dark-mode-header-background-matches-foot/) |
 
 ## Session Continuity
 
 Last activity: 2026-03-25
-Stopped at: Completed quick task 260324-wer
+Stopped at: Completed quick task 260324-wou
 Resume file: None
