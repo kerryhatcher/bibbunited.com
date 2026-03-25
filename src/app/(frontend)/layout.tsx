@@ -50,9 +50,15 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${barlowCondensed.variable} ${inter.variable}`}>
       <body data-mode={mode}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-accent focus:text-text-on-accent focus:px-4 focus:py-2 focus:font-heading focus:font-bold focus:uppercase focus:tracking-wide focus:transition-transform focus:duration-200"
+        >
+          Skip to main content
+        </a>
         <UrgentBannerBar />
         <Header navItems={navigation.items || []} />
-        <main className="pt-16">{children}</main>
+        <main id="main-content" className="pt-16">{children}</main>
         <Footer />
       </body>
     </html>
