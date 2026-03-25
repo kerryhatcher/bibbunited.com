@@ -27,7 +27,7 @@
 
 - [ ] **Phase 9: Foundation & Config** - Database migration, seed overhaul, config hardening, and OG default asset
 - [x] **Phase 10: Component Migration & Visual Fixes** - next/link and next/image batch migrations, footer contrast, and keyboard trap fix (completed 2026-03-25)
-- [ ] **Phase 11: Accessibility, Layout & UX Polish** - Skip link, H1, active nav, bylines, excerpts, empty states, spacing, and focus indicators
+- [x] **Phase 11: Accessibility, Layout & UX Polish** - Skip link, H1, active nav, bylines, excerpts, empty states, spacing, and focus indicators (completed 2026-03-25)
 - [ ] **Phase 12: SEO & Metadata** - Title template, canonical URLs, OG tags, dynamic sitemap, and sitemap priorities
 - [ ] **Phase 13: Quality Audit** - Full automated re-review verifying all fixes and catching regressions
 
@@ -73,9 +73,9 @@ Plans:
   5. News cards show excerpt text, empty civic pages show actionable fallback messaging, footer CTA does not link to current page, footer links have visible focus rings, and main content is correctly spaced below the sticky header
 **Plans**: 3 plans
 Plans:
-- [ ] 11-01-PLAN.md -- Skip-to-content link, homepage sr-only H1, footer focus ring indicators
-- [ ] 11-02-PLAN.md -- Active nav indicators (desktop/mobile), footer conditional CTA, spacing verification
-- [ ] 11-03-PLAN.md -- News excerpt field + Lexical utility, article bylines with displayName, civic page empty states
+- [x] 11-01-PLAN.md -- Skip-to-content link, homepage sr-only H1, footer focus ring indicators
+- [x] 11-02-PLAN.md -- Active nav indicators (desktop/mobile), footer conditional CTA, spacing verification
+- [x] 11-03-PLAN.md -- News excerpt field + Lexical utility, article bylines with displayName, civic page empty states
 
 ### Phase 12: SEO & Metadata
 **Goal**: Every page has correct, complete metadata for search engines and social sharing
@@ -113,6 +113,6 @@ Plans:
 | 8. Tech Debt Cleanup | v1.0 | 3/3 | Complete | 2026-03-24 |
 | 9. Foundation & Config | v1.1 | 0/2 | Planning | - |
 | 10. Component Migration & Visual Fixes | v1.1 | 2/2 | Complete    | 2026-03-25 |
-| 11. Accessibility, Layout & UX Polish | v1.1 | 0/3 | Planned | - |
+| 11. Accessibility, Layout & UX Polish | v1.1 | 3/3 | Complete   | 2026-03-25 |
 | 12. SEO & Metadata | v1.1 | 0/0 | Not started | - |
 | 13. Quality Audit | v1.1 | 0/0 | Not started | - |

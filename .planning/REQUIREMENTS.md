@@ -38,11 +38,11 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 ### UX Polish
 
 - [ ] **UX-01**: Article bylines show display name instead of admin email address
-- [ ] **UX-02**: Current page is visually indicated in navigation with active styling and aria-current
+- [x] **UX-02**: Current page is visually indicated in navigation with active styling and aria-current
 - [ ] **UX-03**: News cards show excerpt or summary text to help readers assess relevance
 - [ ] **UX-04**: Empty states on civic pages use actionable messaging with fallback links
-- [ ] **UX-05**: Footer CTA button does not link to the current page
-- [ ] **UX-06**: Main content spacing is correct relative to sticky header on all page types
+- [x] **UX-05**: Footer CTA button does not link to the current page
+- [x] **UX-06**: Main content spacing is correct relative to sticky header on all page types
 
 ### Infrastructure
 
@@ -113,11 +113,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEO-08 | Phase 12 | Pending |
 | SEO-09 | Phase 9 | Complete |
 | UX-01 | Phase 11 | Pending |
-| UX-02 | Phase 11 | Pending |
+| UX-02 | Phase 11 | Complete |
 | UX-03 | Phase 11 | Pending |
 | UX-04 | Phase 11 | Pending |
-| UX-05 | Phase 11 | Pending |
-| UX-06 | Phase 11 | Pending |
+| UX-05 | Phase 11 | Complete |
+| UX-06 | Phase 11 | Complete |
 | INFRA-01 | Phase 9 | Complete |
 | INFRA-02 | Phase 9 | Complete |
 | INFRA-03 | Phase 12 | Pending |

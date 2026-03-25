@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Production Polish
 status: Ready to plan
-stopped_at: Phase 11 context gathered
-last_updated: "2026-03-25T01:56:58.165Z"
+stopped_at: Completed 11-02-PLAN.md
+last_updated: "2026-03-25T02:43:46.732Z"
 last_activity: 2026-03-25
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
+  completed_phases: 3
+  total_plans: 7
+  completed_plans: 7
 ---
 
 # Project State
@@ -45,6 +45,8 @@ Recent decisions affecting current work:
 - [Phase 10]: Hero carousel only first slide gets priority={true} for LCP optimization
 - [Phase 10]: Used native inert attribute (React 19) for mobile panel accessibility instead of manual aria-hidden
 - [Phase 10]: Co-located useFocusTrap hook in Header.tsx -- single consumer, extract later if reused
+- [Phase 11]: Named isActiveLink to avoid collision with useFocusTrap isActive parameter
+- [Phase 11]: Extracted FooterCTA as client component to keep Footer as server component
 
 ### Roadmap Evolution
 
@@ -72,5 +74,5 @@ None.
 ## Session Continuity
 
 Last activity: 2026-03-25
-Stopped at: Phase 11 context gathered
-Resume file: .planning/phases/11-accessibility-layout-ux-polish/11-CONTEXT.md
+Stopped at: Completed 11-02-PLAN.md
+Resume file: None
