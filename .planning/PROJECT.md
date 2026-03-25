@@ -9,7 +9,7 @@ A civic advocacy website for the BIBB community, starting with local school syst
 **Version:** v1.1 complete (v1.0 shipped 2026-03-24, v1.1 shipped 2026-03-25)
 **Codebase:** 6,045 LOC (TypeScript/TSX/CSS), 185 files
 **Test coverage:** 160 Playwright e2e tests + 61 audit tests (Lighthouse, axe-core, admin login) across 5 viewports
-**Requirements:** 26/26 v1 requirements satisfied; 25/25 v1.1 requirements satisfied; QA-01 verified (Phase 13 complete)
+**Requirements:** 26/26 v1 requirements satisfied; 26/26 v1.1 requirements satisfied (Phase 14 closed all gaps)
 
 ## Core Value
 
@@ -98,7 +98,7 @@ Community members can find clear, actionable information about their local schoo
 ## Completed Milestone: v1.1 Production Polish ✓
 
 **Goal:** Fix all UI/UX review issues and perform a final quality audit so the site is production-ready -- visually polished, fully accessible, optimized, and SEO-complete.
-**Status:** Complete (2026-03-25) -- All 5 phases (9-13) executed, all requirements verified, Lighthouse 100/100/100/100 on all routes.
+**Status:** Complete (2026-03-25) -- All 6 phases (9-14) executed, all requirements verified, Lighthouse 100/100/100/100 on all routes.
 
 **Delivered:**
 - Fixed 4 critical appearance issues (footer contrast, empty nav, empty hero, dark seed images)
@@ -121,4 +121,4 @@ Community members can find clear, actionable information about their local schoo
 This document evolves at phase transitions and milestone boundaries.
 
 ---
-*Last updated: 2026-03-25 -- Phase 13 (Quality Audit) complete, v1.1 milestone done*
+*Last updated: 2026-03-25 -- Phase 14 (Navigation URL Fix & Doc Drift) complete, v1.1 milestone fully closed*
