@@ -82,6 +82,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <h1 className="sr-only">BIBB United -- Civic Advocacy for the BIBB Community</h1>
       <JsonLdScript data={organizationJsonLd()} />
       <JsonLdScript data={websiteJsonLd()} />
       <HeroSpotlight stories={heroStories} />

@@ -16,8 +16,8 @@ export function Footer() {
             Your voice matters. Here&apos;s how you can make a difference.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button href="/contact-officials">Contact Officials</Button>
-            <Button href="/meetings" variant="secondary">
+            <Button href="/contact-officials" className="focus:ring-offset-navy">Contact Officials</Button>
+            <Button href="/meetings" variant="secondary" className="focus:ring-offset-navy">
               Upcoming Meetings
             </Button>
           </div>
@@ -41,7 +41,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="text-sm text-text-on-dark no-underline hover:text-white"
+                  className="text-sm text-text-on-dark no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
                 >
                   About
                 </Link>
@@ -49,7 +49,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/news"
-                  className="text-sm text-text-on-dark no-underline hover:text-white"
+                  className="text-sm text-text-on-dark no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
                 >
                   News
                 </Link>
@@ -57,7 +57,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/contact-officials"
-                  className="text-sm text-text-on-dark no-underline hover:text-white"
+                  className="text-sm text-text-on-dark no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
                 >
                   Contact Officials
                 </Link>
@@ -65,7 +65,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/meetings"
-                  className="text-sm text-text-on-dark no-underline hover:text-white"
+                  className="text-sm text-text-on-dark no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
                 >
                   Meetings
                 </Link>
