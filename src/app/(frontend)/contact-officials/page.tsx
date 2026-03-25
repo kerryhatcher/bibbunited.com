@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { generatePageMeta } from '@/lib/metadata'
 import { Section } from '@/components/ui/Section'
 import { Mail, Phone, User, Users } from 'lucide-react'
 import {
@@ -13,21 +14,12 @@ import { Button } from '@/components/ui/Button'
 import type { Official, Media } from '@/payload-types'
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
+  return generatePageMeta({
     title: 'Contact Your Officials',
     description:
       'Contact information for local officials -- school board, county commission, and water board members.',
-    openGraph: {
-      title: 'Contact Your Officials | BIBB United',
-      description:
-        'Contact information for local officials -- school board, county commission, and water board members.',
-    },
-    twitter: {
-      title: 'Contact Your Officials | BIBB United',
-      description:
-        'Contact information for local officials -- school board, county commission, and water board members.',
-    },
-  }
+    slug: 'contact-officials',
+  })
 }
 
 const bodyLabels: Record<string, string> = {

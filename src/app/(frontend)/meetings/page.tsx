@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { generatePageMeta } from '@/lib/metadata'
 import { Section } from '@/components/ui/Section'
 import { Calendar, Clock, MapPin, ExternalLink } from 'lucide-react'
 import { format, isPast } from 'date-fns'
@@ -8,21 +9,12 @@ import { Button } from '@/components/ui/Button'
 import { JsonLdScript, breadcrumbJsonLd } from '@/lib/jsonLd'
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
+  return generatePageMeta({
     title: 'Meeting Schedule',
     description:
       'Upcoming school board and public meeting dates, times, and locations.',
-    openGraph: {
-      title: 'Meeting Schedule | BIBB United',
-      description:
-        'Upcoming school board and public meeting dates, times, and locations.',
-    },
-    twitter: {
-      title: 'Meeting Schedule | BIBB United',
-      description:
-        'Upcoming school board and public meeting dates, times, and locations.',
-    },
-  }
+    slug: 'meetings',
+  })
 }
 
 export default async function MeetingsPage() {

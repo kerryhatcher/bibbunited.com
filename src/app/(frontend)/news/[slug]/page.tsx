@@ -4,6 +4,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { generatePageMeta } from '@/lib/metadata'
 import { RichTextRenderer } from '@/components/shared/RichTextRenderer'
 import { DateDisplay } from '@/components/shared/DateDisplay'
 import { PrintButton } from '@/components/shared/PrintButton'
@@ -44,9 +45,7 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const post = result.docs[0]
   if (!post) return { title: 'Not Found' }
 
-  const title = post.meta?.title || post.title
-  const description = post.meta?.description || undefined
-  // Use SEO image override, fall back to featured image
+  // SEO image -> featured image -> helper fetches SiteTheme fallback
   const seoImage =
     typeof post.meta?.image === 'object'
       ? (post.meta.image as Media)?.url ?? null
@@ -55,22 +54,19 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
     typeof post.featuredImage === 'object'
       ? (post.featuredImage as Media)?.url ?? null
       : null
-  const ogImage = seoImage || featuredImg
 
-  return {
-    title: `${title} | BIBB United`,
-    description,
-    openGraph: {
-      title: `${title} | BIBB United`,
-      description,
-      ...(ogImage && { images: [{ url: ogImage, width: 1200, height: 630 }] }),
-    },
-    twitter: {
-      title: `${title} | BIBB United`,
-      description,
-      ...(ogImage && { images: [ogImage] }),
-    },
-  }
+  return generatePageMeta({
+    title: post.meta?.title || post.title,
+    description: post.meta?.description || undefined,
+    slug: `news/${slug}`,
+    type: 'article',
+    image: seoImage || featuredImg || null,
+    publishedTime: post.publishDate,
+    author:
+      typeof post.author === 'object'
+        ? (post.author as User)?.displayName || undefined
+        : undefined,
+  })
 }
 
 export default async function NewsArticlePage({ params }: Args) {
