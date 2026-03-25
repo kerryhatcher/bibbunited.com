@@ -36,6 +36,7 @@ test-results/
 playwright-report/
 e2e/screenshots/
 .playwright-mcp/
+e2e/audit/results/
 
 # pnpm
 .pnpm-store/
