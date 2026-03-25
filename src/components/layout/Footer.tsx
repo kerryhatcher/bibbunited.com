@@ -16,7 +16,7 @@ export function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 sm:px-6 lg:flex-row lg:px-8">
           {/* Left: logo + copyright */}
           <div className="flex items-center gap-3">
-            <Logo />
+            <Logo variant="footer" />
             <span className="text-sm text-white/80">
               &copy; 2026 BIBB United. All rights reserved.
             </span>

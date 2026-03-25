@@ -3,10 +3,12 @@ import React from 'react'
 interface LogoProps {
   className?: string
   size?: 'default' | 'large'
+  variant?: 'default' | 'footer'
 }
 
-export function Logo({ className = '', size = 'default' }: LogoProps) {
+export function Logo({ className = '', size = 'default', variant = 'default' }: LogoProps) {
   const textSize = size === 'large' ? 'text-4xl sm:text-5xl' : 'text-2xl sm:text-3xl'
+  const unitedColor = variant === 'footer' ? 'text-white' : 'text-crimson'
 
   return (
     <span
@@ -15,7 +17,7 @@ export function Logo({ className = '', size = 'default' }: LogoProps) {
       aria-label="BIBB United"
     >
       <span className="logo-bibb">BIBB</span>
-      <span className="text-crimson ml-2">UNITED</span>
+      <span className={`${unitedColor} ml-2`}>UNITED</span>
     </span>
   )
 }

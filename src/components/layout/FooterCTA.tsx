@@ -37,7 +37,7 @@ export function FooterCTA() {
             key={link.href}
             href={link.href}
             variant={link.variant}
-            className="focus:ring-offset-navy"
+            className={`focus:ring-offset-navy ${link.variant === 'secondary' ? 'text-white border-white hover:bg-white hover:text-navy' : ''}`}
           >
             {link.label}
           </Button>
