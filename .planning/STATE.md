@@ -70,7 +70,7 @@ None.
 - [Phase 10]: Turbopack/webpack build conflict -- verify `pnpm build` succeeds before component changes
 - [Phase 10]: next/image CLS regression risk -- audit parent `position: relative` for every `<Image fill>`
 - [Phase 12]: next-sitemap `additionalPaths` ESM/CJS compatibility -- may need App Router `sitemap.ts` fallback
-- [Phase 11]: pt-16 is NOT unnecessary -- sticky header requires it; evaluate, not blindly remove
+- [Phase 11]: pt-16 was removed -- sticky header reserves flow space, pt-16 was causing a visible gap (resolved in quick-260325-jc8)
 
 ### Quick Tasks Completed
 
@@ -82,9 +82,10 @@ None.
 | 260324-vxb | Fix footer text contrast - text-white instead of text-text-on-dark | 2026-03-25 | b31e6b0 | [260324-vxb-fix-footer-text-contrast-text-nearly-unr](./quick/260324-vxb-fix-footer-text-contrast-text-nearly-unr/) |
 | 260324-wer | Fix header broken in dark theme - restore bg-bg-dominant | 2026-03-25 | 1b1bf3a | [260324-wer-fix-header-broken-in-dark-theme-restore-](./quick/260324-wer-fix-header-broken-in-dark-theme-restore-/) |
 | 260324-wou | Dark mode header background matches footer navy | 2026-03-25 | 58e6e0d | [260324-wou-dark-mode-header-background-matches-foot](./quick/260324-wou-dark-mode-header-background-matches-foot/) |
+| 260325-jc8 | Remove gap between hero image and top menu | 2026-03-25 | d4b49a6 | [260325-jc8-remove-the-gap-between-the-hero-img-and-](./quick/260325-jc8-remove-the-gap-between-the-hero-img-and-/) |
 
 ## Session Continuity
 
-Last activity: 2026-03-25
+Last activity: 2026-03-25 - Completed quick task 260325-jc8: Remove gap between hero image and top menu
 Stopped at: Completed 13-04-PLAN.md
 Resume file: None
