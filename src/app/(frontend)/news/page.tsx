@@ -6,6 +6,7 @@ import { Section } from '@/components/ui/Section'
 import { Card } from '@/components/ui/Card'
 import { DateDisplay } from '@/components/shared/DateDisplay'
 import { JsonLdScript, breadcrumbJsonLd } from '@/lib/jsonLd'
+import { getExcerpt } from '@/lib/lexicalToPlainText'
 import type { NewsPost, Media } from '@/payload-types'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -83,6 +84,9 @@ export default async function NewsListingPage() {
               <h2 className="text-xl font-heading font-bold uppercase mb-2">
                 {post.title}
               </h2>
+              <p className="text-text-secondary text-sm line-clamp-2 mb-2">
+                {post.excerpt || getExcerpt(post.body)}
+              </p>
               <DateDisplay publishDate={post.publishDate} variant="compact" />
             </Card>
           ))}

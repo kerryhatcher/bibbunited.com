@@ -250,6 +250,10 @@ export interface NewsPost {
   id: number;
   title: string;
   /**
+   * Short summary for news listing cards. If empty, auto-generated from body content.
+   */
+  excerpt?: string | null;
+  /**
    * Auto-generated from title. Edit to override.
    */
   slug?: string | null;
@@ -305,6 +309,10 @@ export interface NewsPost {
  */
 export interface User {
   id: number;
+  /**
+   * Public name shown on article bylines. Falls back to "BIBB United Staff" if empty.
+   */
+  displayName?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -586,6 +594,7 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface NewsPostsSelect<T extends boolean = true> {
   title?: T;
+  excerpt?: T;
   slug?: T;
   author?: T;
   publishDate?: T;
@@ -665,6 +674,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  displayName?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
