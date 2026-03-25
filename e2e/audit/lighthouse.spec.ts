@@ -1,6 +1,6 @@
-import { chromium } from 'playwright'
+import { chromium, type Browser, expect } from '@playwright/test'
 import { test as base } from '@playwright/test'
-import { playAudit } from 'playwright-lighthouse'
+import lighthouse from 'lighthouse'
 import {
   AUDIT_ROUTES,
   LIGHTHOUSE_THRESHOLDS,
@@ -9,7 +9,7 @@ import {
 
 const test = base.extend<
   {},
-  { port: number; auditBrowser: import('playwright').Browser }
+  { port: number; auditBrowser: Browser }
 >({
   port: [
     async ({}, use, workerInfo) => {
@@ -66,22 +66,47 @@ for (const route of AUDIT_ROUTES) {
 
     const viewport = testInfo.project.name
 
-    await playAudit({
-      page,
-      port,
-      thresholds: LIGHTHOUSE_THRESHOLDS,
-      config: lighthouseConfig,
-    })
+    // Use lighthouse directly to capture actual scores
+    const result = await lighthouse(
+      `http://localhost:3000${route}`,
+      { port, output: 'json' },
+      lighthouseConfig,
+    )
 
-    // playAudit throws if thresholds not met, so reaching here means pass.
-    // Write a result marker for the audit report.
+    const categories = result?.lhr?.categories ?? {}
+    const scores = {
+      performance: Math.round((categories.performance?.score ?? 0) * 100),
+      accessibility: Math.round((categories.accessibility?.score ?? 0) * 100),
+      'best-practices': Math.round((categories['best-practices']?.score ?? 0) * 100),
+      seo: Math.round((categories.seo?.score ?? 0) * 100),
+    }
+
+    const failures: string[] = []
+    for (const [category, threshold] of Object.entries(LIGHTHOUSE_THRESHOLDS)) {
+      const actual = scores[category as keyof typeof scores]
+      if (actual < threshold) {
+        failures.push(`${category}: ${actual} (threshold: ${threshold})`)
+      }
+    }
+
+    const status = failures.length === 0 ? 'pass' : 'fail'
+
+    // Always write JSON result with actual scores
     writeJsonResult(`lighthouse-${routeName}-${viewport}.json`, {
       route,
       viewport,
+      scores,
       thresholds: LIGHTHOUSE_THRESHOLDS,
-      status: 'pass',
+      status,
+      failures,
       timestamp: new Date().toISOString(),
     })
+
+    // Assert thresholds
+    expect(
+      failures,
+      `Lighthouse threshold failures on ${route} at ${viewport}: ${failures.join(', ')}`,
+    ).toEqual([])
 
     await page.close()
   })
