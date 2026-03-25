@@ -78,7 +78,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
                 </Link>
               </h2>
               {story.publishDate && (
-                <p className="text-white/80 text-sm">
+                <p className="text-white/80 text-sm" suppressHydrationWarning>
                   {formatArticleDate(story.publishDate)}
                 </p>
               )}
