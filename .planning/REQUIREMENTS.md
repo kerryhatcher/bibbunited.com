@@ -52,7 +52,7 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 
 ### Quality Assurance
 
-- [ ] **QA-01**: Full automated re-review (Lighthouse, visual, accessibility, responsive, SEO) verifies all fixes and identifies remaining polish opportunities
+- [x] **QA-01**: Full automated re-review (Lighthouse, visual, accessibility, responsive, SEO) verifies all fixes and identifies remaining polish opportunities
 
 ## v2 Requirements
 
@@ -121,7 +121,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-01 | Phase 9 | Complete |
 | INFRA-02 | Phase 9 | Complete |
 | INFRA-03 | Phase 12 | Complete |
-| QA-01 | Phase 13 | Pending |
+| QA-01 | Phase 13 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 26 total

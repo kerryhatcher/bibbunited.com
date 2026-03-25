@@ -102,8 +102,8 @@ Plans:
 Plans:
 - [x] 13-01-PLAN.md -- Install audit dependencies, create Lighthouse/axe-core/admin test specs and shared helpers
 - [x] 13-02-PLAN.md -- Execute regression + audit suites, generate AUDIT-RESULTS.md report with scores and Future Polish
-- [ ] 13-03-PLAN.md -- Fix footer contrast, news article null-safety, and About page SEO fallback (gap closure)
-- [ ] 13-04-PLAN.md -- Re-run audit suite, update AUDIT-RESULTS.md, verify all gaps closed (gap closure)
+- [x] 13-03-PLAN.md -- Fix footer contrast, news article null-safety, and About page SEO fallback (gap closure)
+- [x] 13-04-PLAN.md -- Re-run audit suite, update AUDIT-RESULTS.md, verify all gaps closed (gap closure)
 
 ## Progress
 
@@ -123,4 +123,4 @@ Plans:
 | 10. Component Migration & Visual Fixes | v1.1 | 2/2 | Complete    | 2026-03-25 |
 | 11. Accessibility, Layout & UX Polish | v1.1 | 3/3 | Complete    | 2026-03-25 |
 | 12. SEO & Metadata | v1.1 | 0/2 | Complete    | 2026-03-25 |
-| 13. Quality Audit | v1.1 | 2/4 | Gap Closure | - |
+| 13. Quality Audit | v1.1 | 4/4 | Complete   | 2026-03-25 |
