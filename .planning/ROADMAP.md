@@ -30,7 +30,7 @@
 - [x] **Phase 11: Accessibility, Layout & UX Polish** - Skip link, H1, active nav, bylines, excerpts, empty states, spacing, and focus indicators (completed 2026-03-25)
 - [x] **Phase 12: SEO & Metadata** - Title template, canonical URLs, OG tags, dynamic sitemap, and sitemap priorities (completed 2026-03-25)
 - [x] **Phase 13: Quality Audit** - Full automated re-review verifying all fixes and catching regressions (completed 2026-03-25)
-- [ ] **Phase 14: Navigation URL Fix & Documentation Drift** - Fix seed URL mismatch for Contact Officials and correct documentation drift (gap closure)
+- [x] **Phase 14: Navigation URL Fix & Documentation Drift** - Fix seed URL mismatch for Contact Officials and correct documentation drift (gap closure) (completed 2026-03-25)
 
 ## Phase Details
 
@@ -139,4 +139,4 @@ Plans:
 | 11. Accessibility, Layout & UX Polish | v1.1 | 3/3 | Complete    | 2026-03-25 |
 | 12. SEO & Metadata | v1.1 | 2/2 | Complete    | 2026-03-25 |
 | 13. Quality Audit | v1.1 | 4/4 | Complete    | 2026-03-25 |
-| 14. Navigation URL Fix & Doc Drift | v1.1 | 0/1 | Planning | - |
+| 14. Navigation URL Fix & Doc Drift | v1.1 | 1/1 | Complete   | 2026-03-25 |
