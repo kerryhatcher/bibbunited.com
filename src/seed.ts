@@ -328,7 +328,7 @@ async function seed() {
         await payload.update({
           collection: 'news-posts',
           id: doc.id,
-          data: { featuredImage: postData.featuredImage },
+          data: { featuredImage: postData.featuredImage, author: user.id },
           overrideAccess: true,
         })
         console.log('Updated news post featured image:', doc.slug)
@@ -466,7 +466,7 @@ async function seed() {
               type: 'internal',
               page: { relationTo: 'pages', value: getInvolvedPage.id },
             },
-            { label: 'Contact Officials', type: 'external', url: '/officials' },
+            { label: 'Contact Officials', type: 'external', url: '/contact-officials' },
             { label: 'Meetings', type: 'external', url: '/meetings' },
           ],
         },
