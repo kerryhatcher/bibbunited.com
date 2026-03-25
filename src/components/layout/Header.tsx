@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect, useCallback } from 'react'
+import Link from 'next/link'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { Logo } from '@/components/ui/Logo'
 
@@ -108,17 +109,84 @@ export function Header({ navItems }: HeaderProps) {
     }
   }
 
-  function renderLink(item: NavLink, className: string) {
+  function renderLink(item: NavLink, className: string, onClick?: () => void) {
     const href = resolveHref(item)
-    const linkProps: React.AnchorHTMLAttributes<HTMLAnchorElement> = { href, className }
-    if (item.newTab) {
-      linkProps.target = '_blank'
-      linkProps.rel = 'noopener noreferrer'
+    const isExternal = item.newTab || !href.startsWith('/')
+
+    if (isExternal) {
+      return (
+        <a href={href} className={className} target="_blank" rel="noopener noreferrer">
+          {item.label}
+        </a>
+      )
     }
+
     return (
-      <a {...linkProps}>
+      <Link href={href} className={className} onClick={onClick}>
         {item.label}
-      </a>
+      </Link>
+    )
+  }
+
+  function renderChildLink(
+    child: NavLink & { id?: string | null },
+    childIndex: number,
+    itemId: string,
+    totalChildren: number,
+    className: string,
+    onClick?: () => void,
+  ) {
+    const childHref = resolveHref(child)
+    const isExternal = child.newTab || !childHref.startsWith('/')
+
+    if (isExternal) {
+      return (
+        <a
+          key={child.id || `child-${childIndex}`}
+          href={childHref}
+          className={className}
+          target="_blank"
+          rel="noopener noreferrer"
+          ref={(el) => {
+            if (el) {
+              if (!dropdownItemRefs.current.has(itemId)) {
+                dropdownItemRefs.current.set(itemId, [])
+              }
+              const arr = dropdownItemRefs.current.get(itemId)!
+              arr[childIndex] = el
+            }
+          }}
+          onKeyDown={(e) =>
+            handleChildKeyDown(e, itemId, childIndex, totalChildren)
+          }
+          onClick={onClick}
+        >
+          {child.label}
+        </a>
+      )
+    }
+
+    return (
+      <Link
+        key={child.id || `child-${childIndex}`}
+        href={childHref}
+        className={className}
+        ref={(el) => {
+          if (el) {
+            if (!dropdownItemRefs.current.has(itemId)) {
+              dropdownItemRefs.current.set(itemId, [])
+            }
+            const arr = dropdownItemRefs.current.get(itemId)!
+            arr[childIndex] = el
+          }
+        }}
+        onKeyDown={(e) =>
+          handleChildKeyDown(e, itemId, childIndex, totalChildren)
+        }
+        onClick={onClick}
+      >
+        {child.label}
+      </Link>
     )
   }
 
@@ -126,9 +194,9 @@ export function Header({ navItems }: HeaderProps) {
     <header data-print-hide="" className="sticky top-0 z-50 border-b border-border bg-bg-dominant">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <a href="/" className="no-underline">
+        <Link href="/" className="no-underline">
           <Logo />
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 lg:flex" aria-label="Main navigation">
@@ -167,38 +235,15 @@ export function Header({ navItems }: HeaderProps) {
                     </button>
                     {openDropdown === itemId && (
                       <div className="absolute left-0 top-full min-w-48 border border-border bg-bg-dominant py-2 shadow-lg">
-                        {item.children!.map((child, childIndex) => {
-                          const childHref = resolveHref(child)
-                          return (
-                            <a
-                              key={child.id || `child-${childIndex}`}
-                              href={childHref}
-                              className="block px-4 py-2 text-sm text-text-primary no-underline hover:bg-accent hover:text-text-on-accent"
-                              ref={(el) => {
-                                if (el) {
-                                  if (!dropdownItemRefs.current.has(itemId)) {
-                                    dropdownItemRefs.current.set(itemId, [])
-                                  }
-                                  const arr = dropdownItemRefs.current.get(itemId)!
-                                  arr[childIndex] = el
-                                }
-                              }}
-                              onKeyDown={(e) =>
-                                handleChildKeyDown(
-                                  e,
-                                  itemId,
-                                  childIndex,
-                                  item.children!.length,
-                                )
-                              }
-                              {...(child.newTab
-                                ? { target: '_blank', rel: 'noopener noreferrer' }
-                                : {})}
-                            >
-                              {child.label}
-                            </a>
-                          )
-                        })}
+                        {item.children!.map((child, childIndex) =>
+                          renderChildLink(
+                            child,
+                            childIndex,
+                            itemId,
+                            item.children!.length,
+                            'block px-4 py-2 text-sm text-text-primary no-underline hover:bg-accent hover:text-text-on-accent',
+                          ),
+                        )}
                       </div>
                     )}
                   </li>
@@ -280,38 +325,64 @@ export function Header({ navItems }: HeaderProps) {
                     </button>
                     {mobileExpanded === itemId && (
                       <ul className="list-none m-0 mb-2 p-0 pl-4">
-                        {item.children!.map((child, childIndex) => (
-                          <li key={child.id || `mobile-child-${childIndex}`}>
-                            <a
-                              href={resolveHref(child)}
-                              className="block py-2 text-sm text-text-secondary no-underline hover:text-accent"
-                              onClick={() => setMobileOpen(false)}
-                              {...(child.newTab
-                                ? { target: '_blank', rel: 'noopener noreferrer' }
-                                : {})}
-                            >
-                              {child.label}
-                            </a>
-                          </li>
-                        ))}
+                        {item.children!.map((child, childIndex) => {
+                          const childHref = resolveHref(child)
+                          const isExternal = child.newTab || !childHref.startsWith('/')
+
+                          return (
+                            <li key={child.id || `mobile-child-${childIndex}`}>
+                              {isExternal ? (
+                                <a
+                                  href={childHref}
+                                  className="block py-2 text-sm text-text-secondary no-underline hover:text-accent"
+                                  onClick={() => setMobileOpen(false)}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {child.label}
+                                </a>
+                              ) : (
+                                <Link
+                                  href={childHref}
+                                  className="block py-2 text-sm text-text-secondary no-underline hover:text-accent"
+                                  onClick={() => setMobileOpen(false)}
+                                >
+                                  {child.label}
+                                </Link>
+                              )}
+                            </li>
+                          )
+                        })}
                       </ul>
                     )}
                   </li>
                 )
               }
 
+              const href = resolveHref(item)
+              const isExternal = item.newTab || !href.startsWith('/')
+
               return (
                 <li key={itemId} className="border-b border-border">
-                  <a
-                    href={resolveHref(item)}
-                    className="block py-3 font-heading text-sm font-bold uppercase tracking-wide text-text-primary no-underline hover:text-accent"
-                    onClick={() => setMobileOpen(false)}
-                    {...(item.newTab
-                      ? { target: '_blank', rel: 'noopener noreferrer' }
-                      : {})}
-                  >
-                    {item.label}
-                  </a>
+                  {isExternal ? (
+                    <a
+                      href={href}
+                      className="block py-3 font-heading text-sm font-bold uppercase tracking-wide text-text-primary no-underline hover:text-accent"
+                      onClick={() => setMobileOpen(false)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={href}
+                      className="block py-3 font-heading text-sm font-bold uppercase tracking-wide text-text-primary no-underline hover:text-accent"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
                 </li>
               )
             })}

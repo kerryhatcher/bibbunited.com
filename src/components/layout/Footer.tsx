@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { Logo } from '@/components/ui/Logo'
 import { Button } from '@/components/ui/Button'
 
@@ -38,36 +39,36 @@ export function Footer() {
           <nav aria-label="Footer navigation">
             <ul className="m-0 flex list-none items-center gap-6 p-0">
               <li>
-                <a
+                <Link
                   href="/about"
                   className="text-sm text-text-on-dark no-underline hover:text-white"
                 >
                   About
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/news"
                   className="text-sm text-text-on-dark no-underline hover:text-white"
                 >
                   News
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/contact-officials"
                   className="text-sm text-text-on-dark no-underline hover:text-white"
                 >
                   Contact Officials
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/meetings"
                   className="text-sm text-text-on-dark no-underline hover:text-white"
                 >
                   Meetings
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>

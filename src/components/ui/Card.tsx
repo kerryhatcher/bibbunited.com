@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 interface CardProps {
   imageSrc?: string
@@ -33,13 +34,16 @@ export function Card({
   )
 
   if (href) {
+    const isInternal = href.startsWith('/')
+    const Wrapper = isInternal ? Link : 'a'
     return (
-      <a
+      <Wrapper
         href={href}
         className={`block ${cardClasses} focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2`}
+        {...(!isInternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       >
         {content}
-      </a>
+      </Wrapper>
     )
   }
 

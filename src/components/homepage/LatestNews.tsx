@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { Card } from '@/components/ui/Card'
 import { Section } from '@/components/ui/Section'
 import { DateDisplay } from '@/components/shared/DateDisplay'
@@ -62,7 +63,7 @@ export function LatestNews({ posts }: LatestNewsProps) {
         {/* Smaller list items */}
         <div className="lg:col-span-1">
           {listItems.map((post) => (
-            <a
+            <Link
               key={post.id}
               href={`/news/${post.slug}`}
               className="flex gap-4 items-start py-4 border-b border-border last:border-0 hover:text-accent transition-colors"
@@ -80,18 +81,18 @@ export function LatestNews({ posts }: LatestNewsProps) {
                 </h4>
                 <DateDisplay publishDate={post.publishDate} variant="compact" />
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
 
       <div className="mt-8">
-        <a
+        <Link
           href="/news"
           className="text-accent font-bold uppercase hover:underline"
         >
           View All News &rarr;
-        </a>
+        </Link>
       </div>
     </Section>
   )
