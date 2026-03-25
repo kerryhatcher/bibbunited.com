@@ -9,7 +9,7 @@ A civic advocacy website for the BIBB community, starting with local school syst
 **Version:** v1.1 in progress (v1.0 shipped 2026-03-24)
 **Codebase:** 6,045 LOC (TypeScript/TSX/CSS), 185 files
 **Test coverage:** 160 Playwright e2e tests across 5 viewports
-**Requirements:** 26/26 v1 requirements satisfied; 11/25 v1.1 requirements satisfied (Phase 10 complete)
+**Requirements:** 26/26 v1 requirements satisfied; 20/25 v1.1 requirements satisfied (Phase 11 complete)
 
 ## Core Value
 
@@ -120,4 +120,4 @@ Community members can find clear, actionable information about their local schoo
 This document evolves at phase transitions and milestone boundaries.
 
 ---
-*Last updated: 2026-03-24 -- Phase 9 (Foundation & Config) complete*
+*Last updated: 2026-03-25 -- Phase 11 (Accessibility, Layout & UX Polish) complete*
