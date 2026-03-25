@@ -88,8 +88,8 @@ export default async function NewsArticlePage({ params }: Args) {
 
   const authorName =
     typeof post.author === 'object'
-      ? (post.author as User).email
-      : ''
+      ? (post.author as User).displayName || 'BIBB United Staff'
+      : 'BIBB United Staff'
 
   const featuredImage =
     typeof post.featuredImage === 'object'
@@ -104,7 +104,7 @@ export default async function NewsArticlePage({ params }: Args) {
           slug: post.slug || '',
           publishDate: post.publishDate,
           updatedAt: post.updatedAt,
-          authorName: authorName || 'BIBB United',
+          authorName: authorName,
           imageUrl: featuredImage?.url || undefined,
           description: post.meta?.description || undefined,
         })}
@@ -137,11 +137,9 @@ export default async function NewsArticlePage({ params }: Args) {
         </h1>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4">
-          {authorName && (
-            <span className="text-text-secondary text-sm">
-              By {authorName}
-            </span>
-          )}
+          <span className="text-text-secondary text-sm">
+            By {authorName}
+          </span>
           <DateDisplay
             publishDate={post.publishDate}
             updatedAt={post.updatedAt}

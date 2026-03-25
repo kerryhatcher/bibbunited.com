@@ -3,12 +3,13 @@ import Image from 'next/image'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { Section } from '@/components/ui/Section'
-import { Mail, Phone, User } from 'lucide-react'
+import { Mail, Phone, User, Users } from 'lucide-react'
 import {
   JsonLdScript,
   governmentOrgJsonLd,
   breadcrumbJsonLd,
 } from '@/lib/jsonLd'
+import { Button } from '@/components/ui/Button'
 import type { Official, Media } from '@/payload-types'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -94,9 +95,17 @@ export default async function ContactOfficialsPage() {
       </p>
 
       {officials.docs.length === 0 && (
-        <p className="text-text-secondary">
-          No officials have been added yet. Check back soon.
-        </p>
+        <div className="text-center py-12 border border-border bg-bg-dominant">
+          <Users className="mx-auto h-12 w-12 text-text-secondary mb-4" />
+          <h2 className="text-2xl font-heading font-bold uppercase mb-4">
+            No Officials Listed Yet
+          </h2>
+          <p className="text-text-secondary mb-6 max-w-md mx-auto">
+            We&apos;re working on compiling contact information for your local officials.
+            In the meantime, reach out to us directly.
+          </p>
+          <Button href="/about">Contact Us</Button>
+        </div>
       )}
 
       {bodyOrder.map((key) => {

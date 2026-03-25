@@ -4,6 +4,7 @@ import configPromise from '@payload-config'
 import { Section } from '@/components/ui/Section'
 import { Calendar, Clock, MapPin, ExternalLink } from 'lucide-react'
 import { format, isPast } from 'date-fns'
+import { Button } from '@/components/ui/Button'
 import { JsonLdScript, breadcrumbJsonLd } from '@/lib/jsonLd'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -64,9 +65,17 @@ export default async function MeetingsPage() {
       </h2>
 
       {upcoming.length === 0 && (
-        <p className="text-text-secondary mb-8">
-          No upcoming meetings scheduled. Check back soon.
-        </p>
+        <div className="text-center py-12 border border-border bg-bg-dominant mb-8">
+          <Calendar className="mx-auto h-12 w-12 text-text-secondary mb-4" />
+          <h2 className="text-2xl font-heading font-bold uppercase mb-4">
+            No Upcoming Meetings Scheduled
+          </h2>
+          <p className="text-text-secondary mb-6 max-w-md mx-auto">
+            Check back soon for the latest meeting dates and locations.
+            Want to stay informed? Reach out and let us know.
+          </p>
+          <Button href="/about">Get in Touch</Button>
+        </div>
       )}
 
       {upcoming.map((meeting) => (
