@@ -67,9 +67,10 @@ None.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260324-koh | Fix postbuild script to use next-sitemap --config next-sitemap.config.cjs | 2026-03-24 | 4956e61 | [260324-koh-fix-postbuild-script-to-use-next-sitemap](./quick/260324-koh-fix-postbuild-script-to-use-next-sitemap/) |
+| 260324-u4b | Add Next.js app service to docker-compose.dev.yml for single-command dev startup | 2026-03-25 | 765ad69 | [260324-u4b-update-the-docker-compose-setup-so-that-](./quick/260324-u4b-update-the-docker-compose-setup-so-that-/) |
 
 ## Session Continuity
 
 Last activity: 2026-03-25
-Stopped at: Completed 10-02-PLAN.md
+Stopped at: Completed 260324-u4b quick task
 Resume file: None
