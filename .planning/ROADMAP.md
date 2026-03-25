@@ -98,7 +98,10 @@ Plans:
   1. Lighthouse scores meet or exceed v1.0 baselines for performance, accessibility, best practices, and SEO
   2. Automated visual, accessibility, and responsive checks pass across all public routes at all 5 viewports
   3. Any remaining polish opportunities are documented for future consideration
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 13-01-PLAN.md -- Install audit dependencies, create Lighthouse/axe-core/admin test specs and shared helpers
+- [ ] 13-02-PLAN.md -- Execute regression + audit suites, generate AUDIT-RESULTS.md report with scores and Future Polish
 
 ## Progress
 
@@ -118,4 +121,4 @@ Plans:
 | 10. Component Migration & Visual Fixes | v1.1 | 2/2 | Complete    | 2026-03-25 |
 | 11. Accessibility, Layout & UX Polish | v1.1 | 3/3 | Complete    | 2026-03-25 |
 | 12. SEO & Metadata | v1.1 | 0/2 | Complete    | 2026-03-25 |
-| 13. Quality Audit | v1.1 | 0/0 | Not started | - |
+| 13. Quality Audit | v1.1 | 0/2 | Planning | - |
