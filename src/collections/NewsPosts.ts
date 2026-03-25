@@ -29,6 +29,15 @@ export const NewsPosts: CollectionConfig = {
       type: 'text',
       required: true,
     },
+    {
+      name: 'excerpt',
+      type: 'textarea',
+      label: 'Excerpt',
+      maxLength: 160,
+      admin: {
+        description: 'Short summary for news listing cards. If empty, auto-generated from body content.',
+      },
+    },
     slugField,
     {
       name: 'author',
