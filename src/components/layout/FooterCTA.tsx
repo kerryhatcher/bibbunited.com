@@ -28,7 +28,7 @@ export function FooterCTA() {
       <h2 className="font-heading text-3xl font-bold uppercase tracking-tight sm:text-4xl">
         GET INVOLVED
       </h2>
-      <p className="mx-auto mt-4 max-w-xl text-lg text-text-on-dark">
+      <p className="mx-auto mt-4 max-w-xl text-lg text-white/80">
         Your voice matters. Here&apos;s how you can make a difference.
       </p>
       <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">

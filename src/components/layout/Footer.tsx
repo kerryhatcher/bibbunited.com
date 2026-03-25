@@ -5,7 +5,7 @@ import { FooterCTA } from '@/components/layout/FooterCTA'
 
 export function Footer() {
   return (
-    <footer data-print-hide="" className="bg-navy text-text-on-dark">
+    <footer data-print-hide="" className="bg-navy text-white">
       {/* Get Involved CTA section */}
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
         <FooterCTA />
@@ -17,7 +17,7 @@ export function Footer() {
           {/* Left: logo + copyright */}
           <div className="flex items-center gap-3">
             <Logo />
-            <span className="text-sm text-text-on-dark">
+            <span className="text-sm text-white/80">
               &copy; 2026 BIBB United. All rights reserved.
             </span>
           </div>
@@ -28,7 +28,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="text-sm text-text-on-dark no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+                  className="text-sm text-white/80 no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
                 >
                   About
                 </Link>
@@ -36,7 +36,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/news"
-                  className="text-sm text-text-on-dark no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+                  className="text-sm text-white/80 no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
                 >
                   News
                 </Link>
@@ -44,7 +44,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/contact-officials"
-                  className="text-sm text-text-on-dark no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+                  className="text-sm text-white/80 no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
                 >
                   Contact Officials
                 </Link>
@@ -52,7 +52,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/meetings"
-                  className="text-sm text-text-on-dark no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+                  className="text-sm text-white/80 no-underline hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
                 >
                   Meetings
                 </Link>
