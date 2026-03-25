@@ -29,10 +29,10 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 
 ### SEO & Metadata
 
-- [ ] **SEO-05**: Page titles follow consistent template without duplicate site name suffix
-- [ ] **SEO-06**: All pages have canonical URLs via Next.js metadata API
-- [ ] **SEO-07**: All pages have complete Open Graph tags (url, type, site_name, image, description)
-- [ ] **SEO-08**: News articles and all CMS pages appear in sitemap.xml
+- [x] **SEO-05**: Page titles follow consistent template without duplicate site name suffix
+- [x] **SEO-06**: All pages have canonical URLs via Next.js metadata API
+- [x] **SEO-07**: All pages have complete Open Graph tags (url, type, site_name, image, description)
+- [x] **SEO-08**: News articles and all CMS pages appear in sitemap.xml
 - [x] **SEO-09**: Default branded 1200x630 OG image exists for pages without custom images
 
 ### UX Polish
@@ -48,7 +48,7 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 
 - [x] **INFRA-01**: Media files served with long-lived cache headers (Cache-Control: public, max-age=31536000)
 - [x] **INFRA-02**: X-Powered-By response header is not exposed in production
-- [ ] **INFRA-03**: Homepage has priority 1.0 in sitemap.xml
+- [x] **INFRA-03**: Homepage has priority 1.0 in sitemap.xml
 
 ### Quality Assurance
 
@@ -107,10 +107,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | A11Y-05 | Phase 9 | Complete |
 | COMP-01 | Phase 10 | Complete |
 | COMP-02 | Phase 10 | Complete |
-| SEO-05 | Phase 12 | Pending |
-| SEO-06 | Phase 12 | Pending |
-| SEO-07 | Phase 12 | Pending |
-| SEO-08 | Phase 12 | Pending |
+| SEO-05 | Phase 12 | Complete |
+| SEO-06 | Phase 12 | Complete |
+| SEO-07 | Phase 12 | Complete |
+| SEO-08 | Phase 12 | Complete |
 | SEO-09 | Phase 9 | Complete |
 | UX-01 | Phase 11 | Pending |
 | UX-02 | Phase 11 | Complete |
@@ -120,7 +120,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-06 | Phase 11 | Complete |
 | INFRA-01 | Phase 9 | Complete |
 | INFRA-02 | Phase 9 | Complete |
-| INFRA-03 | Phase 12 | Pending |
+| INFRA-03 | Phase 12 | Complete |
 | QA-01 | Phase 13 | Pending |
 
 **Coverage:**

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Production Polish
 status: Ready to plan
-stopped_at: Phase 12 context gathered
-last_updated: "2026-03-25T15:13:10.575Z"
+stopped_at: Completed 12-01-PLAN.md
+last_updated: "2026-03-25T15:45:48.639Z"
 last_activity: 2026-03-25
 progress:
   total_phases: 5
-  completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
+  completed_phases: 4
+  total_plans: 9
+  completed_plans: 9
 ---
 
 # Project State
@@ -20,11 +20,11 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Community members can find clear, actionable information about their local school system and know exactly what to do about it.
-**Current focus:** Phase 10 — component-migration-visual-fixes
+**Current focus:** Phase 12 — seo-metadata
 
 ## Current Position
 
-Phase: 12
+Phase: 13
 Plan: Not started
 
 ## Accumulated Context
@@ -47,6 +47,9 @@ Recent decisions affecting current work:
 - [Phase 10]: Co-located useFocusTrap hook in Header.tsx -- single consumer, extract later if reused
 - [Phase 11]: Named isActiveLink to avoid collision with useFocusTrap isActive parameter
 - [Phase 11]: Extracted FooterCTA as client component to keep Footer as server component
+- [Phase 12]: Native App Router sitemap.ts/robots.ts replace next-sitemap -- eliminates ESM/CJS compatibility issue and postbuild step
+- [Phase 12]: Homepage uses title.absolute to bypass layout template suffix
+- [Phase 12]: OG image fallback chain: page SEO image -> featured image -> SiteTheme ogDefaultImage -> /og-default.png
 
 ### Roadmap Evolution
 
@@ -78,5 +81,5 @@ None.
 ## Session Continuity
 
 Last activity: 2026-03-25
-Stopped at: Phase 12 context gathered
-Resume file: .planning/phases/12-seo-metadata/12-CONTEXT.md
+Stopped at: Completed 12-01-PLAN.md
+Resume file: None
