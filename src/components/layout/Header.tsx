@@ -29,6 +29,41 @@ function resolveHref(item: NavLink): string {
   return item.url || '#'
 }
 
+function useFocusTrap(containerRef: React.RefObject<HTMLDivElement | null>, isActive: boolean) {
+  useEffect(() => {
+    if (!isActive || !containerRef.current) return
+
+    const container = containerRef.current
+    const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    const focusables = container.querySelectorAll<HTMLElement>(focusableSelector)
+    if (focusables.length === 0) return
+
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+
+    // Focus the close button (first focusable) when menu opens
+    first.focus()
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key !== 'Tab') return
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
+    }
+
+    container.addEventListener('keydown', handleKeyDown)
+    return () => container.removeEventListener('keydown', handleKeyDown)
+  }, [isActive, containerRef])
+}
+
 interface HeaderProps {
   navItems: NavItem[]
 }
@@ -39,6 +74,9 @@ export function Header({ navItems }: HeaderProps) {
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
   const dropdownRefs = useRef<Map<string, HTMLLIElement>>(new Map())
   const dropdownItemRefs = useRef<Map<string, HTMLAnchorElement[]>>(new Map())
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
+
+  useFocusTrap(mobileMenuRef, mobileOpen)
 
   const closeDropdowns = useCallback(() => {
     setOpenDropdown(null)
@@ -283,6 +321,8 @@ export function Header({ navItems }: HeaderProps) {
 
       {/* Mobile slide-out panel */}
       <div
+        ref={mobileMenuRef}
+        inert={!mobileOpen}
         className={`fixed right-0 top-0 z-[60] h-full w-72 transform bg-bg-dominant transition-transform duration-300 ${
           mobileOpen ? 'translate-x-0' : 'translate-x-full'
         }`}

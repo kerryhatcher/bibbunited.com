@@ -30,7 +30,7 @@ export function Footer() {
           {/* Left: logo + copyright */}
           <div className="flex items-center gap-3">
             <Logo />
-            <span className="text-sm text-text-on-dark/80">
+            <span className="text-sm text-text-on-dark">
               &copy; 2026 BIBB United. All rights reserved.
             </span>
           </div>
