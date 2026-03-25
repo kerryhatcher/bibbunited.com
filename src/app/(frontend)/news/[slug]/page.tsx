@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import configPromise from '@payload-config'
@@ -120,10 +121,12 @@ export default async function NewsArticlePage({ params }: Args) {
       />
       {featuredImage?.url && (
         <div className="w-full aspect-video relative">
-          <img
+          <Image
             src={featuredImage.url}
             alt={featuredImage.alt || post.title}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="100vw"
           />
         </div>
       )}

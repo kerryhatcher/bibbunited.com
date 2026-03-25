@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Card } from '@/components/ui/Card'
 import { Section } from '@/components/ui/Section'
@@ -69,10 +70,12 @@ export function LatestNews({ posts }: LatestNewsProps) {
               className="flex gap-4 items-start py-4 border-b border-border last:border-0 hover:text-accent transition-colors"
             >
               {getThumbnailUrl(post) && (
-                <img
-                  src={getThumbnailUrl(post)}
+                <Image
+                  src={getThumbnailUrl(post)!}
                   alt={getImageAlt(post)}
-                  className="w-16 h-16 object-cover flex-shrink-0"
+                  width={64}
+                  height={64}
+                  className="object-cover flex-shrink-0"
                 />
               )}
               <div>

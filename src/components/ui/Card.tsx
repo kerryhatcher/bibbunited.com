@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 interface CardProps {
@@ -21,11 +22,13 @@ export function Card({
   const content = (
     <>
       {imageSrc && (
-        <div className="w-full aspect-video overflow-hidden">
-          <img
+        <div className="relative w-full aspect-video overflow-hidden">
+          <Image
             src={imageSrc}
             alt={imageAlt}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         </div>
       )}

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { Section } from '@/components/ui/Section'
@@ -121,10 +122,12 @@ export default async function ContactOfficialsPage() {
                     className="border border-border p-6 bg-bg-dominant"
                   >
                     {photo?.url && (
-                      <img
+                      <Image
                         src={photo.url}
                         alt={official.name}
-                        className="w-20 h-20 rounded-full object-cover mb-4"
+                        width={80}
+                        height={80}
+                        className="rounded-full object-cover mb-4"
                       />
                     )}
                     <h3 className="text-xl font-heading font-bold">

@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatArticleDate } from '@/components/shared/DateDisplay'
 
@@ -57,20 +59,23 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
       >
         {stories.map((story, index) => (
           <div key={index} className="min-w-full relative h-full">
-            <img
+            <Image
               src={story.featuredImage.url}
               alt={story.featuredImage.alt || story.title}
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority={index === 0}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 text-white">
               <h2 className="text-2xl sm:text-4xl lg:text-5xl font-heading font-bold uppercase tracking-tight mb-2">
-                <a
+                <Link
                   href={`/news/${story.slug}`}
                   className="hover:underline focus:underline focus:outline-none"
                 >
                   {story.title}
-                </a>
+                </Link>
               </h2>
               {story.publishDate && (
                 <p className="text-white/80 text-sm">
