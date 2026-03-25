@@ -35,3 +35,4 @@ media/
 test-results/
 playwright-report/
 e2e/screenshots/
+e2e/audit/results/
