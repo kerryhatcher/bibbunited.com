@@ -25,11 +25,12 @@
 
 **Milestone Goal:** Fix all UI/UX review issues and perform a final quality audit so the site is production-ready -- visually polished, fully accessible, optimized, and SEO-complete.
 
-- [ ] **Phase 9: Foundation & Config** - Database migration, seed overhaul, config hardening, and OG default asset
+- [x] **Phase 9: Foundation & Config** - Database migration, seed overhaul, config hardening, and OG default asset (completed 2026-03-25)
 - [x] **Phase 10: Component Migration & Visual Fixes** - next/link and next/image batch migrations, footer contrast, and keyboard trap fix (completed 2026-03-25)
 - [x] **Phase 11: Accessibility, Layout & UX Polish** - Skip link, H1, active nav, bylines, excerpts, empty states, spacing, and focus indicators (completed 2026-03-25)
 - [x] **Phase 12: SEO & Metadata** - Title template, canonical URLs, OG tags, dynamic sitemap, and sitemap priorities (completed 2026-03-25)
 - [x] **Phase 13: Quality Audit** - Full automated re-review verifying all fixes and catching regressions (completed 2026-03-25)
+- [ ] **Phase 14: Navigation URL Fix & Documentation Drift** - Fix seed URL mismatch for Contact Officials and correct documentation drift (gap closure)
 
 ## Phase Details
 
@@ -87,8 +88,8 @@ Plans:
   3. All news articles and CMS pages appear in sitemap.xml with homepage at priority 1.0
 **Plans**: 2 plans
 Plans:
-- [ ] 12-01-PLAN.md -- Shared generatePageMeta helper, SiteTheme ogDefaultImage field, refactor all page metadata
-- [ ] 12-02-PLAN.md -- Native sitemap.ts and robots.ts handlers, next-sitemap removal
+- [x] 12-01-PLAN.md -- Shared generatePageMeta helper, SiteTheme ogDefaultImage field, refactor all page metadata
+- [x] 12-02-PLAN.md -- Native sitemap.ts and robots.ts handlers, next-sitemap removal
 
 ### Phase 13: Quality Audit
 **Goal**: All v1.1 fixes are verified through automated re-review and no regressions remain
@@ -105,6 +106,19 @@ Plans:
 - [x] 13-03-PLAN.md -- Fix footer contrast, news article null-safety, and About page SEO fallback (gap closure)
 - [x] 13-04-PLAN.md -- Re-run audit suite, update AUDIT-RESULTS.md, verify all gaps closed (gap closure)
 
+### Phase 14: Navigation URL Fix & Documentation Drift
+**Goal**: Close all gaps identified by milestone audit -- fix the Contact Officials navigation URL mismatch and correct documentation drift in REQUIREMENTS.md and ROADMAP.md
+**Depends on**: Phase 13
+**Requirements**: VIS-02, UX-02
+**Gap Closure**: Closes all gaps from v1.1-MILESTONE-AUDIT.md
+**Success Criteria** (what must be TRUE):
+  1. Clicking "Contact Officials" in navigation loads the Contact Officials page (no 404)
+  2. Active nav indicator and aria-current fire correctly on the Contact Officials page
+  3. All implemented requirement checkboxes are marked [x] in REQUIREMENTS.md
+  4. All completed requirement traceability entries show "Complete" status
+Plans:
+- [ ] 14-01-PLAN.md -- Fix seed URL, re-seed, fix documentation drift
+
 ## Progress
 
 **Execution Order:** Phase 9 -> 10 -> 11 -> 12 -> 13
@@ -119,8 +133,9 @@ Plans:
 | 6. Responsive Device Testing | v1.0 | 1/1 | Complete | 2026-03-24 |
 | 7. Audit Documentation Cleanup | v1.0 | 1/1 | Complete | 2026-03-24 |
 | 8. Tech Debt Cleanup | v1.0 | 3/3 | Complete | 2026-03-24 |
-| 9. Foundation & Config | v1.1 | 0/2 | Planning | - |
+| 9. Foundation & Config | v1.1 | 2/2 | Complete | 2026-03-25 |
 | 10. Component Migration & Visual Fixes | v1.1 | 2/2 | Complete    | 2026-03-25 |
 | 11. Accessibility, Layout & UX Polish | v1.1 | 3/3 | Complete    | 2026-03-25 |
-| 12. SEO & Metadata | v1.1 | 0/2 | Complete    | 2026-03-25 |
+| 12. SEO & Metadata | v1.1 | 2/2 | Complete    | 2026-03-25 |
 | 13. Quality Audit | v1.1 | 4/4 | Complete    | 2026-03-25 |
+| 14. Navigation URL Fix & Doc Drift | v1.1 | 0/1 | Planning | - |
