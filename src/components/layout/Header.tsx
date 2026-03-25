@@ -248,7 +248,7 @@ export function Header({ navItems }: HeaderProps) {
   }
 
   return (
-    <header data-print-hide="" className="sticky top-0 z-50 border-b border-border bg-bg-dominant">
+    <header data-print-hide="" className="sticky top-0 z-50 border-b border-border bg-white">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="no-underline">
@@ -295,7 +295,7 @@ export function Header({ navItems }: HeaderProps) {
                       />
                     </button>
                     {openDropdown === itemId && (
-                      <div className="absolute left-0 top-full min-w-48 border border-border bg-bg-dominant py-2 shadow-lg">
+                      <div className="absolute left-0 top-full min-w-48 border border-border bg-white py-2 shadow-lg">
                         {item.children!.map((child, childIndex) =>
                           renderChildLink(
                             child,
@@ -356,7 +356,7 @@ export function Header({ navItems }: HeaderProps) {
       <div
         ref={mobileMenuRef}
         inert={!mobileOpen}
-        className={`fixed right-0 top-0 z-[60] h-full w-72 transform bg-bg-dominant transition-transform duration-300 ${
+        className={`fixed right-0 top-0 z-[60] h-full w-72 transform bg-white transition-transform duration-300 ${
           mobileOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
