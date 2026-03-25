@@ -2,6 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { generatePageMeta } from '@/lib/metadata'
 import { Section } from '@/components/ui/Section'
 import { Card } from '@/components/ui/Card'
 import { DateDisplay } from '@/components/shared/DateDisplay'
@@ -10,21 +11,12 @@ import { getExcerpt } from '@/lib/lexicalToPlainText'
 import type { NewsPost, Media } from '@/payload-types'
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
+  return generatePageMeta({
     title: 'News',
     description:
       'Latest news and updates from BIBB United about local school system issues, board decisions, and community advocacy.',
-    openGraph: {
-      title: 'News | BIBB United',
-      description:
-        'Latest news and updates from BIBB United about local school system issues, board decisions, and community advocacy.',
-    },
-    twitter: {
-      title: 'News | BIBB United',
-      description:
-        'Latest news and updates from BIBB United about local school system issues, board decisions, and community advocacy.',
-    },
-  }
+    slug: 'news',
+  })
 }
 
 function getImageUrl(post: NewsPost): string | undefined {
