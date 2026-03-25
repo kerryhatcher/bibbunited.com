@@ -3,7 +3,7 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     ports:
-      - "5434:5432"
+      - "5499:5432"
     environment:
       POSTGRES_USER: bibbunited
       POSTGRES_PASSWORD: bibbunited_dev
@@ -15,6 +15,25 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+
+  app:
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm dev"
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URI: postgresql://bibbunited:bibbunited_dev@db:5432/bibbunited
+      PAYLOAD_SECRET: dev-secret-change-in-production
+      NEXT_PUBLIC_SERVER_URL: http://localhost:3000
+      NODE_OPTIONS: "--no-deprecation"
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:
