@@ -56,8 +56,10 @@ Plans:
   2. All images serve optimized formats (WebP/AVIF) with responsive srcset and lazy loading (next/image migration complete)
   3. Footer text is clearly readable against the dark background with WCAG 4.5:1 contrast ratio
   4. Mobile menu close button is not reachable via keyboard when the slide-out panel is hidden
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 2 plans
+Plans:
+- [ ] 10-01-PLAN.md -- next/link migration across all components, next/image migration with fill/fixed modes, next.config.ts image formats
+- [ ] 10-02-PLAN.md -- Footer contrast fix (remove /80 opacity), keyboard trap fix (inert + focus trap)
 
 ### Phase 11: Accessibility, Layout & UX Polish
 **Goal**: The site meets WCAG 2.1 AA for keyboard navigation and document structure, and content presentation gives users the context they need to act
@@ -107,7 +109,7 @@ Plans:
 | 7. Audit Documentation Cleanup | v1.0 | 1/1 | Complete | 2026-03-24 |
 | 8. Tech Debt Cleanup | v1.0 | 3/3 | Complete | 2026-03-24 |
 | 9. Foundation & Config | v1.1 | 0/2 | Planning | - |
-| 10. Component Migration & Visual Fixes | v1.1 | 0/0 | Not started | - |
+| 10. Component Migration & Visual Fixes | v1.1 | 0/2 | Planning | - |
 | 11. Accessibility, Layout & UX Polish | v1.1 | 0/0 | Not started | - |
 | 12. SEO & Metadata | v1.1 | 0/0 | Not started | - |
 | 13. Quality Audit | v1.1 | 0/0 | Not started | - |
