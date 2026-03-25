@@ -6,10 +6,10 @@ A civic advocacy website for the BIBB community, starting with local school syst
 
 ## Current State
 
-**Version:** v1.1 in progress (v1.0 shipped 2026-03-24)
+**Version:** v1.1 complete (v1.0 shipped 2026-03-24, v1.1 shipped 2026-03-25)
 **Codebase:** 6,045 LOC (TypeScript/TSX/CSS), 185 files
-**Test coverage:** 160 Playwright e2e tests across 5 viewports
-**Requirements:** 26/26 v1 requirements satisfied; 25/25 v1.1 requirements satisfied (Phase 12 complete)
+**Test coverage:** 160 Playwright e2e tests + 61 audit tests (Lighthouse, axe-core, admin login) across 5 viewports
+**Requirements:** 26/26 v1 requirements satisfied; 25/25 v1.1 requirements satisfied; QA-01 verified (Phase 13 complete)
 
 ## Core Value
 
@@ -95,16 +95,17 @@ Community members can find clear, actionable information about their local schoo
 | DOM assertions over pixel-diff testing | CMS content changes; structural assertions are more stable than screenshots | ✓ Good -- v1.0 |
 | Seed script for test data | Enables full Playwright test coverage without manual setup | ✓ Good -- v1.0 |
 
-## Current Milestone: v1.1 Production Polish
+## Completed Milestone: v1.1 Production Polish ✓
 
 **Goal:** Fix all UI/UX review issues and perform a final quality audit so the site is production-ready -- visually polished, fully accessible, optimized, and SEO-complete.
+**Status:** Complete (2026-03-25) -- All 5 phases (9-13) executed, all requirements verified, Lighthouse 100/100/100/100 on all routes.
 
-**Target features:**
-- Fix 4 critical appearance issues (footer contrast, empty nav, empty hero, dark seed images)
-- Fix 6 high-priority quality issues (missing H1, skip-to-content, Next.js Link/Image migration, admin email exposure, keyboard trap)
-- Fix 10 medium issues (duplicate titles, canonical URLs, OG tags, sitemap gaps, layout spacing, empty states, news excerpts, active nav indicator, cache headers, seed alt text)
-- Fix 5 low issues (footer self-link, missing OG image, X-Powered-By header, footer focus rings, sitemap priority)
-- Final quality audit: full automated re-review to verify all fixes, catch regressions, and identify remaining polish opportunities
+**Delivered:**
+- Fixed 4 critical appearance issues (footer contrast, empty nav, empty hero, dark seed images)
+- Fixed 6 high-priority quality issues (missing H1, skip-to-content, Next.js Link/Image migration, admin email exposure, keyboard trap)
+- Fixed 10 medium issues (duplicate titles, canonical URLs, OG tags, sitemap gaps, layout spacing, empty states, news excerpts, active nav indicator, cache headers, seed alt text)
+- Fixed 5 low issues (footer self-link, missing OG image, X-Powered-By header, footer focus rings, sitemap priority)
+- Final quality audit: 30/30 Lighthouse tests pass (100 all categories), 30/30 axe-core tests pass (zero WCAG violations), 1/1 admin login passes
 
 **Source:** UI-UX-REVIEW-2026-03-24.md (25 issues across 4 priority tiers)
 
@@ -120,4 +121,4 @@ Community members can find clear, actionable information about their local schoo
 This document evolves at phase transitions and milestone boundaries.
 
 ---
-*Last updated: 2026-03-25 -- Phase 12 (SEO & Metadata) complete*
+*Last updated: 2026-03-25 -- Phase 13 (Quality Audit) complete, v1.1 milestone done*
