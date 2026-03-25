@@ -38,7 +38,9 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
   if (!page) return { title: 'Not Found' }
 
   const title = page.meta?.title || page.title
-  const description = page.meta?.description || undefined
+  const description =
+    page.meta?.description ||
+    page.title + ' - BIBB United community information and resources'
   const ogImage =
     typeof page.meta?.image === 'object'
       ? (page.meta.image as Media)?.url ?? null
