@@ -1,27 +1,14 @@
 import React from 'react'
 import Link from 'next/link'
 import { Logo } from '@/components/ui/Logo'
-import { Button } from '@/components/ui/Button'
+import { FooterCTA } from '@/components/layout/FooterCTA'
 
 export function Footer() {
   return (
     <footer data-print-hide="" className="bg-navy text-text-on-dark">
       {/* Get Involved CTA section */}
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div className="text-center">
-          <h2 className="font-heading text-3xl font-bold uppercase tracking-tight sm:text-4xl">
-            GET INVOLVED
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-text-on-dark">
-            Your voice matters. Here&apos;s how you can make a difference.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button href="/contact-officials" className="focus:ring-offset-navy">Contact Officials</Button>
-            <Button href="/meetings" variant="secondary" className="focus:ring-offset-navy">
-              Upcoming Meetings
-            </Button>
-          </div>
-        </div>
+        <FooterCTA />
       </div>
 
       {/* Bottom bar */}
