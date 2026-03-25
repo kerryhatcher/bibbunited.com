@@ -3,7 +3,7 @@ status: complete
 phase: 09-foundation-config
 source: 09-01-SUMMARY.md, 09-02-SUMMARY.md
 started: 2026-03-24T23:30:00Z
-updated: 2026-03-25T00:20:00Z
+updated: 2026-03-25T00:25:00Z
 ---
 
 ## Current Test
@@ -54,30 +54,22 @@ result: pass
 
 ### 11. Homepage Renders with Seed Data
 expected: Load the public homepage in the browser. The hero section should display spotlight news posts with colorful featured images (not dark/blank). Navigation should show the seeded menu structure.
-result: issue
-reported: "Homepage renders with hero spotlight carousel, Key Issues section with icons, and populated navigation. However, news post featured images are still dark/generic (old seed images with alt text 'BIBB United test image for seed data'). The seed script created 6 new colorful images but skipped updating existing news posts, so posts still reference old images."
-severity: minor
+result: pass
 
 ## Summary
 
 total: 11
-passed: 10
-issues: 1
+passed: 11
+issues: 0
 pending: 0
 skipped: 0
 blocked: 0
 
 ## Gaps
 
-- truth: "News posts should display colorful featured images with descriptive alt text, not dark generic seed images"
-  status: failed
-  reason: "Seed script skipped existing news posts ('News post already exists') so they still reference old generic seed images. The 6 new colorful images were created but not linked to the pre-existing posts."
-  severity: minor
-  test: 11
-  root_cause: "src/seed.ts uses find-or-skip logic for news posts. When posts already exist from a prior seed run, it does not update their featuredImage field to use the new colorful images."
-  artifacts:
-    - path: "src/seed.ts"
-      issue: "News post seed logic skips updates to existing posts' featuredImage"
-  missing:
-    - "Seed script should update featuredImage on existing news posts when new images are available, or use upsert logic"
-  debug_session: ""
+[none — all resolved]
+
+## Fixes Applied
+
+- Fixed seed script news post logic to upsert featuredImage on existing posts (src/seed.ts)
+- Re-ran seed to link colorful images to pre-existing news posts

@@ -323,8 +323,19 @@ async function seed() {
       console.log('Created news post:', created.slug)
     } else {
       const doc = existing.docs[0]
+      // Update featuredImage if it changed (e.g. new colorful seed images)
+      if (doc.featuredImage !== postData.featuredImage) {
+        await payload.update({
+          collection: 'news-posts',
+          id: doc.id,
+          data: { featuredImage: postData.featuredImage },
+          overrideAccess: true,
+        })
+        console.log('Updated news post featured image:', doc.slug)
+      } else {
+        console.log('News post already exists:', doc.slug)
+      }
       newsPostDocs.push({ id: doc.id as number, slug: doc.slug || '' })
-      console.log('News post already exists:', doc.slug)
     }
   }
 
