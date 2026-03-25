@@ -2,13 +2,13 @@
 
 ## Milestones
 
-- ✅ **v1.0 MVP** -- Phases 1-8 (shipped 2026-03-24) | [Archive](milestones/v1.0-ROADMAP.md)
-- 🚧 **v1.1 Production Polish** -- Phases 9-13 (in progress)
+- [x] **v1.0 MVP** -- Phases 1-8 (shipped 2026-03-24) | [Archive](milestones/v1.0-ROADMAP.md)
+- [x] **v1.1 Production Polish** -- Phases 9-14 (shipped 2026-03-25) | [Archive](milestones/v1.1-ROADMAP.md)
 
 ## Phases
 
 <details>
-<summary>✅ v1.0 MVP (Phases 1-8) -- SHIPPED 2026-03-24</summary>
+<summary>v1.0 MVP (Phases 1-8) -- SHIPPED 2026-03-24</summary>
 
 - [x] Phase 1: CMS Foundation (3/3 plans) -- Payload CMS collections, PostgreSQL, editorial workflow
 - [x] Phase 2: Brand & Design System (2/2 plans) -- Visual identity, Tailwind v4 tokens, dual-mode theme
@@ -21,108 +21,19 @@
 
 </details>
 
-### v1.1 Production Polish
+<details>
+<summary>v1.1 Production Polish (Phases 9-14) -- SHIPPED 2026-03-25</summary>
 
-**Milestone Goal:** Fix all UI/UX review issues and perform a final quality audit so the site is production-ready -- visually polished, fully accessible, optimized, and SEO-complete.
+- [x] Phase 9: Foundation & Config (2/2 plans) -- DB migration, seed overhaul, config hardening, OG default asset
+- [x] Phase 10: Component Migration & Visual Fixes (2/2 plans) -- next/link and next/image migrations, footer contrast, keyboard trap fix
+- [x] Phase 11: Accessibility, Layout & UX Polish (3/3 plans) -- Skip link, H1, active nav, bylines, excerpts, empty states, focus indicators
+- [x] Phase 12: SEO & Metadata (2/2 plans) -- Title template, canonical URLs, OG tags, dynamic sitemap
+- [x] Phase 13: Quality Audit (4/4 plans) -- Lighthouse/axe-core/admin audit, regression fixes, re-verification
+- [x] Phase 14: Navigation URL Fix & Documentation Drift (1/1 plan) -- Seed URL fix, documentation drift correction
 
-- [x] **Phase 9: Foundation & Config** - Database migration, seed overhaul, config hardening, and OG default asset (completed 2026-03-25)
-- [x] **Phase 10: Component Migration & Visual Fixes** - next/link and next/image batch migrations, footer contrast, and keyboard trap fix (completed 2026-03-25)
-- [x] **Phase 11: Accessibility, Layout & UX Polish** - Skip link, H1, active nav, bylines, excerpts, empty states, spacing, and focus indicators (completed 2026-03-25)
-- [x] **Phase 12: SEO & Metadata** - Title template, canonical URLs, OG tags, dynamic sitemap, and sitemap priorities (completed 2026-03-25)
-- [x] **Phase 13: Quality Audit** - Full automated re-review verifying all fixes and catching regressions (completed 2026-03-25)
-- [x] **Phase 14: Navigation URL Fix & Documentation Drift** - Fix seed URL mismatch for Contact Officials and correct documentation drift (gap closure) (completed 2026-03-25)
-
-## Phase Details
-
-### Phase 9: Foundation & Config
-**Goal**: All prerequisite infrastructure, data, and assets are in place so downstream phases can build on correct config, populated seed data, and required static assets
-**Depends on**: Phase 8 (v1.0 complete)
-**Requirements**: VIS-02, VIS-03, VIS-04, A11Y-05, INFRA-01, INFRA-02, SEO-09
-**Success Criteria** (what must be TRUE):
-  1. Seed script populates navigation menu items, hero spotlight content, and visually distinct images with descriptive alt text
-  2. Users collection has a displayName field and the seed user has a display name set
-  3. A branded 1200x630 OG default image exists at a known public path
-  4. Media files are served with long-lived cache headers and the X-Powered-By header is suppressed
-**Plans**: 2 plans
-Plans:
-- [x] 09-01-PLAN.md -- Users displayName field, DB migration, Next.js cache/security headers
-- [x] 09-02-PLAN.md -- Seed script overhaul: images, OG image, Navigation/Homepage globals, Officials, Meetings
-
-### Phase 10: Component Migration & Visual Fixes
-**Goal**: All internal links use client-side navigation, all images are optimized via next/image, and critical visual bugs (footer contrast, keyboard trap) are resolved
-**Depends on**: Phase 9
-**Requirements**: COMP-01, COMP-02, VIS-01, A11Y-03
-**Success Criteria** (what must be TRUE):
-  1. Clicking any internal link navigates without a full page reload (next/link migration complete)
-  2. All images serve optimized formats (WebP/AVIF) with responsive srcset and lazy loading (next/image migration complete)
-  3. Footer text is clearly readable against the dark background with WCAG 4.5:1 contrast ratio
-  4. Mobile menu close button is not reachable via keyboard when the slide-out panel is hidden
-**Plans**: 2 plans
-Plans:
-- [x] 10-01-PLAN.md -- next/link migration across all components, next/image migration with fill/fixed modes, next.config.ts image formats
-- [x] 10-02-PLAN.md -- Footer contrast fix (remove /80 opacity), keyboard trap fix (inert + focus trap)
-
-### Phase 11: Accessibility, Layout & UX Polish
-**Goal**: The site meets WCAG 2.1 AA for keyboard navigation and document structure, and content presentation gives users the context they need to act
-**Depends on**: Phase 10
-**Requirements**: A11Y-01, A11Y-02, A11Y-04, UX-01, UX-02, UX-03, UX-04, UX-05, UX-06
-**Success Criteria** (what must be TRUE):
-  1. Keyboard user can skip to main content via a visible skip link that appears on focus
-  2. Homepage has a proper H1 heading visible to screen readers
-  3. Current page is visually indicated in navigation with active styling and aria-current attribute
-  4. Article bylines show a human-readable display name instead of an email address
-  5. News cards show excerpt text, empty civic pages show actionable fallback messaging, footer CTA does not link to current page, footer links have visible focus rings, and main content is correctly spaced below the sticky header
-**Plans**: 3 plans
-Plans:
-- [x] 11-01-PLAN.md -- Skip-to-content link, homepage sr-only H1, footer focus ring indicators
-- [x] 11-02-PLAN.md -- Active nav indicators (desktop/mobile), footer conditional CTA, spacing verification
-- [x] 11-03-PLAN.md -- News excerpt field + Lexical utility, article bylines with displayName, civic page empty states
-
-### Phase 12: SEO & Metadata
-**Goal**: Every page has correct, complete metadata for search engines and social sharing
-**Depends on**: Phase 9 (OG default image), Phase 11 (H1 structure)
-**Requirements**: SEO-05, SEO-06, SEO-07, SEO-08, INFRA-03
-**Success Criteria** (what must be TRUE):
-  1. Page titles follow a consistent template without duplicate site name suffixes
-  2. Every page has a canonical URL and complete Open Graph tags (url, type, site_name, image, description)
-  3. All news articles and CMS pages appear in sitemap.xml with homepage at priority 1.0
-**Plans**: 2 plans
-Plans:
-- [x] 12-01-PLAN.md -- Shared generatePageMeta helper, SiteTheme ogDefaultImage field, refactor all page metadata
-- [x] 12-02-PLAN.md -- Native sitemap.ts and robots.ts handlers, next-sitemap removal
-
-### Phase 13: Quality Audit
-**Goal**: All v1.1 fixes are verified through automated re-review and no regressions remain
-**Depends on**: Phase 12
-**Requirements**: QA-01
-**Success Criteria** (what must be TRUE):
-  1. Lighthouse scores meet or exceed v1.0 baselines for performance, accessibility, best practices, and SEO
-  2. Automated visual, accessibility, and responsive checks pass across all public routes at all 5 viewports
-  3. Any remaining polish opportunities are documented for future consideration
-**Plans**: 4 plans
-Plans:
-- [x] 13-01-PLAN.md -- Install audit dependencies, create Lighthouse/axe-core/admin test specs and shared helpers
-- [x] 13-02-PLAN.md -- Execute regression + audit suites, generate AUDIT-RESULTS.md report with scores and Future Polish
-- [x] 13-03-PLAN.md -- Fix footer contrast, news article null-safety, and About page SEO fallback (gap closure)
-- [x] 13-04-PLAN.md -- Re-run audit suite, update AUDIT-RESULTS.md, verify all gaps closed (gap closure)
-
-### Phase 14: Navigation URL Fix & Documentation Drift
-**Goal**: Close all gaps identified by milestone audit -- fix the Contact Officials navigation URL mismatch and correct documentation drift in REQUIREMENTS.md and ROADMAP.md
-**Depends on**: Phase 13
-**Requirements**: VIS-02, UX-02
-**Gap Closure**: Closes all gaps from v1.1-MILESTONE-AUDIT.md
-**Success Criteria** (what must be TRUE):
-  1. Clicking "Contact Officials" in navigation loads the Contact Officials page (no 404)
-  2. Active nav indicator and aria-current fire correctly on the Contact Officials page
-  3. All implemented requirement checkboxes are marked [x] in REQUIREMENTS.md
-  4. All completed requirement traceability entries show "Complete" status
-**Plans**: 1 plan
-Plans:
-- [x] 14-01-PLAN.md -- Fix seed URL and re-seed database, update REQUIREMENTS.md and ROADMAP.md documentation drift
+</details>
 
 ## Progress
-
-**Execution Order:** Phase 9 -> 10 -> 11 -> 12 -> 13
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -135,8 +46,8 @@ Plans:
 | 7. Audit Documentation Cleanup | v1.0 | 1/1 | Complete | 2026-03-24 |
 | 8. Tech Debt Cleanup | v1.0 | 3/3 | Complete | 2026-03-24 |
 | 9. Foundation & Config | v1.1 | 2/2 | Complete | 2026-03-25 |
-| 10. Component Migration & Visual Fixes | v1.1 | 2/2 | Complete    | 2026-03-25 |
-| 11. Accessibility, Layout & UX Polish | v1.1 | 3/3 | Complete    | 2026-03-25 |
-| 12. SEO & Metadata | v1.1 | 2/2 | Complete    | 2026-03-25 |
-| 13. Quality Audit | v1.1 | 4/4 | Complete    | 2026-03-25 |
-| 14. Navigation URL Fix & Doc Drift | v1.1 | 1/1 | Complete    | 2026-03-25 |
+| 10. Component Migration & Visual Fixes | v1.1 | 2/2 | Complete | 2026-03-25 |
+| 11. Accessibility, Layout & UX Polish | v1.1 | 3/3 | Complete | 2026-03-25 |
+| 12. SEO & Metadata | v1.1 | 2/2 | Complete | 2026-03-25 |
+| 13. Quality Audit | v1.1 | 4/4 | Complete | 2026-03-25 |
+| 14. Navigation URL Fix & Doc Drift | v1.1 | 1/1 | Complete | 2026-03-25 |

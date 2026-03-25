@@ -2,6 +2,51 @@
 
 *A living document updated after each milestone. Lessons feed forward into future planning.*
 
+## Milestone: v1.1 -- Production Polish
+
+**Shipped:** 2026-03-25
+**Phases:** 6 | **Plans:** 14 | **Timeline:** 1 day (2026-03-25)
+
+### What Was Built
+- Foundation hardening: displayName DB migration, complete seed overhaul with 6 distinct labeled images, branded OG image, populated Navigation/Homepage/Officials/Meetings globals
+- Component migration: all internal links to next/link (SPA navigation), all images to next/image (AVIF/WebP optimization with LCP priority)
+- WCAG 2.1 AA accessibility: skip-to-content link, sr-only H1, footer focus rings, mobile panel inert attribute, keyboard focus trap
+- UX polish: active nav indicators with aria-current, article bylines with displayName, news card excerpts via Lexical text extraction, actionable empty states, conditional footer CTA
+- SEO completeness: shared generatePageMeta helper, canonical URLs, complete OG tags with 4-level fallback chain, native sitemap.ts/robots.ts
+- Quality audit: Lighthouse 100/100/100/100 on all routes, zero axe-core violations, 61 automated audit tests
+
+### What Worked
+- **Dependency-ordered phase sequencing:** Foundation (Phase 9) before components (10) before a11y/UX (11) before SEO (12) before audit (13) -- each phase built cleanly on the previous
+- **Milestone audit before shipping:** Running `/gsd:audit-milestone` caught the seed URL mismatch (VIS-02/UX-02) and documentation drift that phase-level verification missed -- Phase 14 closed all gaps surgically
+- **Native App Router sitemap.ts:** Replacing next-sitemap eliminated the ESM/CJS compatibility headache and postbuild step entirely
+- **Automated quality baseline:** 61 Lighthouse + axe-core tests across all routes at all viewports creates a regression safety net for future changes
+- **React 19 inert attribute:** Native `inert` replaced manual aria-hidden management for the mobile panel -- cleaner, more reliable
+
+### What Was Inefficient
+- **Documentation drift accumulated across phases:** REQUIREMENTS.md checkboxes, ROADMAP.md plan checkboxes, and SUMMARY frontmatter all fell out of sync during phases 9-12, requiring dedicated fix passes
+- **Footer contrast fixed twice:** Originally fixed in v1.0 Phase 8, then the audit revealed it regressed or was incomplete -- needed re-fixing in Phase 13
+- **Audit gap closure required extra phase:** Phase 14 was created just to fix a seed URL typo and doc drift -- could have been caught earlier with a seed URL validation step
+
+### Patterns Established
+- **generatePageMeta helper:** Single shared function for all page metadata with consistent title template, canonical URLs, and OG tag generation
+- **4-level OG image fallback:** page SEO image -> featured image -> SiteTheme ogDefaultImage -> /og-default.png
+- **Lexical text extraction for excerpts:** `getExcerpt()` utility extracts plain text from Lexical JSON for news card summaries
+- **Logo variant prop:** `variant="default"|"footer"` controls UNITED text color per dark/light context
+- **FooterCTA as client component:** Extracted to keep Footer as server component while enabling pathname-based conditional rendering
+
+### Key Lessons
+1. **Automate documentation sync.** Checkbox drift across REQUIREMENTS.md, ROADMAP.md, and SUMMARY frontmatter happened in both milestones. This needs tooling, not discipline.
+2. **Validate seed data against routes.** The `/officials` vs `/contact-officials` mismatch was a simple typo that broke navigation. A seed validation step comparing URLs to actual routes would catch this instantly.
+3. **Run audit early, not just at the end.** Phase 13's audit found issues that were easy to fix but would have been easier to prevent. Consider a mid-milestone checkpoint.
+4. **Component migrations are batch operations.** Doing all next/link and next/image migrations in a single phase (10) was the right call -- avoided scattered changes across phases.
+
+### Cost Observations
+- Model mix: Primarily Opus with quality profile
+- Sessions: ~5 sessions in 1 day
+- Notable: Phase 14 (gap closure) completed in minutes -- single seed data fix plus doc updates
+
+---
+
 ## Milestone: v1.0 -- MVP
 
 **Shipped:** 2026-03-24
@@ -53,14 +98,18 @@
 | Milestone | Timeline | Phases | Key Change |
 |-----------|----------|--------|------------|
 | v1.0 | 2 days | 8 | Audit-driven gap phases proved highly effective for quality |
+| v1.1 | 1 day | 6 | Dependency-ordered sequencing + automated quality baseline |
 
 ### Cumulative Quality
 
 | Milestone | Tests | Requirements | Audit Score |
 |-----------|-------|-------------|-------------|
 | v1.0 | 160 | 26/26 | 78/78 must-haves |
+| v1.1 | 221 | 52/52 cumulative | Lighthouse 100/100/100/100, zero a11y violations |
 
 ### Top Lessons (Verified Across Milestones)
 
-1. Milestone audits catch gaps that phase-level verification misses -- always audit before shipping
-2. Seed data is infrastructure, not an afterthought -- include in first phase next time
+1. Milestone audits catch gaps that phase-level verification misses -- always audit before shipping (confirmed v1.0, v1.1)
+2. Seed data is infrastructure, not an afterthought -- include in first phase next time (confirmed v1.0, validated in v1.1 with full seed rewrite)
+3. Documentation sync needs automation, not discipline -- checkbox/frontmatter drift happened in both milestones
+4. Batch operations (component migrations, doc fixes) are more efficient than scattered changes across phases (new in v1.1)

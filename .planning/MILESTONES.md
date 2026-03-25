@@ -1,5 +1,28 @@
 # Milestones
 
+## v1.1 Production Polish (Shipped: 2026-03-25)
+
+**Phases completed:** 6 phases, 14 plans, 28 tasks
+
+**Key accomplishments:**
+
+- Optional displayName field on Users with DB migration, plus Next.js cache headers and X-Powered-By suppression
+- Complete seed rewrite with 6 colorful labeled images, branded OG image, populated Navigation/Homepage globals, 4 Officials, 3 Meetings, and user displayName
+- Migrated all internal <a> tags to next/link for SPA navigation and all <img> tags to next/image with AVIF/WebP format optimization across 10 files
+- Full-contrast footer copyright text (VIS-01) and mobile menu inert/focus-trap for keyboard accessibility (A11Y-03)
+- Skip-to-content link, sr-only homepage H1, and accent-colored focus rings on footer for WCAG 2.1 AA keyboard and screen reader support
+- Active navigation indicators with aria-current and conditional Footer CTA that hides buttons linking to the current page
+- Article bylines with displayName fallback, news card excerpts via Lexical text extraction, and actionable empty states for civic pages
+- Shared generatePageMeta helper with canonical URLs, complete OG tags, and 4-level fallback image chain across all 7 page routes
+- Native App Router sitemap.ts and robots.ts replace next-sitemap, querying Payload for all published news and pages with tiered priority (homepage 1.0, civic pages 0.8, news 0.7)
+- Lighthouse, axe-core, and admin audit specs covering 6 public routes with 95+ thresholds and zero-violation accessibility assertions
+- Full regression and audit suite execution across 6 routes x 5 viewports revealing footer color contrast as single accessibility blocker and news article null-safety bug as application error
+- Fixed 3 audit verification gaps: footer WCAG AA contrast (white on navy 11.07:1), null author crash guard, and CMS page SEO description fallback
+- All 61 automated quality checks pass with perfect scores: 30 Lighthouse tests at 100/100/100/100, 30 axe-core tests with zero WCAG violations, admin login verified
+- Fixed Contact Officials seed URL from /officials to /contact-officials and corrected all documentation drift in REQUIREMENTS.md and ROADMAP.md
+
+---
+
 ## v1.0 MVP (Shipped: 2026-03-24)
 
 **Phases completed:** 8 phases, 18 plans, 35 tasks
