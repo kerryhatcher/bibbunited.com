@@ -85,7 +85,10 @@ Plans:
   1. Page titles follow a consistent template without duplicate site name suffixes
   2. Every page has a canonical URL and complete Open Graph tags (url, type, site_name, image, description)
   3. All news articles and CMS pages appear in sitemap.xml with homepage at priority 1.0
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 12-01-PLAN.md -- Shared generatePageMeta helper, SiteTheme ogDefaultImage field, refactor all page metadata
+- [ ] 12-02-PLAN.md -- Native sitemap.ts and robots.ts handlers, next-sitemap removal
 
 ### Phase 13: Quality Audit
 **Goal**: All v1.1 fixes are verified through automated re-review and no regressions remain
@@ -114,5 +117,5 @@ Plans:
 | 9. Foundation & Config | v1.1 | 0/2 | Planning | - |
 | 10. Component Migration & Visual Fixes | v1.1 | 2/2 | Complete    | 2026-03-25 |
 | 11. Accessibility, Layout & UX Polish | v1.1 | 3/3 | Complete    | 2026-03-25 |
-| 12. SEO & Metadata | v1.1 | 0/0 | Not started | - |
+| 12. SEO & Metadata | v1.1 | 0/2 | Planning | - |
 | 13. Quality Audit | v1.1 | 0/0 | Not started | - |
