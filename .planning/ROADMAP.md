@@ -26,7 +26,7 @@
 **Milestone Goal:** Fix all UI/UX review issues and perform a final quality audit so the site is production-ready -- visually polished, fully accessible, optimized, and SEO-complete.
 
 - [ ] **Phase 9: Foundation & Config** - Database migration, seed overhaul, config hardening, and OG default asset
-- [ ] **Phase 10: Component Migration & Visual Fixes** - next/link and next/image batch migrations, footer contrast, and keyboard trap fix
+- [x] **Phase 10: Component Migration & Visual Fixes** - next/link and next/image batch migrations, footer contrast, and keyboard trap fix (completed 2026-03-25)
 - [ ] **Phase 11: Accessibility, Layout & UX Polish** - Skip link, H1, active nav, bylines, excerpts, empty states, spacing, and focus indicators
 - [ ] **Phase 12: SEO & Metadata** - Title template, canonical URLs, OG tags, dynamic sitemap, and sitemap priorities
 - [ ] **Phase 13: Quality Audit** - Full automated re-review verifying all fixes and catching regressions
@@ -59,7 +59,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 10-01-PLAN.md -- next/link migration across all components, next/image migration with fill/fixed modes, next.config.ts image formats
-- [ ] 10-02-PLAN.md -- Footer contrast fix (remove /80 opacity), keyboard trap fix (inert + focus trap)
+- [x] 10-02-PLAN.md -- Footer contrast fix (remove /80 opacity), keyboard trap fix (inert + focus trap)
 
 ### Phase 11: Accessibility, Layout & UX Polish
 **Goal**: The site meets WCAG 2.1 AA for keyboard navigation and document structure, and content presentation gives users the context they need to act
@@ -109,7 +109,7 @@ Plans:
 | 7. Audit Documentation Cleanup | v1.0 | 1/1 | Complete | 2026-03-24 |
 | 8. Tech Debt Cleanup | v1.0 | 3/3 | Complete | 2026-03-24 |
 | 9. Foundation & Config | v1.1 | 0/2 | Planning | - |
-| 10. Component Migration & Visual Fixes | v1.1 | 1/2 | In Progress|  |
+| 10. Component Migration & Visual Fixes | v1.1 | 2/2 | Complete   | 2026-03-25 |
 | 11. Accessibility, Layout & UX Polish | v1.1 | 0/0 | Not started | - |
 | 12. SEO & Metadata | v1.1 | 0/0 | Not started | - |
 | 13. Quality Audit | v1.1 | 0/0 | Not started | - |

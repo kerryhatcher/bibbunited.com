@@ -9,7 +9,7 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 
 ### Visual Appearance
 
-- [ ] **VIS-01**: Footer text is readable with proper contrast on dark background (WCAG 4.5:1 minimum)
+- [x] **VIS-01**: Footer text is readable with proper contrast on dark background (WCAG 4.5:1 minimum)
 - [x] **VIS-02**: Navigation menu is populated with all site sections in both desktop and mobile views
 - [x] **VIS-03**: Hero spotlight displays featured news content on homepage instead of empty dark rectangle
 - [x] **VIS-04**: Seed images are visually distinct and high-contrast against card backgrounds
@@ -18,7 +18,7 @@ Requirements for production polish release. Addresses all 25 issues from UI-UX-R
 
 - [ ] **A11Y-01**: Homepage has a proper H1 heading for screen readers and SEO
 - [ ] **A11Y-02**: User can skip to main content via visible skip-to-content link on keyboard focus
-- [ ] **A11Y-03**: Mobile menu close button is not focusable when slide-out panel is hidden
+- [x] **A11Y-03**: Mobile menu close button is not focusable when slide-out panel is hidden
 - [ ] **A11Y-04**: Footer links have visible high-contrast focus indicators on dark background
 - [x] **A11Y-05**: All seed images have descriptive, context-specific alt text
 
@@ -96,13 +96,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| VIS-01 | Phase 10 | Pending |
+| VIS-01 | Phase 10 | Complete |
 | VIS-02 | Phase 9 | Complete |
 | VIS-03 | Phase 9 | Complete |
 | VIS-04 | Phase 9 | Complete |
 | A11Y-01 | Phase 11 | Pending |
 | A11Y-02 | Phase 11 | Pending |
-| A11Y-03 | Phase 10 | Pending |
+| A11Y-03 | Phase 10 | Complete |
 | A11Y-04 | Phase 11 | Pending |
 | A11Y-05 | Phase 9 | Complete |
 | COMP-01 | Phase 10 | Complete |
