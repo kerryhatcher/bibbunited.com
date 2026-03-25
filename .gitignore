@@ -35,3 +35,7 @@ media/
 test-results/
 playwright-report/
 e2e/screenshots/
+.playwright-mcp/
+
+# pnpm
+.pnpm-store/
