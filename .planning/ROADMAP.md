@@ -116,8 +116,9 @@ Plans:
   2. Active nav indicator and aria-current fire correctly on the Contact Officials page
   3. All implemented requirement checkboxes are marked [x] in REQUIREMENTS.md
   4. All completed requirement traceability entries show "Complete" status
+**Plans**: 1 plan
 Plans:
-- [ ] 14-01-PLAN.md -- Fix seed URL, re-seed, fix documentation drift
+- [ ] 14-01-PLAN.md -- Fix seed URL and re-seed database, update REQUIREMENTS.md and ROADMAP.md documentation drift
 
 ## Progress
 
