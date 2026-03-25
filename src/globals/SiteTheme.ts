@@ -25,5 +25,15 @@ export const SiteTheme: GlobalConfig = {
           'Switch between community (light, welcoming) and urgent (dark, bold) visual modes',
       },
     },
+    {
+      name: 'ogDefaultImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Default Open Graph Image',
+      admin: {
+        description:
+          'Default image (1200x630) used for social sharing when a page has no specific image set.',
+      },
+    },
   ],
 }
