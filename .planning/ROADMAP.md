@@ -58,7 +58,7 @@ Plans:
   4. Mobile menu close button is not reachable via keyboard when the slide-out panel is hidden
 **Plans**: 2 plans
 Plans:
-- [ ] 10-01-PLAN.md -- next/link migration across all components, next/image migration with fill/fixed modes, next.config.ts image formats
+- [x] 10-01-PLAN.md -- next/link migration across all components, next/image migration with fill/fixed modes, next.config.ts image formats
 - [ ] 10-02-PLAN.md -- Footer contrast fix (remove /80 opacity), keyboard trap fix (inert + focus trap)
 
 ### Phase 11: Accessibility, Layout & UX Polish
@@ -109,7 +109,7 @@ Plans:
 | 7. Audit Documentation Cleanup | v1.0 | 1/1 | Complete | 2026-03-24 |
 | 8. Tech Debt Cleanup | v1.0 | 3/3 | Complete | 2026-03-24 |
 | 9. Foundation & Config | v1.1 | 0/2 | Planning | - |
-| 10. Component Migration & Visual Fixes | v1.1 | 0/2 | Planning | - |
+| 10. Component Migration & Visual Fixes | v1.1 | 1/2 | In Progress|  |
 | 11. Accessibility, Layout & UX Polish | v1.1 | 0/0 | Not started | - |
 | 12. SEO & Metadata | v1.1 | 0/0 | Not started | - |
 | 13. Quality Audit | v1.1 | 0/0 | Not started | - |
