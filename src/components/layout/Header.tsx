@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { Logo } from '@/components/ui/Logo'
 
@@ -72,6 +73,21 @@ export function Header({ navItems }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
+  const pathname = usePathname()
+
+  function isActiveLink(item: NavLink): boolean {
+    const href = resolveHref(item)
+    if (href === '#') return false
+    if (href === '/') return pathname === '/'
+    return pathname === href || pathname.startsWith(href + '/')
+  }
+
+  function isParentActive(item: NavItem): boolean {
+    if (item.children) {
+      return item.children.some((child) => isActiveLink(child))
+    }
+    return isActiveLink(item)
+  }
   const dropdownRefs = useRef<Map<string, HTMLLIElement>>(new Map())
   const dropdownItemRefs = useRef<Map<string, HTMLAnchorElement[]>>(new Map())
   const mobileMenuRef = useRef<HTMLDivElement>(null)
@@ -147,20 +163,20 @@ export function Header({ navItems }: HeaderProps) {
     }
   }
 
-  function renderLink(item: NavLink, className: string, onClick?: () => void) {
+  function renderLink(item: NavLink, className: string, onClick?: () => void, active?: boolean) {
     const href = resolveHref(item)
     const isExternal = item.newTab || !href.startsWith('/')
 
     if (isExternal) {
       return (
-        <a href={href} className={className} target="_blank" rel="noopener noreferrer">
+        <a href={href} className={className} target="_blank" rel="noopener noreferrer" aria-current={active ? 'page' : undefined}>
           {item.label}
         </a>
       )
     }
 
     return (
-      <Link href={href} className={className} onClick={onClick}>
+      <Link href={href} className={className} onClick={onClick} aria-current={active ? 'page' : undefined}>
         {item.label}
       </Link>
     )
@@ -176,6 +192,7 @@ export function Header({ navItems }: HeaderProps) {
   ) {
     const childHref = resolveHref(child)
     const isExternal = child.newTab || !childHref.startsWith('/')
+    const childActive = isActiveLink(child)
 
     if (isExternal) {
       return (
@@ -185,6 +202,7 @@ export function Header({ navItems }: HeaderProps) {
           className={className}
           target="_blank"
           rel="noopener noreferrer"
+          aria-current={childActive ? 'page' : undefined}
           ref={(el) => {
             if (el) {
               if (!dropdownItemRefs.current.has(itemId)) {
@@ -209,6 +227,7 @@ export function Header({ navItems }: HeaderProps) {
         key={child.id || `child-${childIndex}`}
         href={childHref}
         className={className}
+        aria-current={childActive ? 'page' : undefined}
         ref={(el) => {
           if (el) {
             if (!dropdownItemRefs.current.has(itemId)) {
@@ -255,7 +274,11 @@ export function Header({ navItems }: HeaderProps) {
                     onMouseLeave={() => setOpenDropdown(null)}
                   >
                     <button
-                      className="flex items-center gap-1 font-heading text-sm font-bold uppercase tracking-wide text-text-primary hover:text-accent bg-transparent border-none cursor-pointer py-2"
+                      className={`flex items-center gap-1 font-heading text-sm font-bold uppercase tracking-wide bg-transparent border-none cursor-pointer py-2 ${
+                        isParentActive(item)
+                          ? 'text-accent border-b-3 border-accent pb-1'
+                          : 'text-text-primary hover:text-accent'
+                      }`}
                       aria-expanded={openDropdown === itemId}
                       aria-haspopup="true"
                       onClick={() =>
@@ -279,7 +302,11 @@ export function Header({ navItems }: HeaderProps) {
                             childIndex,
                             itemId,
                             item.children!.length,
-                            'block px-4 py-2 text-sm text-text-primary no-underline hover:bg-accent hover:text-text-on-accent',
+                            `block px-4 py-2 text-sm no-underline ${
+                              isActiveLink(child)
+                                ? 'bg-accent text-text-on-accent font-bold'
+                                : 'text-text-primary hover:bg-accent hover:text-text-on-accent'
+                            }`,
                           ),
                         )}
                       </div>
@@ -292,7 +319,13 @@ export function Header({ navItems }: HeaderProps) {
                 <li key={itemId}>
                   {renderLink(
                     item,
-                    'font-heading text-sm font-bold uppercase tracking-wide text-text-primary no-underline hover:text-accent',
+                    `font-heading text-sm font-bold uppercase tracking-wide no-underline ${
+                      isActiveLink(item)
+                        ? 'text-accent border-b-3 border-accent pb-1'
+                        : 'text-text-primary hover:text-accent'
+                    }`,
+                    undefined,
+                    isActiveLink(item),
                   )}
                 </li>
               )
@@ -369,23 +402,32 @@ export function Header({ navItems }: HeaderProps) {
                           const childHref = resolveHref(child)
                           const isExternal = child.newTab || !childHref.startsWith('/')
 
+                          const childActive = isActiveLink(child)
+                          const childClassName = `block py-2 text-sm no-underline ${
+                            childActive
+                              ? 'text-accent border-l-3 border-accent pl-3 font-bold'
+                              : 'text-text-secondary hover:text-accent'
+                          }`
+
                           return (
                             <li key={child.id || `mobile-child-${childIndex}`}>
                               {isExternal ? (
                                 <a
                                   href={childHref}
-                                  className="block py-2 text-sm text-text-secondary no-underline hover:text-accent"
+                                  className={childClassName}
                                   onClick={() => setMobileOpen(false)}
                                   target="_blank"
                                   rel="noopener noreferrer"
+                                  aria-current={childActive ? 'page' : undefined}
                                 >
                                   {child.label}
                                 </a>
                               ) : (
                                 <Link
                                   href={childHref}
-                                  className="block py-2 text-sm text-text-secondary no-underline hover:text-accent"
+                                  className={childClassName}
                                   onClick={() => setMobileOpen(false)}
+                                  aria-current={childActive ? 'page' : undefined}
                                 >
                                   {child.label}
                                 </Link>
@@ -401,24 +443,32 @@ export function Header({ navItems }: HeaderProps) {
 
               const href = resolveHref(item)
               const isExternal = item.newTab || !href.startsWith('/')
+              const itemActive = isActiveLink(item)
+              const mobileTopClassName = `block py-3 font-heading text-sm font-bold uppercase tracking-wide no-underline ${
+                itemActive
+                  ? 'text-accent border-l-3 border-accent pl-3'
+                  : 'text-text-primary hover:text-accent'
+              }`
 
               return (
                 <li key={itemId} className="border-b border-border">
                   {isExternal ? (
                     <a
                       href={href}
-                      className="block py-3 font-heading text-sm font-bold uppercase tracking-wide text-text-primary no-underline hover:text-accent"
+                      className={mobileTopClassName}
                       onClick={() => setMobileOpen(false)}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-current={itemActive ? 'page' : undefined}
                     >
                       {item.label}
                     </a>
                   ) : (
                     <Link
                       href={href}
-                      className="block py-3 font-heading text-sm font-bold uppercase tracking-wide text-text-primary no-underline hover:text-accent"
+                      className={mobileTopClassName}
                       onClick={() => setMobileOpen(false)}
+                      aria-current={itemActive ? 'page' : undefined}
                     >
                       {item.label}
                     </Link>
