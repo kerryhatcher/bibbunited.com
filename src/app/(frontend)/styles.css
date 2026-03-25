@@ -37,6 +37,11 @@
   --color-border: #334155;
 }
 
+/* ===== Dark mode header: match footer navy instead of page background ===== */
+[data-mode="urgent"] header {
+  background-color: var(--color-navy);
+}
+
 /* ===== Base resets ===== */
 * {
   box-sizing: border-box;
