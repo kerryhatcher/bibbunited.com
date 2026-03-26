@@ -827,6 +827,10 @@ export interface SiteTheme {
    * Switch between community (light, welcoming) and urgent (dark, bold) visual modes
    */
   mode?: ('community' | 'urgent') | null;
+  /**
+   * Default image (1200x630) used for social sharing when a page has no specific image set.
+   */
+  ogDefaultImage?: (number | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -926,6 +930,7 @@ export interface UrgentBannerSelect<T extends boolean = true> {
  */
 export interface SiteThemeSelect<T extends boolean = true> {
   mode?: T;
+  ogDefaultImage?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
