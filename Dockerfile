@@ -13,13 +13,17 @@ COPY .next/standalone ./
 COPY .next/static ./.next/static
 COPY public ./public
 
-# Replace sharp with Alpine-native (musl) binaries
+# Replace sharp with Alpine-native (musl) binaries.
+# Turbopack bundles external modules as "sharp-<hash>" — create symlinks
+# so Node.js resolves the hashed name to the real sharp package.
 RUN rm -rf node_modules/sharp node_modules/.pnpm/*sharp* node_modules/.pnpm/*@img* && \
     cd /tmp && npm init -y > /dev/null 2>&1 && \
     npm install --os=linux --cpu=x64 --libc=musl sharp@0.34.2 > /dev/null 2>&1 && \
     cp -r node_modules/sharp /app/node_modules/sharp && \
     cp -r node_modules/@img /app/node_modules/@img 2>/dev/null || true && \
-    rm -rf /tmp/node_modules /tmp/package.json /tmp/package-lock.json
+    rm -rf /tmp/node_modules /tmp/package.json /tmp/package-lock.json && \
+    cd /app/node_modules && \
+    for h in $(grep -roh 'sharp-[0-9a-f]\{16\}' /app/.next/server/ 2>/dev/null | sort -u); do ln -sf sharp "$h"; done
 
 # Create writable directories for media uploads and Next.js cache
 # Use Alpine's built-in nobody user (UID 65534)
