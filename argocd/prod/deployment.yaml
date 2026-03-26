@@ -18,7 +18,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: bibbunited
-          image: ghcr.io/kerryhatcher/bibbunited.com:sha-78a775691f99a9d2df87c2bdbfd7851e33056ad9-seeded2
+          image: ghcr.io/kerryhatcher/bibbunited.com:sha-f3a11f1baad85bac8048fa2bd315417a9325abef
           ports:
             - containerPort: 3000
           envFrom:
