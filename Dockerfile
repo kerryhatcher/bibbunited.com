@@ -13,25 +13,12 @@ COPY .next/standalone ./
 COPY .next/static ./.next/static
 COPY public ./public
 
-# Replace sharp with Alpine-native (musl) binaries and resolve all
-# Turbopack hashed external modules (e.g. "pg-<hash>" -> "pg").
-# Turbopack bundles require() calls as "<name>-<16hex>" — we create
-# symlinks from the hashed name to the real package in node_modules.
-RUN rm -rf node_modules/sharp node_modules/.pnpm/*sharp* node_modules/.pnpm/*@img* && \
-    cd /tmp && npm init -y > /dev/null 2>&1 && \
-    npm install --os=linux --cpu=x64 --libc=musl sharp@0.34.2 > /dev/null 2>&1 && \
-    cp -r node_modules/sharp /app/node_modules/sharp && \
-    cp -r node_modules/@img /app/node_modules/@img 2>/dev/null || true && \
-    rm -rf /tmp/node_modules /tmp/package.json /tmp/package-lock.json && \
-    cd /app/node_modules && \
-    for entry in $(grep -roh '[a-z_-]*-[0-9a-f]\{16\}' /app/.next/server/ 2>/dev/null | sort -u); do \
-      pkg=$(echo "$entry" | sed 's/-[0-9a-f]\{16\}$//'); \
-      if [ -d "/app/node_modules/.pnpm/${pkg}@"*/node_modules/"${pkg}" ] || [ -d "/app/node_modules/${pkg}" ]; then \
-        real=$(ls -d /app/node_modules/.pnpm/${pkg}@*/node_modules/${pkg} 2>/dev/null | head -1); \
-        [ -z "$real" ] && real="/app/node_modules/${pkg}"; \
-        ln -sf "$real" "/app/node_modules/${entry}"; \
-      fi; \
-    done
+# Install sharp with Alpine-native (musl) binaries and all its dependencies.
+# Copy everything from the fresh install into app node_modules.
+# Then create symlinks for all Turbopack hashed external modules
+# (Turbopack bundles require() calls as "<name>-<16hex>").
+COPY docker-fix-modules.sh /tmp/
+RUN chmod +x /tmp/docker-fix-modules.sh && /tmp/docker-fix-modules.sh && rm /tmp/docker-fix-modules.sh
 
 # Create writable directories for media uploads and Next.js cache
 # Use Alpine's built-in nobody user (UID 65534)
