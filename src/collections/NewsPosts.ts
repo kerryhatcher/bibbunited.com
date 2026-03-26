@@ -2,9 +2,19 @@ import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 import { ctaFields } from '../fields/cta'
 import { richTextEditor } from '../editors/richText'
+import { revalidateCollection } from '../hooks/revalidate'
 
 export const NewsPosts: CollectionConfig = {
   slug: 'news-posts',
+  hooks: {
+    afterChange: [
+      revalidateCollection((doc) => [
+        '/news',
+        `/news/${doc.slug}`,
+        '/', // homepage spotlight may reference news posts
+      ]),
+    ],
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'author', 'publishDate', '_status', 'updatedAt'],

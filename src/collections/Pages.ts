@@ -2,9 +2,15 @@ import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 import { ctaFields } from '../fields/cta'
 import { richTextEditor } from '../editors/richText'
+import { revalidateCollection } from '../hooks/revalidate'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
+  hooks: {
+    afterChange: [
+      revalidateCollection((doc) => [`/${doc.slug}`]),
+    ],
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],

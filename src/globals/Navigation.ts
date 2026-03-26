@@ -1,8 +1,12 @@
 import type { GlobalConfig } from 'payload'
 import { linkFields } from '../fields/link'
+import { revalidateGlobal } from '../hooks/revalidate'
 
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
+  hooks: {
+    afterChange: [revalidateGlobal(['/'], 'layout')],
+  },
   label: 'Site Navigation',
   access: {
     read: () => true,

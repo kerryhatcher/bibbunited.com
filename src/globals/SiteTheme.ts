@@ -1,7 +1,11 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobal } from '../hooks/revalidate'
 
 export const SiteTheme: GlobalConfig = {
   slug: 'site-theme',
+  hooks: {
+    afterChange: [revalidateGlobal(['/'], 'layout')],
+  },
   label: 'Site Theme',
   admin: {
     description:

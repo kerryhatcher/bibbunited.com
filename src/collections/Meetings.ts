@@ -1,7 +1,11 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateCollection } from '../hooks/revalidate'
 
 export const Meetings: CollectionConfig = {
   slug: 'meetings',
+  hooks: {
+    afterChange: [revalidateCollection(['/meetings'])],
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'date', 'time', 'location'],

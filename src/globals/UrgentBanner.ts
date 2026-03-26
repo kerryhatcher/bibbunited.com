@@ -1,7 +1,11 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobal } from '../hooks/revalidate'
 
 export const UrgentBanner: GlobalConfig = {
   slug: 'urgent-banner',
+  hooks: {
+    afterChange: [revalidateGlobal(['/'], 'layout')],
+  },
   label: 'Urgent Banner',
   admin: {
     description:

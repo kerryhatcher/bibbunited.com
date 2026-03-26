@@ -1,7 +1,11 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateCollection } from '../hooks/revalidate'
 
 export const Officials: CollectionConfig = {
   slug: 'officials',
+  hooks: {
+    afterChange: [revalidateCollection(['/contact-officials'])],
+  },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'role', 'body', 'email'],
