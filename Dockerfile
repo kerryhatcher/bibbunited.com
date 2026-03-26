@@ -14,10 +14,11 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Payload config requires these at build time but doesn't connect to DB.
+# Payload requires a live DB connection during next build for migrations.
+# CI provides a PostgreSQL service container on localhost:5432.
 # Real values are injected at runtime via k8s secrets.
-ENV DATABASE_URI=postgresql://placeholder:placeholder@localhost:5432/placeholder
-ENV PAYLOAD_SECRET=build-time-placeholder-not-used-at-runtime
+ENV DATABASE_URI=postgresql://ci:ci@localhost:5432/bibbunited_ci
+ENV PAYLOAD_SECRET=build-time-secret-replaced-at-runtime
 
 RUN pnpm build
 
