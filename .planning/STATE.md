@@ -84,9 +84,10 @@ None.
 | 260324-wer | Fix header broken in dark theme - restore bg-bg-dominant | 2026-03-25 | 1b1bf3a | [260324-wer-fix-header-broken-in-dark-theme-restore-](./quick/260324-wer-fix-header-broken-in-dark-theme-restore-/) |
 | 260324-wou | Dark mode header background matches footer navy | 2026-03-25 | 58e6e0d | [260324-wou-dark-mode-header-background-matches-foot](./quick/260324-wou-dark-mode-header-background-matches-foot/) |
 | 260325-jc8 | Remove gap between hero image and top menu | 2026-03-25 | d4b49a6 | [260325-jc8-remove-the-gap-between-the-hero-img-and-](./quick/260325-jc8-remove-the-gap-between-the-hero-img-and-/) |
+| 260325-sg9 | Deploy bibbunited.com to production on k8s cluster | 2026-03-26 | 24d5d73 | [260325-sg9-deploy-bibbunited-com-to-production-on-k](./quick/260325-sg9-deploy-bibbunited-com-to-production-on-k/) |
 
 ## Session Continuity
 
-Last activity: 2026-03-25
-Stopped at: Completed 14-01-PLAN.md
+Last activity: 2026-03-26 - Completed quick task 260325-sg9: Deploy bibbunited.com to production on k8s cluster
+Stopped at: Production deployed at www.bibbunited.com
 Resume file: None
