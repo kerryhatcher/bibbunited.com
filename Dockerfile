@@ -14,10 +14,10 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
-ARG DATABASE_URI
-ARG PAYLOAD_SECRET
-ENV DATABASE_URI=${DATABASE_URI}
-ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
+# Payload config requires these at build time but doesn't connect to DB.
+# Real values are injected at runtime via k8s secrets.
+ENV DATABASE_URI=postgresql://placeholder:placeholder@localhost:5432/placeholder
+ENV PAYLOAD_SECRET=build-time-placeholder-not-used-at-runtime
 
 RUN pnpm build
 
@@ -27,10 +27,6 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-
-# Create non-root user per D-08
-RUN addgroup --system --gid 65534 appgroup && \
-    adduser --system --uid 65534 appuser
 
 # Copy standalone output
 COPY --from=builder /app/.next/standalone ./
@@ -42,10 +38,11 @@ COPY --from=builder /app/node_modules/sharp ./node_modules/sharp
 COPY --from=builder /app/node_modules/@img ./node_modules/@img
 
 # Create writable directories for media and Next.js cache
+# Use Alpine's built-in nobody user (UID 65534) per D-08
 RUN mkdir -p /app/media /app/.next/cache && \
-    chown -R appuser:appgroup /app/media /app/.next/cache
+    chown -R nobody:nobody /app/media /app/.next/cache
 
-USER appuser
+USER nobody
 
 EXPOSE 3000
 ENV PORT=3000

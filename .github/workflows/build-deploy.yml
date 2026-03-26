@@ -36,9 +36,6 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          build-args: |
-            DATABASE_URI=${{ secrets.BUILD_DATABASE_URI }}
-            PAYLOAD_SECRET=${{ secrets.BUILD_PAYLOAD_SECRET }}
 
       - name: Update image tag in manifests
         env:
