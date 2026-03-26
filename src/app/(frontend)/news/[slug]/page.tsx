@@ -116,13 +116,14 @@ export default async function NewsArticlePage({ params }: Args) {
         ])}
       />
       {featuredImage?.url && (
-        <div className="w-full aspect-video relative">
+        <div className="w-full aspect-[21/9] max-h-[400px] relative bg-bg-secondary">
           <Image
             src={featuredImage.url}
             alt={featuredImage.alt || post.title}
             fill
             className="object-cover"
             sizes="100vw"
+            priority
           />
         </div>
       )}

@@ -257,7 +257,7 @@ export function Header({ navItems }: HeaderProps) {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 lg:flex" aria-label="Main navigation">
-          <ul className="flex items-center gap-6 list-none m-0 p-0">
+          <ul role="list" className="flex items-center gap-6 list-none m-0 p-0">
             {navItems.map((item, index) => {
               const itemId = item.id || `nav-${index}`
               const hasChildren = item.children && item.children.length > 0
@@ -274,7 +274,7 @@ export function Header({ navItems }: HeaderProps) {
                     onMouseLeave={() => setOpenDropdown(null)}
                   >
                     <button
-                      className={`flex items-center gap-1 font-heading text-sm font-bold uppercase tracking-wide bg-transparent border-none cursor-pointer py-2 ${
+                      className={`flex items-center gap-1 font-heading text-sm font-bold uppercase tracking-wide bg-transparent border-none cursor-pointer py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                         isParentActive(item)
                           ? 'text-accent border-b-3 border-accent pb-1'
                           : 'text-text-primary hover:text-accent'
@@ -294,23 +294,28 @@ export function Header({ navItems }: HeaderProps) {
                         className={`transition-transform ${openDropdown === itemId ? 'rotate-180' : ''}`}
                       />
                     </button>
-                    {openDropdown === itemId && (
-                      <div className="absolute left-0 top-full min-w-48 border border-border bg-bg-dominant py-2 shadow-lg">
-                        {item.children!.map((child, childIndex) =>
-                          renderChildLink(
-                            child,
-                            childIndex,
-                            itemId,
-                            item.children!.length,
-                            `block px-4 py-2 text-sm no-underline ${
-                              isActiveLink(child)
-                                ? 'bg-accent text-text-on-accent font-bold'
-                                : 'text-text-primary hover:bg-accent hover:text-text-on-accent'
-                            }`,
-                          ),
-                        )}
-                      </div>
-                    )}
+                    <div
+                      className={`absolute left-0 top-full min-w-48 border border-border bg-bg-dominant py-2 shadow-lg transition-[opacity,visibility] duration-200 ${
+                        openDropdown === itemId
+                          ? 'opacity-100 visible'
+                          : 'opacity-0 invisible'
+                      }`}
+                      aria-hidden={openDropdown !== itemId}
+                    >
+                      {item.children!.map((child, childIndex) =>
+                        renderChildLink(
+                          child,
+                          childIndex,
+                          itemId,
+                          item.children!.length,
+                          `block px-4 py-2 text-sm no-underline min-h-[44px] flex items-center ${
+                            isActiveLink(child)
+                              ? 'bg-accent text-text-on-accent font-bold'
+                              : 'text-text-primary hover:bg-accent hover:text-text-on-accent'
+                          }`,
+                        ),
+                      )}
+                    </div>
                   </li>
                 )
               }
@@ -319,7 +324,7 @@ export function Header({ navItems }: HeaderProps) {
                 <li key={itemId}>
                   {renderLink(
                     item,
-                    `font-heading text-sm font-bold uppercase tracking-wide no-underline ${
+                    `font-heading text-sm font-bold uppercase tracking-wide no-underline transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                       isActiveLink(item)
                         ? 'text-accent border-b-3 border-accent pb-1'
                         : 'text-text-primary hover:text-accent'
@@ -335,7 +340,7 @@ export function Header({ navItems }: HeaderProps) {
 
         {/* Mobile hamburger button */}
         <button
-          className="bg-transparent border-none cursor-pointer text-text-primary lg:hidden"
+          className="bg-transparent border-none cursor-pointer text-text-primary lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
         >
@@ -363,7 +368,7 @@ export function Header({ navItems }: HeaderProps) {
         {/* Close button */}
         <div className="flex items-center justify-end p-4">
           <button
-            className="bg-transparent border-none cursor-pointer text-text-primary"
+            className="bg-transparent border-none cursor-pointer text-text-primary min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             onClick={() => setMobileOpen(false)}
             aria-label="Close menu"
           >
@@ -373,7 +378,7 @@ export function Header({ navItems }: HeaderProps) {
 
         {/* Mobile nav items */}
         <nav className="px-4" aria-label="Mobile navigation">
-          <ul className="list-none m-0 p-0">
+          <ul role="list" className="list-none m-0 p-0">
             {navItems.map((item, index) => {
               const itemId = item.id || `mobile-nav-${index}`
               const hasChildren = item.children && item.children.length > 0
@@ -396,14 +401,18 @@ export function Header({ navItems }: HeaderProps) {
                         className={`transition-transform ${mobileExpanded === itemId ? 'rotate-180' : ''}`}
                       />
                     </button>
-                    {mobileExpanded === itemId && (
-                      <ul className="list-none m-0 mb-2 p-0 pl-4">
+                    <div
+                      className={`grid transition-[grid-template-rows] duration-200 ease-out ${
+                        mobileExpanded === itemId ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                      }`}
+                    >
+                      <ul role="list" className="list-none m-0 p-0 pl-4 overflow-hidden">
                         {item.children!.map((child, childIndex) => {
                           const childHref = resolveHref(child)
                           const isExternal = child.newTab || !childHref.startsWith('/')
 
                           const childActive = isActiveLink(child)
-                          const childClassName = `block py-2 text-sm no-underline ${
+                          const childClassName = `block py-3 text-sm no-underline min-h-[44px] ${
                             childActive
                               ? 'text-accent border-l-3 border-accent pl-3 font-bold'
                               : 'text-text-secondary hover:text-accent'
@@ -436,7 +445,7 @@ export function Header({ navItems }: HeaderProps) {
                           )
                         })}
                       </ul>
-                    )}
+                    </div>
                   </li>
                 )
               }

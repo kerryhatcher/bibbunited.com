@@ -65,24 +65,48 @@ export default async function NewsListingPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {newsPosts.docs.map((post) => (
-            <Card
-              key={post.id}
-              href={`/news/${post.slug}`}
-              imageSrc={getImageUrl(post)}
-              imageAlt={getImageAlt(post)}
-            >
-              <h2 className="text-xl font-heading font-bold uppercase mb-2">
-                {post.title}
-              </h2>
-              <p className="text-text-secondary text-sm line-clamp-2 mb-2">
-                {post.excerpt || getExcerpt(post.body)}
-              </p>
-              <DateDisplay publishDate={post.publishDate} variant="compact" />
-            </Card>
-          ))}
-        </div>
+        (() => {
+          const [featured, ...rest] = newsPosts.docs
+          return (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Featured first post — spans 2 columns */}
+              <div className="lg:col-span-2">
+                <Card
+                  key={featured.id}
+                  href={`/news/${featured.slug}`}
+                  imageSrc={getImageUrl(featured)}
+                  imageAlt={getImageAlt(featured)}
+                >
+                  <h2 className="text-2xl sm:text-3xl font-heading font-bold uppercase mb-2 line-clamp-2">
+                    {featured.title}
+                  </h2>
+                  <p className="text-text-secondary text-base line-clamp-3 mb-2">
+                    {featured.excerpt || getExcerpt(featured.body)}
+                  </p>
+                  <DateDisplay publishDate={featured.publishDate} variant="compact" />
+                </Card>
+              </div>
+
+              {/* Remaining posts — list style in right column on desktop */}
+              <div className="lg:col-span-1 flex flex-col gap-4">
+                {rest.map((post) => (
+                  <Card
+                    key={post.id}
+                    href={`/news/${post.slug}`}
+                  >
+                    <h2 className="text-lg font-heading font-bold uppercase mb-1 line-clamp-2">
+                      {post.title}
+                    </h2>
+                    <p className="text-text-secondary text-sm line-clamp-2 mb-2">
+                      {post.excerpt || getExcerpt(post.body)}
+                    </p>
+                    <DateDisplay publishDate={post.publishDate} variant="compact" />
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )
+        })()
       )}
     </Section>
   )

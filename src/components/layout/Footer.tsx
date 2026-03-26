@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <footer data-print-hide="" className="bg-navy text-white">
       {/* Get Involved CTA section */}
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
         <FooterCTA />
       </div>
 
@@ -24,7 +24,7 @@ export function Footer() {
 
           {/* Right: quick links */}
           <nav aria-label="Footer navigation">
-            <ul className="m-0 flex list-none items-center gap-6 p-0">
+            <ul role="list" className="m-0 flex list-none items-center gap-6 p-0">
               <li>
                 <Link
                   href="/about"

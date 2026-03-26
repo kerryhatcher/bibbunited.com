@@ -20,9 +20,8 @@
   --font-heading: var(--font-barlow-condensed), sans-serif;
   --font-body: var(--font-inter), sans-serif;
 
-  /* Custom spacing */
-  --spacing-section: 64px;
-  --spacing-section-mobile: 32px;
+  /* Overlay color for dark overlays on images/heroes */
+  --color-overlay: rgba(0, 0, 0, 0.5);
 }
 
 /* ===== Urgent Mode (Dark) overrides ===== */
@@ -112,6 +111,16 @@ body {
 /* Inherits from parent section: white on dark backgrounds, navy on light */
 .logo-bibb {
   color: inherit;
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ===== Print styles (DSGN-07) ===== */

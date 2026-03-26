@@ -17,7 +17,7 @@ export function Card({
   className = '',
   href,
 }: CardProps) {
-  const cardClasses = `border border-border bg-bg-dominant overflow-hidden transition-colors hover:border-t-4 hover:border-t-accent ${className}`
+  const cardClasses = `border border-border bg-bg-dominant overflow-hidden transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg ${className}`
 
   const content = (
     <>
@@ -42,7 +42,7 @@ export function Card({
     return (
       <Wrapper
         href={href}
-        className={`block ${cardClasses} focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2`}
+        className={`block ${cardClasses} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2`}
         {...(!isInternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       >
         {content}

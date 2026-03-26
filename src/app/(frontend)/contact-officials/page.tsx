@@ -4,7 +4,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { generatePageMeta } from '@/lib/metadata'
 import { Section } from '@/components/ui/Section'
-import { Mail, Phone, User, Users } from 'lucide-react'
+import { Mail, Phone, Users } from 'lucide-react'
 import {
   JsonLdScript,
   governmentOrgJsonLd,
@@ -106,7 +106,7 @@ export default async function ContactOfficialsPage() {
 
         return (
           <div key={key}>
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold uppercase tracking-tight mb-6 mt-12 first:mt-0">
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold uppercase tracking-tight mb-6 mt-14 first:mt-0 border-b-2 border-accent pb-3">
               {bodyLabels[key] || key}
             </h2>
 
@@ -128,31 +128,31 @@ export default async function ContactOfficialsPage() {
                         alt={official.name}
                         width={80}
                         height={80}
-                        className="rounded-full object-cover mb-4"
+                        className="object-cover mb-4"
                       />
                     )}
-                    <h3 className="text-xl font-heading font-bold">
+                    <h3 className="text-xl font-heading font-bold truncate">
                       {official.name}
                     </h3>
-                    <p className="text-text-secondary text-sm mb-4">
+                    <p className="text-text-secondary text-sm mb-4 truncate">
                       {official.role}
                     </p>
                     <div className="flex flex-col gap-2">
                       {official.email && (
                         <a
                           href={`mailto:${official.email}`}
-                          className="flex items-center gap-2 text-accent hover:underline text-sm"
+                          className="flex items-center gap-2 text-accent hover:underline text-sm min-h-[44px] py-1 break-all"
                         >
-                          <Mail className="w-4 h-4" />
-                          {official.email}
+                          <Mail className="w-4 h-4 flex-shrink-0" />
+                          <span className="truncate">{official.email}</span>
                         </a>
                       )}
                       {official.phone && (
                         <a
                           href={`tel:${official.phone}`}
-                          className="flex items-center gap-2 text-accent hover:underline text-sm"
+                          className="flex items-center gap-2 text-accent hover:underline text-sm min-h-[44px] py-1"
                         >
-                          <Phone className="w-4 h-4" />
+                          <Phone className="w-4 h-4 flex-shrink-0" />
                           {official.phone}
                         </a>
                       )}
