@@ -6,6 +6,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_SHARP_PATH=/app/node_modules/sharp
 
 # Copy pre-built standalone output from CI
 COPY .next/standalone ./
