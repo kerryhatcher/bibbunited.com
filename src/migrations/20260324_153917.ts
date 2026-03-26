@@ -51,7 +51,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TABLE "news_posts" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar,
-  	"excerpt" varchar,
   	"slug" varchar,
   	"author_id" integer,
   	"publish_date" timestamp(3) with time zone,
@@ -71,7 +70,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" serial PRIMARY KEY NOT NULL,
   	"parent_id" integer,
   	"version_title" varchar,
-  	"version_excerpt" varchar,
   	"version_slug" varchar,
   	"version_author_id" integer,
   	"version_publish_date" timestamp(3) with time zone,
@@ -135,7 +133,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   
   CREATE TABLE "users" (
   	"id" serial PRIMARY KEY NOT NULL,
-  	"display_name" varchar,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"email" varchar NOT NULL,
