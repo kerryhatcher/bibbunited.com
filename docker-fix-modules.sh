@@ -9,13 +9,19 @@ cd /tmp
 npm init -y > /dev/null 2>&1
 npm install --os=linux --cpu=x64 --libc=musl sharp@0.34.2 > /dev/null 2>&1
 
-# Copy sharp and all its dependencies
-for pkg in sharp @img detect-libc color semver; do
-  if [ -d "/tmp/node_modules/$pkg" ]; then
-    rm -rf "/app/node_modules/$pkg"
-    cp -r "/tmp/node_modules/$pkg" "/app/node_modules/$pkg"
+# Copy ALL packages from the sharp install (includes all transitive deps)
+for pkg in /tmp/node_modules/*; do
+  name=$(basename "$pkg")
+  if [ "$name" != ".package-lock.json" ]; then
+    rm -rf "/app/node_modules/$name"
+    cp -r "$pkg" "/app/node_modules/$name"
   fi
 done
+# Also copy scoped packages (@img/*)
+if [ -d "/tmp/node_modules/@img" ]; then
+  rm -rf "/app/node_modules/@img"
+  cp -r "/tmp/node_modules/@img" "/app/node_modules/@img"
+fi
 
 rm -rf /tmp/node_modules /tmp/package.json /tmp/package-lock.json
 
