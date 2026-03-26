@@ -20,7 +20,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URI=postgresql://ci:ci@localhost:5432/bibbunited_ci
 ENV PAYLOAD_SECRET=build-time-secret-replaced-at-runtime
 
-RUN pnpm payload migrate && pnpm build
+RUN pnpm payload migrate:fresh && pnpm build
 
 # Stage 3: Production runner
 FROM node:22-alpine AS runner
