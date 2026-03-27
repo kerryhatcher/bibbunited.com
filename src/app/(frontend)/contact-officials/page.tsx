@@ -78,7 +78,7 @@ export default async function ContactOfficialsPage() {
           />
         )
       })}
-      <h1 className="text-4xl sm:text-5xl font-heading font-bold uppercase tracking-tight mb-4">
+      <h1 className="text-fluid-page-title font-heading font-bold uppercase tracking-tight mb-4">
         Contact Your Officials
       </h1>
       <p className="text-text-secondary text-lg mb-12 max-w-[65ch]">

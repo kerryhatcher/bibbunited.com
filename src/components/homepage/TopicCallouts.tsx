@@ -45,7 +45,7 @@ export function TopicCallouts({ callouts }: TopicCalloutsProps) {
 
   return (
     <Section variant="dark">
-      <h2 className="text-3xl sm:text-4xl font-heading font-bold uppercase tracking-tight mb-8">
+      <h2 className="text-fluid-section-title font-heading font-bold uppercase tracking-tight mb-8">
         Key Issues
       </h2>
 

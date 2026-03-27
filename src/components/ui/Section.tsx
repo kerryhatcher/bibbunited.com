@@ -16,7 +16,7 @@ export function Section({
 
   return (
     <section
-      className={`py-8 sm:py-12 px-4 sm:px-6 lg:px-8 ${bg} ${text} ${className}`}
+      className={`py-[clamp(2rem,4vw,3rem)] px-[clamp(1rem,3vw,2rem)] ${bg} ${text} ${className}`}
     >
       <div className="mx-auto max-w-7xl">{children}</div>
     </section>

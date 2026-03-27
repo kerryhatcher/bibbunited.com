@@ -29,7 +29,7 @@ export function LatestNews({ posts }: LatestNewsProps) {
   if (!posts || posts.length === 0) {
     return (
       <Section>
-        <h2 className="text-3xl sm:text-4xl font-heading font-bold uppercase tracking-tight mb-8">
+        <h2 className="text-fluid-section-title font-heading font-bold uppercase tracking-tight mb-8">
           Latest News
         </h2>
         <p className="text-text-secondary">No news posts published yet.</p>
@@ -42,7 +42,7 @@ export function LatestNews({ posts }: LatestNewsProps) {
 
   return (
     <Section>
-      <h2 className="text-3xl sm:text-4xl font-heading font-bold uppercase tracking-tight mb-8">
+      <h2 className="text-fluid-section-title font-heading font-bold uppercase tracking-tight mb-8">
         Latest News
       </h2>
 

@@ -77,6 +77,19 @@ body {
   }
 }
 
+/* ===== Fluid typography utilities ===== */
+.text-fluid-page-title {
+  font-size: clamp(2.25rem, 5vw, 3rem);
+}
+
+.text-fluid-section-title {
+  font-size: clamp(1.875rem, 4vw, 2.5rem);
+}
+
+.text-fluid-hero {
+  font-size: clamp(1.875rem, 6vw, 3.75rem);
+}
+
 /* ===== Typography prose overrides ===== */
 .prose {
   --tw-prose-body: var(--color-text-primary);

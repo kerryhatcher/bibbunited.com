@@ -80,7 +80,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-6 pb-12 sm:p-10 sm:pb-10 text-white">
-              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-bold uppercase tracking-tight mb-2 line-clamp-3">
+              <h2 className="text-fluid-hero font-heading font-bold uppercase tracking-tight mb-2 line-clamp-3">
                 <Link
                   href={`/news/${story.slug}`}
                   className="hover:underline focus:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
