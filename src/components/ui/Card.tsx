@@ -46,6 +46,7 @@ export function Card({
         {...(!isInternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       >
         {content}
+        {!isInternal && <span className="sr-only"> (opens in new tab)</span>}
       </Wrapper>
     )
   }

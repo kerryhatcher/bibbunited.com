@@ -125,6 +125,11 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
         </>
       )}
 
+      {/* Live region for screen reader announcements */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {`Story ${currentIndex + 1} of ${stories.length}: ${stories[currentIndex]?.title}`}
+      </div>
+
       {/* Dot indicators */}
       {showControls && (
         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1" role="tablist" aria-label="Story slides">
@@ -133,9 +138,32 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
               key={index}
               id={`hero-tab-${index}`}
               role="tab"
+              tabIndex={index === currentIndex ? 0 : -1}
               aria-selected={index === currentIndex}
               aria-controls={`hero-panel-${index}`}
               onClick={() => setCurrentIndex(index)}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                  e.preventDefault()
+                  const next = (index + 1) % stories.length
+                  setCurrentIndex(next)
+                  document.getElementById(`hero-tab-${next}`)?.focus()
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                  e.preventDefault()
+                  const prev = (index - 1 + stories.length) % stories.length
+                  setCurrentIndex(prev)
+                  document.getElementById(`hero-tab-${prev}`)?.focus()
+                } else if (e.key === 'Home') {
+                  e.preventDefault()
+                  setCurrentIndex(0)
+                  document.getElementById('hero-tab-0')?.focus()
+                } else if (e.key === 'End') {
+                  e.preventDefault()
+                  const last = stories.length - 1
+                  setCurrentIndex(last)
+                  document.getElementById(`hero-tab-${last}`)?.focus()
+                }
+              }}
               className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
               aria-label={`Go to story ${index + 1} of ${stories.length}`}
             >

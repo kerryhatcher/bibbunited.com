@@ -22,6 +22,7 @@ export async function UrgentBannerBar() {
         ) : (
           <a href={banner.link} className="underline hover:no-underline" target="_blank" rel="noopener noreferrer">
             {banner.message}
+            <span className="sr-only"> (opens in new tab)</span>
           </a>
         )
       ) : (

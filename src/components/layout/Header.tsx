@@ -171,6 +171,7 @@ export function Header({ navItems }: HeaderProps) {
       return (
         <a href={href} className={className} target="_blank" rel="noopener noreferrer" aria-current={active ? 'page' : undefined}>
           {item.label}
+          <span className="sr-only"> (opens in new tab)</span>
         </a>
       )
     }
@@ -218,6 +219,7 @@ export function Header({ navItems }: HeaderProps) {
           onClick={onClick}
         >
           {child.label}
+          <span className="sr-only"> (opens in new tab)</span>
         </a>
       )
     }
@@ -430,6 +432,7 @@ export function Header({ navItems }: HeaderProps) {
                                   aria-current={childActive ? 'page' : undefined}
                                 >
                                   {child.label}
+                                  <span className="sr-only"> (opens in new tab)</span>
                                 </a>
                               ) : (
                                 <Link
@@ -471,6 +474,7 @@ export function Header({ navItems }: HeaderProps) {
                       aria-current={itemActive ? 'page' : undefined}
                     >
                       {item.label}
+                      <span className="sr-only"> (opens in new tab)</span>
                     </a>
                   ) : (
                     <Link
