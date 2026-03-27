@@ -46,6 +46,7 @@ async function createSeedImage(
   label: string,
   bg: { r: number; g: number; b: number },
   alt: string,
+  ctx: { context: { disableRevalidate: boolean } },
 ) {
   const existing = await payload.find({
     collection: 'media',
@@ -81,6 +82,7 @@ async function createSeedImage(
       size: imageBuffer.length,
     },
     overrideAccess: true,
+    ...ctx,
   })
   console.log('Created media:', alt)
   return media
@@ -89,6 +91,9 @@ async function createSeedImage(
 async function seed() {
   const payload = await getPayload({ config })
   const { default: sharpFn } = await import('sharp')
+
+  // Disable revalidatePath in afterChange hooks — not available outside Next.js server
+  const ctx = { context: { disableRevalidate: true } }
 
   console.log('Seeding database...')
 
@@ -112,6 +117,7 @@ async function seed() {
         password: 'seed-password-change-me',
       },
       overrideAccess: true,
+      ...ctx,
     })
     console.log('Created user:', user.email)
   }
@@ -124,6 +130,7 @@ async function seed() {
     id: user.id,
     data: { displayName: 'BIBB United Staff' } as Record<string, unknown>,
     overrideAccess: true,
+    ...ctx,
   })
   console.log('Set user displayName to BIBB United Staff')
 
@@ -178,6 +185,7 @@ async function seed() {
       img.label,
       img.bg,
       img.alt,
+      ctx,
     )
   }
 
@@ -220,6 +228,7 @@ async function seed() {
         size: ogBuffer.length,
       },
       overrideAccess: true,
+      ...ctx,
     })
     console.log('Created OG default image')
   }
@@ -261,6 +270,7 @@ async function seed() {
         collection: 'pages',
         data: { ...pageData, _status: 'published' },
         overrideAccess: true,
+        ...ctx,
       })
       pageRefs[pageData.title] = { id: created.id as number, slug: created.slug || '' }
       console.log('Created page:', created.slug)
@@ -318,6 +328,7 @@ async function seed() {
           _status: 'published',
         },
         overrideAccess: true,
+        ...ctx,
       })
       newsPostDocs.push({ id: created.id as number, slug: created.slug || '' })
       console.log('Created news post:', created.slug)
@@ -330,6 +341,7 @@ async function seed() {
           id: doc.id,
           data: { featuredImage: postData.featuredImage, author: user.id },
           overrideAccess: true,
+          ...ctx,
         })
         console.log('Updated news post featured image:', doc.slug)
       } else {
@@ -389,6 +401,7 @@ async function seed() {
         collection: 'officials',
         data: officialData,
         overrideAccess: true,
+        ...ctx,
       })
       console.log('Created official:', officialData.name)
     } else {
@@ -436,6 +449,7 @@ async function seed() {
         collection: 'meetings',
         data: meetingData,
         overrideAccess: true,
+        ...ctx,
       })
       console.log('Created meeting:', meetingData.title)
     } else {
@@ -478,6 +492,7 @@ async function seed() {
       ],
     },
     overrideAccess: true,
+    ...ctx,
   })
   console.log('Updated navigation global')
 
@@ -510,6 +525,7 @@ async function seed() {
       ],
     },
     overrideAccess: true,
+    ...ctx,
   })
   console.log('Updated homepage global')
 
