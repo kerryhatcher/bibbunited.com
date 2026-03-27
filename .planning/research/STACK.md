@@ -1,11 +1,11 @@
-# Technology Stack -- v1.1 Production Polish
+# Technology Stack -- v2.0 CMS Data Model & Content
 
 **Project:** BIBB United
-**Milestone:** v1.1 Production Polish (25 UI/UX fixes)
-**Researched:** 2026-03-24
-**Scope:** No new dependencies. Configuration changes and migration patterns for existing stack.
+**Milestone:** v2.0 -- Organization collection, homepage editable content, upstream cache busting
+**Researched:** 2026-03-27
+**Scope:** Stack additions and integration patterns for three new features on existing Payload CMS 3.x + Next.js 16 + PostgreSQL site.
 
-## Installed Stack (Verified)
+## Installed Stack (Current Baseline)
 
 | Technology | Installed Version | Purpose |
 |------------|------------------|---------|
@@ -13,564 +13,335 @@
 | React | 19.2.4 | UI rendering |
 | Tailwind CSS | 4.2.2 | Utility-first CSS |
 | Payload CMS | 3.80.0 | Headless CMS |
-| next-sitemap | 4.2.3 | Sitemap generation |
+| @payloadcms/db-postgres | 3.80.0 | PostgreSQL adapter (Drizzle ORM) |
+| @payloadcms/richtext-lexical | 3.80.0 | Lexical rich text editor |
+| @payloadcms/plugin-seo | 3.80.0 | SEO metadata fields |
 | sharp | 0.34.2 | Image optimization |
 | lucide-react | 1.0.1 | Icons |
 | date-fns | 4.1.0 | Date formatting |
 
-**Important correction:** PROJECT.md and CLAUDE.md reference "Next.js 15" but the actual installed version is **Next.js 16.2.1**. All research below is based on the actual installed version.
+---
 
-## No New Dependencies Required
+## New Dependencies Required: NONE
 
-The v1.1 milestone requires zero new npm packages. All 25 fixes use existing dependencies with configuration or code-level changes only.
+This milestone requires **zero new npm packages**. All three features are implemented using capabilities already present in the installed stack.
+
+### Why No New Packages
+
+| Feature | How It's Built | Why No New Dependency |
+|---------|---------------|---------------------|
+| Organization collection | Payload `CollectionConfig` with `relationship` field type | Payload's built-in relationship fields handle collection-to-collection links. Already used (e.g., Homepage heroSpotlight relates to news-posts). |
+| Homepage rich text content | Payload `richText` field on Homepage global using existing `richTextEditor` config | The `@payloadcms/richtext-lexical` editor and `RichText` renderer component are already installed and configured with custom blocks (PullQuote, Callout, Embed). |
+| Cloudflare cache purge | Native `fetch()` to Cloudflare REST API from Payload afterChange hooks | The Cloudflare purge API is a single POST endpoint. Adding the `cloudflare` npm SDK (26MB unpacked) for one API call is unjustifiable bloat. Node.js `fetch()` (available since Node 18, project uses Node 22) handles this cleanly. |
+
+**Confidence:** HIGH -- all three approaches verified against installed codebase and official documentation.
 
 ---
 
-## Migration Pattern: next/image (Issues H4)
+## Feature 1: Organization Collection
 
-### What Changes
+### Stack Integration
 
-Replace all `<img>` tags with `<Image>` from `next/image` for automatic WebP/AVIF conversion, responsive srcSet, lazy loading, and blur-up placeholders.
+No new technology. Uses Payload's existing `CollectionConfig` API.
 
-**Confidence:** HIGH (verified against Next.js 16.2.1 official docs)
+**Key Payload field types needed (all built-in):**
 
-### Next.js 16 Breaking Changes for Images
+| Field Type | Usage | Notes |
+|------------|-------|-------|
+| `text` | Name, phone, address line(s) | Already used in Officials, Meetings |
+| `text` with URL validation | Website URL | Use `validate` function or Payload's built-in URL validation |
+| `email` | Contact email | Already used in Officials |
+| `textarea` | Description/notes | Already used in Meetings |
+| `number` | Sort order | Already used in Officials (`sortOrder`) |
 
-These are version-specific gotchas that apply to this project:
+**Relationship refactor (Officials -> Organizations):**
 
-| Change | Default in 16.x | Action Needed |
-|--------|-----------------|---------------|
-| `images.qualities` | `[75]` only | No action -- quality 75 is appropriate for a civic content site. Only add more if editors need higher quality uploads. |
-| `images.minimumCacheTTL` | 14400 (4 hours) | No action -- the 4-hour default is better than the old 60-second default. Payload media rarely changes after upload. |
-| `images.imageSizes` | Removed 16px | No action -- 16px images are not used on this site. |
-| `priority` prop deprecated | Use `preload` instead | Use `preload` on above-the-fold images (hero spotlight, first news card). |
-| `images.localPatterns.search` | Required for query strings | Not applicable -- Payload media URLs use path-based routing, not query strings. |
-| Local IP restriction | Blocked by default | May need `dangerouslyAllowLocalIP: true` for local dev if testing with `localhost`. Not needed in production. |
-
-### Payload CMS Media and next/image Integration
-
-Payload serves media at `/api/media/file/{filename}`. Since this is a same-origin path (not an external URL), **no `remotePatterns` configuration is needed**. The Next.js image optimizer handles same-origin paths automatically.
-
-However, Payload also generates `imageSizes` (thumbnail: 400x300, card: 768xauto, hero: 1920xauto) at paths like `/api/media/file/{filename}-{size}.webp`. Use these pre-generated sizes with the `sizes` prop to avoid double-optimization.
-
-### Recommended next.config.ts Changes
+The existing Officials collection uses a `select` field for `body` (governing body) with hardcoded options: `board-of-education`, `county-commission`, `water-board`. This will be refactored to a `relationship` field pointing to the new Organizations collection.
 
 ```typescript
-const nextConfig: NextConfig = {
-  output: 'standalone',
-  poweredByHeader: false, // Also fixes L3
-  // images config: defaults are good for this project
-  // qualities: [75] -- fine for content site
-  // minimumCacheTTL: 14400 -- fine for CMS media
+// BEFORE (current Officials.ts)
+{
+  name: 'body',
+  type: 'select',
+  options: [
+    { label: 'Board of Education', value: 'board-of-education' },
+    // ...
+  ],
+}
+
+// AFTER (refactored)
+{
+  name: 'organization',
+  type: 'relationship',
+  relationTo: 'organizations',
+  required: true,
 }
 ```
 
-### Migration Pattern by Component
+**Migration concern:** The `body` field stores string values (`board-of-education`). Changing to a `relationship` field changes the stored data type to an ID reference. A Payload migration (via `payload migrate:create`) will handle the schema change, but existing seed data and any production data will need a data migration script to map old select values to new Organization document IDs.
 
-**HeroSpotlight.tsx (client component):**
-```typescript
-import Image from 'next/image'
+**Confidence:** HIGH -- Payload's `relationship` field is well-documented and already used in the codebase (Homepage heroSpotlight -> news-posts, topicCallouts -> pages).
 
-// Use fill + sizes for responsive hero images
-<Image
-  src={story.featuredImage.url}
-  alt={story.featuredImage.alt || story.title}
-  fill
-  sizes="100vw"
-  className="object-cover"
-  preload={index === 0}  // Only preload first slide
-/>
-```
+### Revalidation Pattern
 
-**Card.tsx (server-compatible component):**
-```typescript
-import Image from 'next/image'
+The existing `revalidateCollection` hook from `src/hooks/revalidate.ts` handles ISR cache invalidation. The Organization collection needs to revalidate:
+- `/contact-officials` (the page that displays officials grouped by organization)
+- Potentially the homepage if organizations appear there
 
-// Use width/height for fixed-aspect cards
-<Image
-  src={imageSrc}
-  alt={imageAlt}
-  width={768}
-  height={432}
-  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-  className="w-full h-full object-cover"
-/>
-```
-
-**News article page (server component):**
-```typescript
-import Image from 'next/image'
-
-// Hero image with preload for LCP
-<Image
-  src={post.featuredImage.url}
-  alt={post.featuredImage.alt}
-  width={1200}
-  height={630}
-  sizes="(max-width: 768px) 100vw, 800px"
-  preload
-  className="w-full"
-/>
-```
-
-### Key Rules
-
-1. Use `fill` when the container determines size (hero spotlight). Parent must be `position: relative`.
-2. Use `width`/`height` when aspect ratio is known (cards, article heroes).
-3. Always provide `sizes` prop to prevent serving oversized images on mobile.
-4. Use `preload` (not the deprecated `priority`) on the LCP image of each page.
-5. The `alt` prop is required -- pull from Payload's `alt` field on the Media collection.
+This follows the exact same pattern as the existing `Officials` collection hook.
 
 ---
 
-## Migration Pattern: next/link (Issue H3)
+## Feature 2: Homepage Rich Text Content Block
 
-### What Changes
+### Stack Integration
 
-Replace all `<a href>` for internal routes with `<Link>` from `next/link` for client-side SPA navigation.
+No new technology. Uses the existing `richTextEditor` configuration from `src/editors/richText.ts` and the `RichTextRenderer` component from `src/components/shared/RichTextRenderer.tsx`.
 
-**Confidence:** HIGH (no breaking changes to Link in Next.js 16)
+**What changes in the Homepage global:**
 
-### Usage in Server Components vs Client Components
-
-`<Link>` works identically in both Server Components and Client Components in Next.js 16. No special handling needed.
-
-### Migration Pattern
+Add a `richText` field to the existing `Homepage` global config between the `heroSpotlight` and `topicCallouts` fields:
 
 ```typescript
-import Link from 'next/link'
-
-// Before
-<a href="/news/some-article">Read More</a>
-
-// After
-<Link href="/news/some-article">Read More</Link>
+{
+  name: 'contentBlock',
+  type: 'richText',
+  label: 'Content Block',
+  editor: richTextEditor,  // Same editor used by Pages and NewsPosts
+  admin: {
+    description: 'Rich text content displayed between the hero and latest news sections',
+  },
+}
 ```
 
-### Key Rules
+**Why reuse the existing editor:** The `richTextEditor` already includes HeadingFeature, UploadFeature, BlocksFeature (PullQuote, Callout, Embed), HorizontalRuleFeature, TableFeature, and FixedToolbarFeature. Editors can use the same familiar toolbar for homepage content as they do for pages and news posts. No new Lexical features or blocks are needed.
 
-1. Use `<Link>` for all internal routes (starting with `/`).
-2. Keep `<a>` for external URLs (starting with `http`).
-3. The Card component needs conditional rendering: `<Link>` for internal `href`, `<a>` for external.
-4. `<Link>` renders an `<a>` tag in the DOM -- all existing className and aria attributes transfer directly.
-5. No `passHref` or `legacyBehavior` needed in Next.js 16.
+**Frontend rendering:** The `RichTextRenderer` component wraps `@payloadcms/richtext-lexical/react`'s `RichText` component with prose styling. It is already used on `[slug]/page.tsx` and `news/[slug]/page.tsx`. The homepage (`page.tsx`) will use the same component.
 
-### Files to Update
+**Confidence:** HIGH -- identical pattern to existing richText fields on Pages and NewsPosts collections.
 
-| File | Internal Links | Notes |
-|------|---------------|-------|
-| `src/components/layout/Header.tsx` | Nav items, logo | Check if href starts with `/` vs `http` |
-| `src/components/layout/Footer.tsx` | Footer nav, CTA buttons | Same internal/external check |
-| `src/components/ui/Button.tsx` | Button-as-link variants | Conditional Link vs a |
-| `src/components/ui/Card.tsx` | Card wrapper link | Always internal (news posts) |
-| `src/components/homepage/HeroSpotlight.tsx` | Story title links | Always `/news/{slug}` |
-| `src/components/homepage/LatestNews.tsx` | News card links | Always internal |
-| `src/app/(frontend)/news/[slug]/page.tsx` | Back links, related | Internal routes |
+### Data Implications
+
+The `richText` field stores Lexical's `SerializedEditorState` as JSON in the database. For the Homepage global, this is stored in the `globals` table. No schema changes beyond the automatic migration that Payload generates.
 
 ---
 
-## Fix Pattern: Tailwind v4 CSS Variable Cascade (Issue C1)
+## Feature 3: Automated Upstream Cache Busting
 
-### Root Cause Analysis
+### Architecture Overview
 
-**Confidence:** HIGH (verified by reading the actual styles.css and understanding CSS specificity)
+The caching architecture has three layers:
 
-The `text-text-on-dark` utility class generates `color: var(--color-text-on-dark)`. This works correctly when applied directly to an element. The problem is **CSS inheritance**, not Tailwind.
-
-The Footer component has a `bg-bg-secondary` (navy) background. Child elements like `<h2>`, `<p>`, and `<a>` do not have `text-text-on-dark` applied individually. They inherit `color` from `body`, which sets `color: var(--color-text-primary)` (#111827 -- dark gray). The child elements never see the `text-text-on-dark` variable.
-
-This is standard CSS behavior, not a Tailwind v4 bug. The `@theme { --color-text-on-dark: initial; }` registration with `initial` is correct -- it tells Tailwind to generate the utility class. The `:root` block correctly sets the actual value.
-
-### Fix Options (Ranked)
-
-**Option 1 (Recommended): Use `text-white` directly**
-Since `--color-text-on-dark` is `#FFFFFF` in both modes (community and urgent), replace `text-text-on-dark` with `text-white` on the Footer wrapper and ensure all children inherit white text. This is the simplest and most reliable approach.
-
-```html
-<footer class="bg-bg-secondary text-white">
-  <!-- All children inherit white text -->
-</footer>
+```
+Browser -> Cloudflare Edge -> Traefik (K8s) -> Next.js (ISR cache)
 ```
 
-**Option 2: Apply text color to every child element individually**
-More verbose, more fragile, no benefit over Option 1.
+**Current state of each layer:**
 
-**Option 3: Add CSS rule to force inheritance**
-```css
-.bg-bg-secondary { color: var(--color-text-on-dark); }
-```
-This couples background and text color, which may cause unexpected effects elsewhere.
+| Layer | Caching Behavior | Current Config |
+|-------|-----------------|----------------|
+| Next.js ISR | Serves cached pages; invalidated by `revalidatePath()` in Payload afterChange hooks | Working -- `src/hooks/revalidate.ts` |
+| Traefik | Does NOT cache content itself. Sets `s-maxage=60, stale-while-revalidate=300` response headers on public routes. | Working -- `argocd/prod/ingress.yaml` |
+| Cloudflare | Does NOT cache HTML/JSON by default (only static assets like JS/CSS/images). Would cache HTML only if a Cache Rule with "Cache Everything" is configured for the zone. | Unknown whether a Cache Rule exists |
 
-### Recommendation
+### Critical Finding: Cloudflare Default Behavior
 
-Use Option 1. The `text-text-on-dark` token exists for cases where you want semantic naming, but in the Footer component, `text-white` is clearer, works in both modes, and avoids the inheritance trap entirely.
+Cloudflare's CDN does **not** cache HTML or JSON responses by default. It only caches static file types (CSS, JS, images, fonts, etc.) based on file extension. The `s-maxage=60` header from Traefik only affects Cloudflare's edge cache behavior **if** a Cache Rule has been set to override the default behavior and cache HTML.
 
----
+This means:
+1. **If no "Cache Everything" rule exists:** HTML requests pass through Cloudflare uncached. Only the Next.js ISR cache matters, and the existing `revalidatePath` hooks already handle that. The Cloudflare purge API would be a no-op for HTML.
+2. **If a "Cache Everything" rule is configured (or will be):** Then Cloudflare caches HTML for up to 60 seconds (per the `s-maxage` header). A purge API call would clear stale HTML from the edge.
 
-## Fix Pattern: next-sitemap Dynamic Routes (Issue M4)
+**Recommendation:** Implement the Cloudflare purge regardless, because:
+- The deployment should work correctly whether or not Cache Rules exist
+- Cache Rules may be added in the future for performance
+- Static assets (images, CSS) are always cached by Cloudflare and may need purging
+- The implementation cost is minimal (one utility function, a few env vars)
 
-### Current Problem
+**Confidence:** HIGH -- verified against [Cloudflare Default Cache Behavior docs](https://developers.cloudflare.com/cache/concepts/default-cache-behavior/).
 
-The `next-sitemap.config.cjs` generates only static routes. News articles and CMS pages are not included.
+### Implementation: Native fetch() to Cloudflare API
 
-**Confidence:** HIGH (verified config file, next-sitemap docs)
+**Endpoint:** `POST https://api.cloudflare.com/client/v4/zones/{zone_id}/purge_cache`
 
-### Recommended Approach: additionalPaths
+**Authentication:** Bearer token via API Token (not Global API Key). The token needs **Zone > Cache Purge > Purge** permission.
 
-Use `additionalPaths` to fetch all published content from Payload's REST API at build time:
+**Purge strategies available:**
 
-```javascript
-/** @type {import('next-sitemap').IConfig} */
-module.exports = {
-  siteUrl: 'https://www.bibbunited.com',
-  generateRobotsTxt: true,
-  robotsTxtOptions: {
-    policies: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: '/admin/',
+| Strategy | Request Body | Best For | Plan Availability |
+|----------|-------------|----------|-------------------|
+| Purge by URL | `{ "files": ["https://..."] }` | Targeted content changes (publish/update one page) | All plans |
+| Purge everything | `{ "purge_everything": true }` | Global changes (nav, theme, urgent banner) | All plans |
+| Purge by prefix | `{ "prefixes": ["www.bibbunited.com/news"] }` | Category-level changes | All plans |
+| Purge by host | `{ "hosts": ["www.bibbunited.com"] }` | Full domain purge | All plans |
+
+**Recommended approach for this project:**
+
+| Payload Event | Purge Strategy | Rationale |
+|--------------|---------------|-----------|
+| Page/NewsPost publish | Purge by URL (the specific page + homepage) | Targeted, minimal cache disruption |
+| Organization/Official change | Purge by URL (`/contact-officials`) | Targeted |
+| Homepage global change | Purge by URL (`/`) | Only homepage affected |
+| Navigation/UrgentBanner/SiteTheme change | Purge everything | These affect every page's layout |
+
+**Rate limits (Free plan):**
+
+| Method | Rate Limit |
+|--------|-----------|
+| Purge by URL | 800 URLs/second, max 30 URLs per request |
+| Purge everything | 5 requests/minute, 25-token bucket |
+
+These limits are more than sufficient for a CMS that publishes a few articles per day.
+
+### Implementation Pattern
+
+```typescript
+// src/lib/cloudflare.ts
+const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN
+const CLOUDFLARE_ZONE_ID = process.env.CLOUDFLARE_ZONE_ID
+const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'https://www.bibbunited.com'
+
+export async function purgeCloudflareUrls(paths: string[]): Promise<void> {
+  if (!CLOUDFLARE_API_TOKEN || !CLOUDFLARE_ZONE_ID) return // Skip if not configured
+
+  const files = paths.map((p) => `${SITE_URL}${p}`)
+
+  await fetch(
+    `https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
+        'Content-Type': 'application/json',
       },
-    ],
-  },
-  exclude: ['/admin/*', '/api/*'],
-  changefreq: 'weekly',
-  priority: 0.7,
-
-  additionalPaths: async (config) => {
-    const result = []
-
-    // Fetch news posts
-    try {
-      const newsRes = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/news-posts?limit=1000&depth=0`,
-      )
-      const newsData = await newsRes.json()
-      if (newsData.docs) {
-        for (const post of newsData.docs) {
-          result.push({
-            loc: `/news/${post.slug}`,
-            changefreq: 'monthly',
-            priority: 0.8,
-            lastmod: post.updatedAt || post.createdAt,
-          })
-        }
-      }
-    } catch (e) {
-      console.warn('Failed to fetch news posts for sitemap:', e)
-    }
-
-    // Fetch CMS pages
-    try {
-      const pagesRes = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/api/pages?limit=1000&depth=0`,
-      )
-      const pagesData = await pagesRes.json()
-      if (pagesData.docs) {
-        for (const page of pagesData.docs) {
-          result.push({
-            loc: `/${page.slug}`,
-            changefreq: 'monthly',
-            priority: 0.6,
-            lastmod: page.updatedAt || page.createdAt,
-          })
-        }
-      }
-    } catch (e) {
-      console.warn('Failed to fetch pages for sitemap:', e)
-    }
-
-    return result
-  },
-
-  // Fix L5: Homepage priority
-  transform: async (config, path) => {
-    const defaults = {
-      loc: path,
-      changefreq: config.changefreq,
-      priority: config.priority,
-      lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
-    }
-
-    if (path === '/') {
-      return { ...defaults, priority: 1.0, changefreq: 'daily' }
-    }
-    if (path.startsWith('/news')) {
-      return { ...defaults, priority: 0.8 }
-    }
-    return defaults
-  },
-}
-```
-
-### Alternative: Next.js App Router sitemap.ts
-
-Payload's official guide recommends using Next.js's built-in `app/sitemap.ts` instead of next-sitemap. This uses Payload's Local API (no network hop) and generates the sitemap at request time. However, since the project already uses next-sitemap and it works for static routes, extending it with `additionalPaths` is less disruptive.
-
-**Decision:** Stay with next-sitemap + `additionalPaths`. It runs at build time (postbuild script), requires no architectural change, and handles the small content volume of this site.
-
----
-
-## Fix Pattern: Canonical URLs via Metadata API (Issue M2)
-
-### Implementation
-
-**Confidence:** HIGH (verified with Next.js 16 metadata API docs)
-
-Next.js metadata API supports `alternates.canonical` in `generateMetadata`. Since the root layout already sets `metadataBase`, canonical URLs can use relative paths.
-
-### Root Layout (global default)
-
-The root layout already has `metadataBase: new URL('https://www.bibbunited.com')`. Add `alternates.canonical` to the layout-level metadata:
-
-```typescript
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    metadataBase: new URL('https://www.bibbunited.com'),
-    alternates: {
-      canonical: './',  // Auto-resolves to current route path
+      body: JSON.stringify({ files }),
     },
-    // ... existing metadata
-  }
+  ).catch(() => {}) // Fire-and-forget; don't block CMS save on purge failure
 }
-```
 
-### Per-Page Override (dynamic routes)
+export async function purgeCloudflareEverything(): Promise<void> {
+  if (!CLOUDFLARE_API_TOKEN || !CLOUDFLARE_ZONE_ID) return
 
-For news articles and CMS pages, set canonical explicitly in `generateMetadata`:
-
-```typescript
-// src/app/(frontend)/news/[slug]/page.tsx
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params
-  return {
-    alternates: {
-      canonical: `/news/${slug}`,
+  await fetch(
+    `https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ purge_everything: true }),
     },
-    // ... other metadata
-  }
+  ).catch(() => {})
 }
 ```
 
-### Important: metadataBase Resolution
+**Key design decision: Fire-and-forget.** The Cloudflare API call must not block the CMS save operation. If the purge fails (network issue, bad token, etc.), the editor should not see an error. The content is still saved and Next.js ISR still revalidates the page. Cloudflare cache will expire naturally within 60 seconds (per `s-maxage`).
 
-With `metadataBase` set to `https://www.bibbunited.com`, a canonical of `/news/some-article` resolves to `https://www.bibbunited.com/news/some-article`. This is the correct behavior.
+### Integration with Existing Revalidation Hooks
 
----
+The existing `revalidateCollection` and `revalidateGlobal` hooks in `src/hooks/revalidate.ts` call `revalidatePath()` for Next.js ISR. The Cloudflare purge should be added alongside these calls, not replace them. Two options:
 
-## Fix Pattern: Complete Open Graph Tags (Issue M3)
+**Option A (Recommended): Extend existing hooks to also call Cloudflare purge**
+Modify `revalidateCollection` and `revalidateGlobal` to call `purgeCloudflareUrls()` with the same paths. Keeps all cache invalidation logic in one place.
 
-### Current State
+**Option B: Add separate afterChange hooks for Cloudflare**
+Add a second afterChange hook per collection/global that handles only Cloudflare purging. More modular but duplicates path logic.
 
-The root layout sets `og:type`, `og:site_name`, and `og:image` globally. Missing: `og:url` on most pages, `og:description` on news articles.
+**Recommendation:** Option A. The existing hooks already know which paths to invalidate. Adding the Cloudflare call inside them is 3-4 lines of code and avoids duplicating path resolution.
 
-**Confidence:** HIGH (metadata API is well-documented)
+**Confidence:** HIGH for the API call pattern (verified against [Cloudflare API docs](https://developers.cloudflare.com/api/resources/cache/methods/purge/)). MEDIUM for the fire-and-forget pattern (Payload docs confirm non-awaited hooks are fine for side effects).
 
-### Implementation
+### Traefik: No Changes Needed
 
-Open Graph metadata merges hierarchically in Next.js. The root layout provides defaults; pages override specific fields.
+Traefik is not a cache -- it only sets response headers. The existing `public-cache` middleware in `argocd/prod/ingress.yaml` sets `s-maxage=60, stale-while-revalidate=300`, which tells Cloudflare (or any shared cache) how long to cache. There is no Traefik cache to purge.
 
-**Root layout additions:**
-```typescript
-openGraph: {
-  type: 'website',
-  siteName: 'BIBB United',
-  locale: 'en_US',
-  images: [{ url: '/og-default.png', width: 1200, height: 630, alt: 'BIBB United' }],
-},
-```
+The `s-maxage=60` value is already conservative enough that even without active purging, stale content is at most 60 seconds old (plus up to 5 minutes of stale-while-revalidate serving). The Cloudflare purge makes this near-instant instead.
 
-**Per-page additions (news articles):**
-```typescript
-openGraph: {
-  type: 'article',
-  title: post.title,
-  description: post.meta?.description || excerpt,
-  url: `/news/${slug}`,
-  publishedTime: post.publishDate,
-  images: post.featuredImage
-    ? [{ url: post.featuredImage.url, width: 1200, height: 630, alt: post.featuredImage.alt }]
-    : undefined,
-},
-```
-
-**Per-page additions (static pages):**
-```typescript
-openGraph: {
-  url: `/${slug}`,
-  // title and description inherit from page metadata
-},
-```
-
-### og:url and canonical
-
-`og:url` should match the canonical URL. Since both use the same slug pattern, they stay in sync automatically.
+**Confidence:** HIGH -- verified from `argocd/prod/ingress.yaml` which shows Traefik only sets headers, not HTTP caching middleware.
 
 ---
 
-## Fix Pattern: Payload Media Cache Headers (Issue M9)
+## Environment Variables (New)
 
-### The Problem
+| Variable | Value | Where | Purpose |
+|----------|-------|-------|---------|
+| `CLOUDFLARE_API_TOKEN` | API token with Zone > Cache Purge > Purge permission | K8s Secret (`bibbunited-secrets`) | Authenticate to Cloudflare purge API |
+| `CLOUDFLARE_ZONE_ID` | Zone ID from Cloudflare dashboard | K8s Secret (`bibbunited-secrets`) | Identify which zone to purge |
 
-Payload 3.x runs inside Next.js -- there is no Express middleware anymore. Media files served at `/api/media/file/*` have no cache-control headers.
-
-**Confidence:** MEDIUM (Payload 3.x removed Express middleware; the Next.js proxy approach is the recommended alternative, but official Payload docs are sparse on this specific topic)
-
-### Recommended Approach: Next.js Proxy (was Middleware)
-
-In Next.js 16, `middleware.ts` has been renamed to `proxy.ts`. Create a proxy that adds cache headers to media responses:
-
-```typescript
-// src/proxy.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-
-export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
-
-  // Add cache headers to Payload media files
-  if (pathname.startsWith('/api/media/file/')) {
-    const response = NextResponse.next()
-    response.headers.set(
-      'Cache-Control',
-      'public, max-age=31536000, immutable'
-    )
-    return response
-  }
-
-  return NextResponse.next()
-}
-
-export const config = {
-  matcher: ['/api/media/file/:path*'],
-}
-```
-
-**Why `immutable`:** Payload media filenames include a hash or are unique per upload. The same URL always serves the same file. One year cache with `immutable` is safe.
-
-**Caveat:** In Next.js 16, the proxy runs in the Node.js runtime (not Edge). This is fine for self-hosted K8s. The proxy only adds a header -- it does not read the response body, so overhead is minimal.
-
-### Alternative: Traefik-Level Caching
-
-Since the site runs behind Traefik, you could add cache headers at the ingress level:
-
-```yaml
-# IngressRoute middleware
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: media-cache-headers
-spec:
-  headers:
-    customResponseHeaders:
-      Cache-Control: "public, max-age=31536000, immutable"
-```
-
-This avoids any Node.js processing but requires K8s manifest changes. The proxy approach is simpler for this milestone.
-
-**Decision:** Use `proxy.ts` for now. It keeps the fix in the application layer and is easier to test.
+These should be added to:
+- `.env.example` (placeholder values with comments)
+- K8s Secret `bibbunited-secrets` (actual values)
+- NOT required for local development (purge gracefully skips when vars are missing)
 
 ---
 
-## Fix Pattern: Duplicate Title Template (Issue M1)
+## What NOT to Add
 
-### Root Cause
-
-The layout template is `%s | BIBB United`. Page-level `generateMetadata` in `news/[slug]/page.tsx` returns titles like `"Article Title | BIBB United"`, producing `"Article Title | BIBB United | BIBB United"`.
-
-**Confidence:** HIGH
-
-### Fix
-
-Page-level metadata should return only the page title without the suffix. The layout template adds the suffix:
-
-```typescript
-// In generateMetadata for news/[slug]/page.tsx
-return {
-  title: post.title,  // Not `${post.title} | BIBB United`
-  // ...
-}
-```
-
-Also check `[slug]/page.tsx` for the same pattern and the `generateTitle` function in `payload.config.ts` which appends ` | BIBB United` -- this is only used for Payload admin SEO preview, not for the frontend metadata.
+| Technology | Why Not |
+|------------|---------|
+| `cloudflare` npm package (v5.2.0) | 26MB unpacked for a single POST request. Native `fetch()` does the same thing in 15 lines. |
+| Redis/Memcached for cache layer | The site has ~50 pages. Next.js ISR + Cloudflare edge is more than sufficient. Adding a cache store adds operational complexity with no measurable benefit at this scale. |
+| Payload Jobs Queue | The Cloudflare purge is a single HTTP call that takes <100ms. A job queue adds infrastructure (Redis or DB-backed) for a fire-and-forget side effect. Overkill. |
+| `@payloadcms/plugin-*` (any new plugin) | No new Payload plugins needed. The Organization collection is a standard collection, the homepage content is a standard richText field, and cache busting is a custom hook. |
+| GraphQL client | Cloudflare API uses REST. The existing codebase uses Payload's Local API for data fetching. No GraphQL needed. |
+| `node-fetch` or `axios` | Node.js 22 (project runtime) has native `fetch()`. No polyfill or alternative HTTP client needed. |
+| New Lexical editor features/blocks | The existing `richTextEditor` config has all needed features for homepage content. No new blocks or plugins required. |
 
 ---
 
-## Configuration: poweredByHeader (Issue L3)
+## Database Migration Strategy
 
-Add to `next.config.ts`:
+### Schema Changes
 
-```typescript
-const nextConfig: NextConfig = {
-  output: 'standalone',
-  poweredByHeader: false,  // Removes X-Powered-By: Next.js header
-  // ...
-}
+Payload CMS 3.x uses Drizzle ORM and auto-generates migrations via `payload migrate:create`. The v2.0 milestone introduces:
+
+1. **New `organizations` table** -- created automatically when the Organizations collection is registered in `payload.config.ts`
+2. **Modified `officials` table** -- the `body` column (text/enum) changes to `organization_id` (foreign key reference). This requires a data migration.
+
+### Migration Steps
+
+```bash
+# 1. After adding Organizations collection and modifying Officials
+pnpm payload migrate:create   # Generates migration file in src/migrations/
+
+# 2. Review the generated SQL -- Drizzle should create the organizations table
+#    and alter the officials table
+
+# 3. Write a data migration script to:
+#    a. Create Organization documents for each previous select option
+#    b. Update Officials documents to reference the new Organization IDs
+#    c. This runs as part of the seed script for dev/test environments
+
+# 4. Apply migration
+pnpm payload migrate
 ```
 
-**Confidence:** HIGH (stable Next.js config option)
-
----
-
-## Turbopack Consideration
-
-Next.js 16 uses Turbopack by default. The current `next.config.ts` has a `webpack` configuration block (for `resolve.extensionAlias`). This means **`next build` will fail by default** in Next.js 16 because it detects a webpack config and refuses to run Turbopack with it.
-
-The current `package.json` build script does not include `--webpack` flag. This needs investigation:
-- Either the build is already using `--webpack` implicitly
-- Or the `withPayload` wrapper handles this
-- Or the build has been tested and works
-
-**Action needed:** Verify that `pnpm build` succeeds. If it fails, add `--webpack` to the build script or migrate the `extensionAlias` config to Turbopack format.
-
-**Confidence:** MEDIUM (the upgrade guide clearly states this is a breaking change, but the project is already running on 16.2.1, so it may have been resolved during initial setup)
+**Confidence:** HIGH -- this is standard Payload/Drizzle migration workflow. The project already has migration infrastructure in place (the CI runs `pnpm payload migrate:fresh`).
 
 ---
 
 ## Alternatives Considered
 
-| Fix Area | Recommended | Alternative | Why Not |
+| Decision | Recommended | Alternative | Why Not |
 |----------|-------------|-------------|---------|
-| Sitemap | next-sitemap additionalPaths | Next.js app/sitemap.ts | Already using next-sitemap; less disruptive to extend |
-| Media cache | Next.js proxy.ts | Traefik middleware | Keep fix in app layer; easier to test |
-| CSS variable fix | `text-white` directly | Fix @theme inheritance | Not a Tailwind bug; `text-white` is clearer |
-| Image component | next/image with fill/sizes | Keep `<img>` with lazy loading | next/image provides format conversion, srcset, and optimization for free |
-| OG completeness | Metadata API per-page | react-helmet / next-seo | Metadata API is built into Next.js 16; no extra dependency |
-
----
-
-## Build Configuration Changes Summary
-
-```typescript
-// next.config.ts -- required changes
-const nextConfig: NextConfig = {
-  output: 'standalone',
-  poweredByHeader: false,  // NEW: Remove X-Powered-By header (L3)
-  // webpack config stays as-is (or migrate to turbopack)
-}
-```
-
-```javascript
-// next-sitemap.config.cjs -- required changes
-// Add: additionalPaths function to fetch CMS content
-// Add: transform function for per-route priority
-```
-
-```typescript
-// src/proxy.ts -- NEW FILE
-// Add cache headers to /api/media/file/* requests
-```
-
-No changes to `package.json` dependencies. No new packages to install.
+| Cloudflare API client | Native `fetch()` | `cloudflare` npm SDK (v5.2.0) | 26MB package for one API call. The REST endpoint is trivial to call directly. |
+| Cache purge trigger | Extend existing afterChange hooks | Separate webhook / API route | Hooks already know the paths; adding a webhook duplicates logic and adds an HTTP hop. |
+| Cache purge timing | Fire-and-forget (non-blocking) | Awaited (blocking) | Editor should not wait for Cloudflare. If purge fails, ISR + s-maxage handles staleness within 60s. |
+| Organization data model | Flat collection | Nested config / hardcoded | Collections are CMS-editable; hardcoded select options require code changes to add a new org. |
+| Homepage content field | richText (full editor) | textarea (plain text) | Editors need formatting, links, callouts -- the same rich text capabilities as pages. |
+| Homepage content field | richText with existing editor | richText with stripped-down editor | Consistency matters more than restriction. Editors know one toolbar. |
+| Purge scope for globals | purge_everything | purge by URL list | Navigation, theme, and urgent banner affect every page. Listing all URLs is fragile and grows with content. |
 
 ---
 
 ## Sources
 
-- [Next.js 16 Upgrade Guide](https://nextjs.org/docs/app/guides/upgrading/version-16) -- HIGH confidence, official docs
-- [Next.js Image Component API Reference](https://nextjs.org/docs/app/api-reference/components/image) -- HIGH confidence, official docs
-- [Next.js generateMetadata API Reference](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) -- HIGH confidence, official docs
-- [next-sitemap GitHub](https://github.com/iamvishnusankar/next-sitemap) -- HIGH confidence, official repo
-- [Payload CMS Community Help: Cache Headers](https://payloadcms.com/community-help/discord/adding-modifying-api-cache-headers) -- MEDIUM confidence, community discussion
-- [Payload CMS Sitemap Guide](https://payloadcms.com/posts/guides/how-to-build-an-seo-friendly-sitemap-in-payload--nextjs) -- MEDIUM confidence, official guide
-- [Tailwind CSS v4 Theme Documentation](https://tailwindcss.com/docs/adding-custom-styles) -- HIGH confidence, official docs
+- [Cloudflare Cache Purge API](https://developers.cloudflare.com/api/resources/cache/methods/purge/) -- HIGH confidence, official API docs
+- [Cloudflare Default Cache Behavior](https://developers.cloudflare.com/cache/concepts/default-cache-behavior/) -- HIGH confidence, confirms HTML not cached by default
+- [Cloudflare Purge Cache Overview](https://developers.cloudflare.com/cache/how-to/purge-cache/) -- HIGH confidence, rate limits and plan availability
+- [Cloudflare API Token Permissions](https://developers.cloudflare.com/fundamentals/api/reference/permissions/) -- HIGH confidence, required permissions for cache purge
+- [Cloudflare API Rate Limits](https://developers.cloudflare.com/fundamentals/api/reference/limits/) -- HIGH confidence, 1200 req/5min global limit
+- [Payload CMS Hooks Overview](https://payloadcms.com/docs/hooks/overview) -- HIGH confidence, async vs sync hook behavior
+- [Payload CMS Collection Hooks](https://payloadcms.com/docs/hooks/collections) -- HIGH confidence, afterChange hook signature
+- Existing codebase: `src/hooks/revalidate.ts`, `argocd/prod/ingress.yaml`, `src/globals/Homepage.ts`, `src/collections/Officials.ts` -- HIGH confidence, direct source code
