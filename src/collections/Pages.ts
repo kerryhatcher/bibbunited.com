@@ -3,6 +3,7 @@ import { slugField } from '../fields/slug'
 import { ctaFields } from '../fields/cta'
 import { richTextEditor } from '../editors/richText'
 import { revalidateCollection } from '../hooks/revalidate'
+import { preventCalloutPageDelete } from '../hooks/preventReferencedDelete'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -10,6 +11,7 @@ export const Pages: CollectionConfig = {
     afterChange: [
       revalidateCollection((doc) => [`/${doc.slug}`]),
     ],
+    beforeDelete: [preventCalloutPageDelete],
   },
   admin: {
     useAsTitle: 'title',

@@ -3,6 +3,7 @@ import { slugField } from '../fields/slug'
 import { ctaFields } from '../fields/cta'
 import { richTextEditor } from '../editors/richText'
 import { revalidateCollection } from '../hooks/revalidate'
+import { preventSpotlightNewsDelete } from '../hooks/preventReferencedDelete'
 
 export const NewsPosts: CollectionConfig = {
   slug: 'news-posts',
@@ -14,6 +15,7 @@ export const NewsPosts: CollectionConfig = {
         '/', // homepage spotlight may reference news posts
       ]),
     ],
+    beforeDelete: [preventSpotlightNewsDelete],
   },
   admin: {
     useAsTitle: 'title',
