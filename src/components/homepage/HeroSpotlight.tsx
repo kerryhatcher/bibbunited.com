@@ -103,21 +103,21 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
         <>
           <button
             onClick={goToPrev}
-            className="absolute top-1/2 left-3 -translate-y-1/2 bg-[var(--color-overlay)] hover:bg-black/70 text-white rounded-full p-3 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
+            className="absolute top-1/2 left-3 -translate-y-1/2 bg-[var(--color-overlay)] hover:bg-black/70 text-white p-3 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
             aria-label="Previous story"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
             onClick={goToNext}
-            className="absolute top-1/2 right-3 -translate-y-1/2 bg-[var(--color-overlay)] hover:bg-black/70 text-white rounded-full p-3 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
+            className="absolute top-1/2 right-3 -translate-y-1/2 bg-[var(--color-overlay)] hover:bg-black/70 text-white p-3 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
             aria-label="Next story"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
           <button
             onClick={() => setIsPaused((p) => !p)}
-            className="absolute top-4 right-4 bg-[var(--color-overlay)] hover:bg-black/70 text-white rounded-full p-2 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
+            className="absolute top-4 right-4 bg-[var(--color-overlay)] hover:bg-black/70 text-white p-2 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
             aria-label={isPaused ? 'Play slideshow' : 'Pause slideshow'}
           >
             {isPaused ? <Play className="w-5 h-5" /> : <Pause className="w-5 h-5" />}
@@ -167,7 +167,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
               className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
               aria-label={`Go to story ${index + 1} of ${stories.length}`}
             >
-              <span className={`block w-3 h-3 rounded-full transition-colors ${
+              <span className={`block w-3 h-3 transition-colors ${
                 index === currentIndex ? 'bg-white' : 'bg-white/50'
               }`} />
             </button>

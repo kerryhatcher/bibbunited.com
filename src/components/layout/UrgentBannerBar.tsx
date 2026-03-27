@@ -17,8 +17,8 @@ export async function UrgentBannerBar() {
     >
       <span className="inline-flex items-center gap-3">
         <span className="relative flex h-2.5 w-2.5 flex-shrink-0" aria-hidden="true">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
-          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
+          <span className="absolute inline-flex h-full w-full animate-ping bg-white opacity-75" />
+          <span className="relative inline-flex h-2.5 w-2.5 bg-white" />
         </span>
         {banner.link ? (
           banner.link.startsWith('/') ? (
