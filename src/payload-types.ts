@@ -73,13 +73,18 @@ export interface Config {
     users: User;
     officials: Official;
     meetings: Meeting;
+    organizations: Organization;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    organizations: {
+      officials: 'officials';
+    };
+  };
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     'news-posts': NewsPostsSelect<false> | NewsPostsSelect<true>;
@@ -87,6 +92,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     officials: OfficialsSelect<false> | OfficialsSelect<true>;
     meetings: MeetingsSelect<false> | MeetingsSelect<true>;
+    organizations: OrganizationsSelect<false> | OrganizationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -340,7 +346,7 @@ export interface Official {
   id: number;
   name: string;
   role: string;
-  body: 'board-of-education' | 'county-commission' | 'water-board';
+  organization: number | Organization;
   email?: string | null;
   phone?: string | null;
   /**
@@ -351,6 +357,39 @@ export interface Official {
    * Lower numbers appear first within their group
    */
   sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "organizations".
+ */
+export interface Organization {
+  id: number;
+  name: string;
+  level: 'county' | 'state' | 'national';
+  /**
+   * Auto-generated from name. Edit to override.
+   */
+  slug?: string | null;
+  website?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  address?: {
+    street?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zip?: string | null;
+  };
+  /**
+   * Lower numbers appear first within their level group
+   */
+  sortOrder?: number | null;
+  officials?: {
+    docs?: (number | Official)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -520,6 +559,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'meetings';
         value: number | Meeting;
+      } | null)
+    | ({
+        relationTo: 'organizations';
+        value: number | Organization;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -699,7 +742,7 @@ export interface UsersSelect<T extends boolean = true> {
 export interface OfficialsSelect<T extends boolean = true> {
   name?: T;
   role?: T;
-  body?: T;
+  organization?: T;
   email?: T;
   phone?: T;
   photo?: T;
@@ -718,6 +761,30 @@ export interface MeetingsSelect<T extends boolean = true> {
   location?: T;
   agendaLink?: T;
   notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "organizations_select".
+ */
+export interface OrganizationsSelect<T extends boolean = true> {
+  name?: T;
+  level?: T;
+  slug?: T;
+  website?: T;
+  phone?: T;
+  email?: T;
+  address?:
+    | T
+    | {
+        street?: T;
+        city?: T;
+        state?: T;
+        zip?: T;
+      };
+  sortOrder?: T;
+  officials?: T;
   updatedAt?: T;
   createdAt?: T;
 }
