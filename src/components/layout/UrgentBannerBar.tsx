@@ -12,22 +12,29 @@ export async function UrgentBannerBar() {
   return (
     <div
       data-print-hide=""
-      className="z-40 bg-crimson py-2 px-4 text-center text-sm font-bold text-white"
+      role="alert"
+      className="z-40 bg-crimson py-3 px-4 text-center font-heading font-bold text-white uppercase tracking-wide"
     >
-      {banner.link ? (
-        banner.link.startsWith('/') ? (
-          <Link href={banner.link} className="underline hover:no-underline">
-            {banner.message}
-          </Link>
+      <span className="inline-flex items-center gap-3">
+        <span className="relative flex h-2.5 w-2.5 flex-shrink-0" aria-hidden="true">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
+        </span>
+        {banner.link ? (
+          banner.link.startsWith('/') ? (
+            <Link href={banner.link} className="underline hover:no-underline">
+              {banner.message}
+            </Link>
+          ) : (
+            <a href={banner.link} className="underline hover:no-underline" target="_blank" rel="noopener noreferrer">
+              {banner.message}
+              <span className="sr-only"> (opens in new tab)</span>
+            </a>
+          )
         ) : (
-          <a href={banner.link} className="underline hover:no-underline" target="_blank" rel="noopener noreferrer">
-            {banner.message}
-            <span className="sr-only"> (opens in new tab)</span>
-          </a>
-        )
-      ) : (
-        <p className="m-0">{banner.message}</p>
-      )}
+          <span>{banner.message}</span>
+        )}
+      </span>
     </div>
   )
 }

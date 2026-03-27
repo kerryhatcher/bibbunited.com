@@ -25,13 +25,13 @@ export function FooterCTA() {
 
   return (
     <div className="text-center">
-      <h2 className="font-heading text-3xl font-bold uppercase tracking-tight sm:text-4xl">
+      <h2 className="font-heading text-4xl font-bold uppercase tracking-tight sm:text-5xl lg:text-6xl">
         GET INVOLVED
       </h2>
-      <p className="mx-auto mt-4 max-w-xl text-lg text-white/80">
-        Your voice matters. Here&apos;s how you can make a difference.
+      <p className="mx-auto mt-6 max-w-2xl text-xl text-white/80 sm:text-2xl">
+        They make decisions. You make the difference.
       </p>
-      <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
         {visible.map((link) => (
           <Button
             key={link.href}

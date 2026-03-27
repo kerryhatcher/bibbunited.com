@@ -17,7 +17,7 @@ export function Card({
   className = '',
   href,
 }: CardProps) {
-  const cardClasses = `border border-border bg-bg-dominant overflow-hidden transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg ${className}`
+  const cardClasses = `border border-border border-l-4 border-l-transparent bg-bg-dominant overflow-hidden transition-colors duration-200 hover:border-l-accent ${className}`
 
   const content = (
     <>
