@@ -44,3 +44,23 @@ export const preventCalloutPageDelete: BeforeDeleteHook = async ({ id, req }) =>
     )
   }
 }
+
+/**
+ * Prevents deletion of an organization that has linked officials.
+ * Officials must be removed or reassigned before the org can be deleted.
+ */
+export const preventOrganizationDelete: BeforeDeleteHook = async ({ id, req }) => {
+  const officials = await req.payload.find({
+    collection: 'officials',
+    where: { organization: { equals: id } },
+    limit: 1,
+    depth: 0,
+  })
+
+  if (officials.docs.length > 0) {
+    throw new APIError(
+      'Remove or reassign officials first.',
+      400,
+    )
+  }
+}

@@ -6,12 +6,17 @@ export const formatSlug = (val: string): string =>
     .replace(/[^\w-]+/g, '')
     .toLowerCase()
 
-export const formatSlugHook: FieldHook = ({ data, operation, value }) => {
-  if (operation === 'create' || !value) {
-    const fallback = data?.title
-    if (fallback && typeof fallback === 'string') {
-      return formatSlug(fallback)
+export function createFormatSlugHook(sourceField: string = 'title'): FieldHook {
+  return ({ data, operation, value }) => {
+    if (operation === 'create' || !value) {
+      const fallback = data?.[sourceField]
+      if (fallback && typeof fallback === 'string') {
+        return formatSlug(fallback)
+      }
     }
+    return value
   }
-  return value
 }
+
+// Backward-compatible default (generates slug from 'title' field)
+export const formatSlugHook: FieldHook = createFormatSlugHook('title')
