@@ -54,7 +54,7 @@ export function LatestNews({ posts }: LatestNewsProps) {
             imageAlt={getImageAlt(featured)}
             href={`/news/${featured.slug}`}
           >
-            <h3 className="text-2xl font-heading font-bold mb-2">
+            <h3 className="text-2xl font-heading font-bold mb-2 line-clamp-2">
               {featured.title}
             </h3>
             <DateDisplay publishDate={featured.publishDate} variant="compact" />
@@ -77,11 +77,11 @@ export function LatestNews({ posts }: LatestNewsProps) {
                   alt={getImageAlt(post)}
                   width={64}
                   height={64}
-                  className="object-cover flex-shrink-0"
+                  className="object-cover flex-shrink-0 aspect-square"
                 />
               )}
-              <div>
-                <h4 className="font-heading font-bold text-sm leading-tight mb-1">
+              <div className="min-w-0">
+                <h4 className="font-heading font-bold text-sm leading-tight mb-1 line-clamp-2">
                   {post.title}
                 </h4>
                 <DateDisplay publishDate={post.publishDate} variant="compact" />
@@ -95,7 +95,7 @@ export function LatestNews({ posts }: LatestNewsProps) {
       <div className="mt-8">
         <Link
           href="/news"
-          className="text-accent font-bold uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="inline-flex items-center gap-1 text-accent font-bold uppercase hover:underline transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           View All News &rarr;
         </Link>

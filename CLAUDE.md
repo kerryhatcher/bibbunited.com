@@ -168,3 +168,27 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 > Profile not yet configured. Run `/gsd:profile-user` to generate your developer profile.
 > This section is managed by `generate-claude-profile` -- do not edit manually.
 <!-- GSD:profile-end -->
+
+## Design Context
+
+### Users
+- **Primary audience**: Mix of parents on mobile (checking info at school board meetings, on-the-go) and engaged community residents researching at home on desktop/laptop.
+- **Job to be done**: "I heard something is happening with the schools. What is it, why should I care, and what can I do right now?"
+
+### Brand Personality
+- **Three words**: Bold, United, Relentless
+- **Voice**: Direct, confident, no-nonsense. Speaks as a neighbor, not an institution.
+- **Emotional goal**: Community + Solidarity -- "We're in this together."
+
+### Aesthetic Direction
+- **Visual tone**: Activist/campaign site energy -- bold, direct, action-oriented.
+- **Anti-references**: NOT corporate/sterile, NOT government/bureaucratic, NOT amateur/homemade.
+- **Colors**: Navy (#1B2A4A) + Crimson (#DC2626) on white. Two modes: Community (light) and Urgent (dark).
+- **Typography**: Barlow Condensed 700 uppercase (headings) + Inter (body). Sharp edges, no rounded corners.
+
+### Design Principles
+1. **Action First** -- Every page answers "what can I do?" within seconds. CTAs are prominent.
+2. **Bold Over Beautiful** -- High-contrast, sharp edges, strong typography over delicate aesthetics.
+3. **Mobile-Ready Urgency** -- Scannable, tappable, fast-loading. No decorative fluff.
+4. **Credible and Professional** -- Clean layouts, consistent spacing, proper hierarchy earns trust.
+5. **Accessible to All** -- WCAG AAA compliance. Works for everyone regardless of ability or device.
