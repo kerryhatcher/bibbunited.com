@@ -15,7 +15,7 @@ export function GetInvolvedCTA() {
   return (
     <section
       aria-labelledby="get-involved-heading"
-      className="bg-bg-secondary text-text-on-dark px-[clamp(1rem,3vw,2rem)] pt-4 pb-2 sm:pt-6 sm:pb-3"
+      className="bg-bg-secondary text-text-on-dark px-[clamp(1rem,3vw,2rem)] pt-4 pb-2 sm:pt-6 sm:pb-3 border-t-2 border-accent"
     >
       <div className="mx-auto max-w-4xl text-center">
         <h2
