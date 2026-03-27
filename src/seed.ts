@@ -3,7 +3,7 @@ import type sharp from 'sharp'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-// Lexical rich text minimal structure
+// Lexical rich text minimal structure -- single paragraph
 const makeRichText = (text: string) => ({
   root: {
     type: 'root',
@@ -35,16 +35,46 @@ const makeRichText = (text: string) => ({
   },
 })
 
+// Lexical rich text -- multiple paragraphs
+const makeMultiParagraphRichText = (paragraphs: string[]) => ({
+  root: {
+    type: 'root',
+    children: paragraphs.map((text) => ({
+      type: 'paragraph',
+      children: [
+        {
+          type: 'text',
+          detail: 0,
+          format: 0,
+          mode: 'normal',
+          style: '',
+          text,
+          version: 1,
+        },
+      ],
+      direction: 'ltr' as const,
+      format: '' as const,
+      indent: 0,
+      textFormat: 0,
+      version: 1,
+    })),
+    direction: 'ltr' as const,
+    format: '' as const,
+    indent: 0,
+    version: 1,
+  },
+})
+
 /**
- * Create a colorful labeled seed image using sharp.
+ * Download an image from Unsplash and create a Payload media item.
  * Uses find-or-create by alt text for idempotency.
+ * Falls back to a sharp-generated placeholder if the download fails.
  */
-async function createSeedImage(
+async function downloadUnsplashImage(
   payload: Payload,
   sharpFn: typeof sharp,
-  name: string,
-  label: string,
-  bg: { r: number; g: number; b: number },
+  url: string,
+  filename: string,
   alt: string,
   ctx: { context: { disableRevalidate: boolean } },
 ) {
@@ -59,26 +89,34 @@ async function createSeedImage(
     return existing.docs[0]
   }
 
-  const svgOverlay = Buffer.from(
-    `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-    <text x="50%" y="50%" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="central">${label}</text>
-  </svg>`,
-  )
+  let imageBuffer: Buffer
+  let mimetype = 'image/jpeg'
 
-  const imageBuffer = await sharpFn({
-    create: { width: 1200, height: 630, channels: 3, background: bg },
-  })
-    .composite([{ input: svgOverlay, top: 0, left: 0 }])
-    .jpeg({ quality: 85 })
-    .toBuffer()
+  try {
+    console.log('Downloading image from Unsplash:', filename)
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(`Unsplash fetch failed: ${response.status} ${response.statusText}`)
+    }
+    const arrayBuffer = await response.arrayBuffer()
+    imageBuffer = Buffer.from(arrayBuffer)
+  } catch (error) {
+    console.warn(`Unsplash download failed for ${filename}, using sharp fallback:`, error)
+    // Generate a simple colored placeholder as fallback
+    imageBuffer = await sharpFn({
+      create: { width: 1200, height: 630, channels: 3, background: { r: 100, g: 100, b: 100 } },
+    })
+      .jpeg({ quality: 85 })
+      .toBuffer()
+  }
 
   const media = await payload.create({
     collection: 'media',
     data: { alt },
     file: {
       data: imageBuffer,
-      name: `${name}.jpg`,
-      mimetype: 'image/jpeg',
+      name: `${filename}.jpg`,
+      mimetype,
       size: imageBuffer.length,
     },
     overrideAccess: true,
@@ -92,14 +130,14 @@ async function seed() {
   const payload = await getPayload({ config })
   const { default: sharpFn } = await import('sharp')
 
-  // Disable revalidatePath in afterChange hooks — not available outside Next.js server
+  // Disable revalidatePath in afterChange hooks -- not available outside Next.js server
   const ctx = { context: { disableRevalidate: true } }
 
   console.log('Seeding database...')
 
-  // ──────────────────────────────────────────────
-  // 1. User -- find-or-create, then set displayName (D-13)
-  // ──────────────────────────────────────────────
+  // --------------------------------------------------
+  // 1. User -- find-or-create, then set displayName
+  // --------------------------------------------------
   let user
   const existingUsers = await payload.find({
     collection: 'users',
@@ -123,8 +161,6 @@ async function seed() {
   }
 
   // Update displayName for the seed user
-  // Note: displayName field exists on Users collection (added in 09-01) but
-  // payload-types may not be regenerated yet, so we cast data to bypass type check
   await payload.update({
     collection: 'users',
     id: user.id,
@@ -134,64 +170,52 @@ async function seed() {
   })
   console.log('Set user displayName to BIBB United Staff')
 
-  // ──────────────────────────────────────────────
-  // 2. Media items -- 6 colorful labeled topic images (D-01, D-04, D-05)
-  // ──────────────────────────────────────────────
-  const seedImages = [
+  // --------------------------------------------------
+  // 2. Unsplash images for news articles
+  // --------------------------------------------------
+  const unsplashImages = [
     {
-      name: 'seed-budget',
-      label: 'Budget',
-      bg: { r: 220, g: 50, b: 50 },
-      alt: 'School district budget overview with financial charts',
+      url: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1200&h=630&fit=crop',
+      filename: 'seed-school-hallway',
+      alt: 'Empty elementary school hallway',
     },
     {
-      name: 'seed-safety',
-      label: 'Safety',
-      bg: { r: 50, g: 130, b: 200 },
-      alt: 'School safety measures and campus security initiatives',
+      url: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop',
+      filename: 'seed-budget-docs',
+      alt: 'Calculator and budget documents on desk',
     },
     {
-      name: 'seed-schools',
-      label: 'Schools',
-      bg: { r: 34, g: 139, b: 34 },
-      alt: 'BIBB County school buildings and educational facilities',
+      url: 'https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=1200&h=630&fit=crop',
+      filename: 'seed-voting-booth',
+      alt: 'Voting booth with American flag',
     },
     {
-      name: 'seed-community',
-      label: 'Community',
-      bg: { r: 200, g: 160, b: 30 },
-      alt: 'BIBB community members at a civic engagement event',
+      url: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&h=630&fit=crop',
+      filename: 'seed-student-backpack',
+      alt: 'Student with backpack walking toward school',
     },
     {
-      name: 'seed-board',
-      label: 'Board Meeting',
-      bg: { r: 150, g: 50, b: 180 },
-      alt: 'BIBB County Board of Education meeting in session',
-    },
-    {
-      name: 'seed-spotlight',
-      label: 'Spotlight',
-      bg: { r: 220, g: 120, b: 30 },
-      alt: 'Featured news spotlight highlighting local school issues',
+      url: 'https://images.unsplash.com/photo-1562774053-701939374585?w=1200&h=630&fit=crop',
+      filename: 'seed-school-building',
+      alt: 'School building exterior',
     },
   ] as const
 
-  const mediaItems: Record<string, Awaited<ReturnType<typeof createSeedImage>>> = {}
-  for (const img of seedImages) {
-    mediaItems[img.name] = await createSeedImage(
+  const mediaItems: Record<string, Awaited<ReturnType<typeof downloadUnsplashImage>>> = {}
+  for (const img of unsplashImages) {
+    mediaItems[img.filename] = await downloadUnsplashImage(
       payload,
       sharpFn,
-      img.name,
-      img.label,
-      img.bg,
+      img.url,
+      img.filename,
       img.alt,
       ctx,
     )
   }
 
-  // ──────────────────────────────────────────────
-  // 2b. OG Default Image -- branded 1200x630 PNG (D-07, D-08, SEO-09)
-  // ──────────────────────────────────────────────
+  // --------------------------------------------------
+  // 2b. OG Default Image -- branded 1200x630 PNG (generated with sharp, not Unsplash)
+  // --------------------------------------------------
   const ogAlt = 'BIBB United default Open Graph sharing image'
   const existingOg = await payload.find({
     collection: 'media',
@@ -233,9 +257,9 @@ async function seed() {
     console.log('Created OG default image')
   }
 
-  // ──────────────────────────────────────────────
+  // --------------------------------------------------
   // 3. Pages -- About, Get Involved, Resources
-  // ──────────────────────────────────────────────
+  // --------------------------------------------------
   const pagesData = [
     {
       title: 'About',
@@ -281,33 +305,74 @@ async function seed() {
     }
   }
 
-  // ──────────────────────────────────────────────
-  // 4. News Posts -- 3 posts with different featured images (D-01)
-  // ──────────────────────────────────────────────
+  // --------------------------------------------------
+  // 4. News Posts -- 5 real articles matching production content
+  // --------------------------------------------------
   const newsPostsData = [
     {
-      title: 'School Board Approves 2026-2027 Budget',
-      publishDate: new Date('2026-03-15').toISOString(),
-      body: makeRichText(
-        'The BIBB County Board of Education voted 5-2 to approve the $180 million operating budget for the 2026-2027 school year. Key allocations include increased funding for teacher retention bonuses and facility maintenance.',
-      ),
-      featuredImage: mediaItems['seed-budget'].id as number,
+      title:
+        "Nine Bibb County Elementary Schools Are Losing State Funding -- Here's What That Means for Your Child",
+      publishDate: new Date('2026-03-26').toISOString(),
+      excerpt:
+        "Nearly half of Bibb County's elementary schools fall below the state enrollment threshold, putting librarians and art teachers at risk.",
+      body: makeMultiParagraphRichText([
+        'Nine elementary schools in Bibb County have fallen below the state enrollment threshold of 450 students, triggering automatic reductions in state funding. The affected schools will lose dedicated positions for librarians, art teachers, and other specialists that the state funds based on enrollment numbers.',
+        'The schools impacted include some of the district\'s most historically significant campuses. As enrollment continues to decline across the county -- driven by population loss, the Georgia Promise Scholarship voucher program, and families choosing alternatives -- the per-school funding formula punishes smaller campuses disproportionately.',
+        'Parents at affected schools should attend upcoming board meetings to advocate for local funding to backfill lost state positions. The Board of Education has the authority to reallocate district funds, but only if community members make their voices heard before the FY2027 budget is finalized.',
+      ]),
+      featuredImage: 'seed-school-hallway',
     },
     {
-      title: 'Community Forum on School Safety Draws Record Attendance',
-      publishDate: new Date('2026-03-10').toISOString(),
-      body: makeRichText(
-        'Over 300 community members packed the Central High School auditorium for a forum on school safety improvements. Parents, teachers, and students shared perspectives on proposed security upgrades and mental health resources.',
-      ),
-      featuredImage: mediaItems['seed-safety'].id as number,
+      title:
+        "From $5.5 Million Error to $307 Million Question: Inside Bibb Schools' Budget Reckoning",
+      publishDate: new Date('2026-03-26').toISOString(),
+      excerpt:
+        'A $5.5M budget error exposed a deeper crisis as the district faces a $307M FY2027 budget with rising costs and shrinking enrollment.',
+      body: makeMultiParagraphRichText([
+        'A $5.5 million accounting error discovered in the current fiscal year has cast a long shadow over the Bibb County School District\'s financial planning. The error, which resulted from a misclassification of recurring expenses as one-time costs, means the district has been spending beyond its sustainable budget baseline for at least two years.',
+        'Now the district faces a $307 million FY2027 budget that must absorb rising personnel costs, deferred maintenance on aging facilities, and the revenue impact of losing over 500 students to the Georgia Promise Scholarship program. Chief Financial Officer reports indicate that without significant adjustments, the district could face a structural deficit within three years.',
+        'Community members can review the full budget documents on the district website and attend the upcoming budget work sessions. Understanding where the money goes is the first step toward ensuring it goes where our students need it most.',
+      ]),
+      featuredImage: 'seed-budget-docs',
     },
     {
-      title: 'New Superintendent Search Committee Formed',
-      publishDate: new Date('2026-03-01').toISOString(),
-      body: makeRichText(
-        'The Board of Education has appointed a seven-member search committee to find the next superintendent of BIBB County Schools. The committee includes two parents, two teachers, one principal, and two community members.',
-      ),
-      featuredImage: mediaItems['seed-community'].id as number,
+      title:
+        'First Contested School Board Race in 12 Years: What You Need to Know About Post 7',
+      publishDate: new Date('2026-03-25').toISOString(),
+      excerpt:
+        'Two candidates vie for the first competitive Post 7 school board seat since 2014 as the district faces generational challenges.',
+      body: makeMultiParagraphRichText([
+        'For the first time since 2014, voters in the Post 7 district will have a genuine choice in their school board representative. The contested race comes at a pivotal moment for Bibb County schools, as the district grapples with declining enrollment, budget shortfalls, and questions about school consolidation.',
+        'Both candidates bring different visions for the district\'s future. The race has drawn attention from education advocacy groups across the state, who see Bibb County as a bellwether for how Georgia communities respond to the intertwined challenges of voucher programs, population decline, and aging infrastructure.',
+        'Voters in the Post 7 district should research both candidates\' positions on school closures, budget priorities, and community engagement. Early voting begins in May, and every vote in a local school board race has an outsized impact on the quality of education in our community.',
+      ]),
+      featuredImage: 'seed-voting-booth',
+    },
+    {
+      title:
+        '582 Students, $3 Million Gone: How the Georgia Promise Scholarship Is Reshaping Bibb Schools',
+      publishDate: new Date('2026-03-25').toISOString(),
+      excerpt:
+        'Bibb County had the third-highest voucher count in Georgia. The $2.4-$3M revenue loss compounds an already dire enrollment crisis.',
+      body: makeMultiParagraphRichText([
+        'Bibb County recorded 582 students using Georgia Promise Scholarship vouchers in the program\'s first year, making it the third-highest participating county in the state. At an estimated $4,000-$5,200 per voucher, the district faces a revenue loss between $2.4 million and $3 million -- money that follows students out of the public school system.',
+        'The voucher exodus compounds an enrollment decline that was already underway. Over the past decade, Bibb County Schools has lost thousands of students to charter schools, homeschooling, and families relocating out of the county. Each departing student takes their per-pupil state funding with them, creating a downward spiral for the schools that remain.',
+        'The district is exploring strategies to retain families, including expanding magnet programs and improving facilities at under-enrolled schools. But the fundamental challenge remains: how does a district maintain quality education across 38 campuses when the student population can no longer support that many schools?',
+      ]),
+      featuredImage: 'seed-student-backpack',
+    },
+    {
+      title:
+        "The Juice Isn't Worth the Squeeze: Why Consultants Say Bibb County Must Revisit School Closures",
+      publishDate: new Date('2026-03-25').toISOString(),
+      excerpt:
+        "The district hired consultants to find alternatives to closures. Their answer: rezoning won't work. Consolidation may be inevitable.",
+      body: makeMultiParagraphRichText([
+        'An independent consulting firm hired by the Bibb County School District to explore alternatives to school closures has delivered a blunt assessment: rezoning alone cannot solve the district\'s capacity imbalance. With many elementary schools operating at less than 50% capacity, the consultants concluded that consolidation -- closing some campuses and combining student populations -- is the most viable path to fiscal sustainability.',
+        'The consultants\' report examined multiple scenarios, including magnet program expansion, grade reconfiguration, and attendance zone adjustments. While each approach offers marginal improvements, none addresses the core problem: Bibb County has too many school buildings for its current and projected student population. Maintaining underutilized buildings drains resources from instruction and drives up per-pupil facility costs.',
+        'The report will be presented at the next Board Retreat. Community members are encouraged to attend and provide input on which scenarios they prefer. The board has committed to a transparent process, but the window for public input is narrow -- decisions on the FY2027 facility plan are expected by early summer.',
+      ]),
+      featuredImage: 'seed-school-building',
     },
   ]
 
@@ -319,11 +384,16 @@ async function seed() {
       limit: 1,
       overrideAccess: true,
     })
+    const imageId = mediaItems[postData.featuredImage].id as number
     if (existing.docs.length === 0) {
       const created = await payload.create({
         collection: 'news-posts',
         data: {
-          ...postData,
+          title: postData.title,
+          publishDate: postData.publishDate,
+          excerpt: postData.excerpt,
+          body: postData.body,
+          featuredImage: imageId,
           author: user.id,
           _status: 'published',
         },
@@ -334,58 +404,90 @@ async function seed() {
       console.log('Created news post:', created.slug)
     } else {
       const doc = existing.docs[0]
-      // Update featuredImage if it changed (e.g. new colorful seed images)
-      if (doc.featuredImage !== postData.featuredImage) {
-        await payload.update({
-          collection: 'news-posts',
-          id: doc.id,
-          data: { featuredImage: postData.featuredImage, author: user.id },
-          overrideAccess: true,
-          ...ctx,
-        })
-        console.log('Updated news post featured image:', doc.slug)
-      } else {
-        console.log('News post already exists:', doc.slug)
-      }
+      // Update fields if content changed
+      await payload.update({
+        collection: 'news-posts',
+        id: doc.id,
+        data: {
+          excerpt: postData.excerpt,
+          body: postData.body,
+          featuredImage: imageId,
+          author: user.id,
+        },
+        overrideAccess: true,
+        ...ctx,
+      })
+      console.log('Updated news post:', doc.slug)
       newsPostDocs.push({ id: doc.id as number, slug: doc.slug || '' })
     }
   }
 
-  // ──────────────────────────────────────────────
-  // 5. Officials (D-04)
-  // ──────────────────────────────────────────────
+  // --------------------------------------------------
+  // 5. Officials -- 9 real Board of Education members
+  // --------------------------------------------------
   const officialsData = [
     {
-      name: 'Dr. Sarah Mitchell',
-      role: 'Board Chair',
+      name: 'Mr. Daryl J. Morton',
+      role: 'President',
       body: 'board-of-education' as const,
-      email: 's.mitchell@bibbschools.gov',
-      phone: '(478) 555-0101',
+      email: 'daryl.morton@bcsdk12.net',
       sortOrder: 1,
     },
     {
-      name: 'James Thompson',
-      role: 'Vice Chair',
+      name: 'Dr. Sundra M. Woodford',
+      role: 'Vice President',
       body: 'board-of-education' as const,
-      email: 'j.thompson@bibbschools.gov',
-      phone: '(478) 555-0102',
+      email: 'sundra.woodford@bcsdk12.net',
       sortOrder: 2,
     },
     {
-      name: 'Maria Rodriguez',
-      role: 'Board Member',
+      name: 'Mrs. Kristin C. Hanlon',
+      role: 'Treasurer',
       body: 'board-of-education' as const,
-      email: 'm.rodriguez@bibbschools.gov',
-      phone: '(478) 555-0103',
+      email: 'kristin.hanlon@bcsdk12.net',
       sortOrder: 3,
     },
     {
-      name: 'Robert Chen',
-      role: 'District 2 Representative',
-      body: 'county-commission' as const,
-      email: 'r.chen@bibbcounty.gov',
-      phone: '(478) 555-0201',
-      sortOrder: 1,
+      name: 'Ms. Myrtice C. Johnson',
+      role: 'Board Member, District 1',
+      body: 'board-of-education' as const,
+      email: 'myrtice.johnson@bcsdk12.net',
+      sortOrder: 4,
+    },
+    {
+      name: 'Dr. Henry C. Ficklin',
+      role: 'Board Member, District 2',
+      body: 'board-of-education' as const,
+      email: 'henry.ficklin@bcsdk12.net',
+      sortOrder: 5,
+    },
+    {
+      name: 'Mr. Barney T. Hester',
+      role: 'Board Member, District 4',
+      body: 'board-of-education' as const,
+      email: 'barney.hester@bcsdk12.net',
+      sortOrder: 6,
+    },
+    {
+      name: 'Mr. James M. Freeman',
+      role: 'Board Member, District 6',
+      body: 'board-of-education' as const,
+      email: 'james.freeman@bcsdk12.net',
+      sortOrder: 7,
+    },
+    {
+      name: 'Dr. Lisa W. Garrett-Boyd',
+      role: 'Board Member, At-Large Post 8',
+      body: 'board-of-education' as const,
+      email: 'lisa.garrettboyd@bcsdk12.net',
+      sortOrder: 8,
+    },
+    {
+      name: 'Dr. Dan A. Sims',
+      role: 'Superintendent',
+      body: 'board-of-education' as const,
+      email: 'dan.sims@bcsdk12.net',
+      sortOrder: 9,
     },
   ]
 
@@ -409,38 +511,49 @@ async function seed() {
     }
   }
 
-  // ──────────────────────────────────────────────
-  // 6. Meetings (D-04) -- dates relative to now for always-upcoming
-  // ──────────────────────────────────────────────
-  const now = new Date()
+  // --------------------------------------------------
+  // 6. Meetings -- 3 real meetings with fixed dates and agenda links
+  // --------------------------------------------------
   const meetingsData = [
     {
-      title: 'Regular Board Meeting',
-      date: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-      time: '6:00 PM',
-      location: 'BIBB County Board of Education, 484 Mulberry St',
-      notes: 'Public comment period at 6:30 PM',
+      title: 'Board Retreat',
+      date: new Date('2026-03-27').toISOString(),
+      time: '8:30 AM',
+      location: 'Bibb County Board of Education, 484 Mulberry St, Macon, GA',
+      agendaLink:
+        'https://simbli.eboardsolutions.com/SB_Meetings/ViewMeeting.aspx?S=4013&MID=133998',
+      notes: '',
     },
     {
-      title: 'Budget Work Session',
-      date: new Date(now.getTime() + 28 * 24 * 60 * 60 * 1000).toISOString(),
-      time: '5:30 PM',
-      location: 'Central High School Auditorium, 2155 Napier Ave',
-      notes: 'Special session to review FY2027 budget proposals',
+      title: 'School Council Meeting',
+      date: new Date('2026-04-15').toISOString(),
+      time: '10:30 AM',
+      location: 'Northwoods Academy',
+      agendaLink:
+        'https://simbli.eboardsolutions.com/SB_Meetings/ViewMeeting.aspx?S=4013&MID=129170',
+      notes: '',
     },
     {
-      title: 'Curriculum Committee Meeting',
-      date: new Date(now.getTime() + 42 * 24 * 60 * 60 * 1000).toISOString(),
-      time: '4:00 PM',
-      location: 'BIBB County Board of Education, 484 Mulberry St',
+      title: 'School Council Meeting',
+      date: new Date('2026-05-07').toISOString(),
+      time: '5:00 PM',
+      location: 'Elam Alexander',
+      agendaLink:
+        'https://simbli.eboardsolutions.com/SB_Meetings/ViewMeeting.aspx?S=4013&MID=128022',
       notes: '',
     },
   ]
 
   for (const meetingData of meetingsData) {
+    // Use both title AND date for uniqueness (two meetings share the same title)
     const existing = await payload.find({
       collection: 'meetings',
-      where: { title: { equals: meetingData.title } },
+      where: {
+        and: [
+          { title: { equals: meetingData.title } },
+          { date: { equals: meetingData.date } },
+        ],
+      },
       limit: 1,
       overrideAccess: true,
     })
@@ -451,44 +564,25 @@ async function seed() {
         overrideAccess: true,
         ...ctx,
       })
-      console.log('Created meeting:', meetingData.title)
+      console.log('Created meeting:', meetingData.title, meetingData.date)
     } else {
-      console.log('Meeting already exists:', meetingData.title)
+      console.log('Meeting already exists:', meetingData.title, meetingData.date)
     }
   }
 
-  // ──────────────────────────────────────────────
-  // 7. Navigation global (D-02) -- populate with pages and routes
-  // ──────────────────────────────────────────────
+  // --------------------------------------------------
+  // 7. Navigation global -- flat menu matching production
+  // --------------------------------------------------
   const aboutPage = pageRefs['About']
-  const getInvolvedPage = pageRefs['Get Involved']
-  const resourcesPage = pageRefs['Resources']
 
   await payload.updateGlobal({
     slug: 'navigation',
     data: {
       items: [
+        { label: 'Meetings', type: 'external', url: '/meetings' },
         { label: 'News', type: 'external', url: '/news' },
         { label: 'About', type: 'internal', page: { relationTo: 'pages', value: aboutPage.id } },
-        {
-          label: 'Take Action',
-          type: 'external',
-          url: '#',
-          children: [
-            {
-              label: 'Get Involved',
-              type: 'internal',
-              page: { relationTo: 'pages', value: getInvolvedPage.id },
-            },
-            { label: 'Contact Officials', type: 'external', url: '/contact-officials' },
-            { label: 'Meetings', type: 'external', url: '/meetings' },
-          ],
-        },
-        {
-          label: 'Resources',
-          type: 'internal',
-          page: { relationTo: 'pages', value: resourcesPage.id },
-        },
+        { label: 'Contact Officials', type: 'external', url: '/contact-officials' },
       ],
     },
     overrideAccess: true,
@@ -496,13 +590,21 @@ async function seed() {
   })
   console.log('Updated navigation global')
 
-  // ──────────────────────────────────────────────
-  // 8. Homepage global (D-03, D-06) -- hero spotlight + topic callouts
-  // ──────────────────────────────────────────────
+  // --------------------------------------------------
+  // 8. Homepage global -- hero spotlight references articles 5, 4, 3
+  // --------------------------------------------------
+  const getInvolvedPage = pageRefs['Get Involved']
+  const resourcesPage = pageRefs['Resources']
+
+  // Articles 5 (school closures, index 4), 4 (voucher, index 3), 3 (post-7 race, index 2)
   await payload.updateGlobal({
     slug: 'homepage',
     data: {
-      heroSpotlight: newsPostDocs.map((post) => ({ story: post.id })),
+      heroSpotlight: [
+        { story: newsPostDocs[4].id },
+        { story: newsPostDocs[3].id },
+        { story: newsPostDocs[2].id },
+      ],
       topicCallouts: [
         {
           title: 'School Budget',
@@ -528,6 +630,20 @@ async function seed() {
     ...ctx,
   })
   console.log('Updated homepage global')
+
+  // --------------------------------------------------
+  // 9. Urgent Banner global
+  // --------------------------------------------------
+  await payload.updateGlobal({
+    slug: 'urgent-banner',
+    data: {
+      active: true,
+      message: 'Site Under Development - Test data - Text is AI generated as placeholder for testing',
+    },
+    overrideAccess: true,
+    ...ctx,
+  })
+  console.log('Updated urgent banner global')
 
   console.log('Seeding complete!')
   process.exit(0)
