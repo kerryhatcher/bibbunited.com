@@ -600,11 +600,9 @@ async function seed() {
   await payload.updateGlobal({
     slug: 'homepage',
     data: {
-      heroSpotlight: [
-        { story: newsPostDocs[4].id },
-        { story: newsPostDocs[3].id },
-        { story: newsPostDocs[2].id },
-      ],
+      heroSpotlight: [newsPostDocs[4], newsPostDocs[3], newsPostDocs[2]]
+        .filter((doc): doc is { id: number; slug: string } => doc != null)
+        .map((doc) => ({ story: doc.id })),
       topicCallouts: [
         {
           title: 'School Budget',

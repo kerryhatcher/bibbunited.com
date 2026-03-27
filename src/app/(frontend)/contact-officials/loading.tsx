@@ -3,6 +3,9 @@ import { Section } from '@/components/ui/Section'
 export default function ContactOfficialsLoading() {
   return (
     <Section>
+      <output aria-busy="true">
+        <span className="sr-only">Loading officials...</span>
+      </output>
       <div className="h-10 w-72 bg-border/50 mb-4 animate-pulse" />
       <div className="h-5 w-96 bg-border/50 mb-12 animate-pulse" />
 

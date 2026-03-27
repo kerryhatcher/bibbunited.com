@@ -89,9 +89,9 @@ export default async function ContactOfficialsPage() {
       {officials.docs.length === 0 && (
         <div className="text-center py-12 border border-border bg-bg-dominant">
           <Users className="mx-auto h-12 w-12 text-text-secondary mb-4" />
-          <h3 className="text-2xl font-heading font-bold uppercase mb-4">
+          <h2 className="text-2xl font-heading font-bold uppercase mb-4">
             No Officials Listed Yet
-          </h3>
+          </h2>
           <p className="text-text-secondary mb-6 max-w-md mx-auto">
             We&apos;re working on compiling contact information for your local officials.
             In the meantime, reach out to us directly.

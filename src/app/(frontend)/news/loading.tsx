@@ -3,6 +3,9 @@ import { Section } from '@/components/ui/Section'
 export default function NewsLoading() {
   return (
     <Section>
+      <output aria-busy="true">
+        <span className="sr-only">Loading news...</span>
+      </output>
       <div className="h-10 w-48 bg-border/50 mb-8 animate-pulse" />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
