@@ -56,7 +56,7 @@ export function TopicCallouts({ callouts }: TopicCalloutsProps) {
           return (
             <Link
               href={`/${featured.link.slug}`}
-              className="block sm:col-span-2 border-l-4 border-l-accent border border-border bg-bg-secondary/50 p-8 hover:bg-bg-secondary transition-colors"
+              className="block sm:col-span-2 border-l-4 border-l-accent border border-border bg-bg-secondary/50 p-8 hover:bg-bg-secondary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
             >
               <IconComponent className="w-12 h-12 text-accent mb-4" />
               <h3 className="text-2xl sm:text-3xl font-heading font-bold uppercase mb-3">
@@ -74,7 +74,7 @@ export function TopicCallouts({ callouts }: TopicCalloutsProps) {
             <Link
               key={index}
               href={`/${callout.link.slug}`}
-              className="block border-l-4 border-l-transparent border border-border bg-bg-secondary/50 p-6 hover:border-l-accent transition-colors"
+              className="block border-l-4 border-l-transparent border border-border bg-bg-secondary/50 p-6 hover:border-l-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
             >
               <IconComponent className="w-10 h-10 text-accent mb-4" />
               <h3 className="text-xl font-heading font-bold uppercase mb-2">

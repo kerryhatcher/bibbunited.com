@@ -79,15 +79,15 @@ export default async function MeetingsPage() {
           </h3>
           <div className="flex flex-col sm:flex-row gap-4 text-text-secondary">
             <time dateTime={meeting.date} className="flex items-center gap-2">
-              <Calendar className="w-4 h-4" />
+              <Calendar className="w-4 h-4" aria-hidden="true" />
               {format(new Date(meeting.date), 'EEEE, MMMM d, yyyy')}
             </time>
             <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4" />
+              <Clock className="w-4 h-4" aria-hidden="true" />
               {meeting.time}
             </span>
             <span className="flex items-center gap-2">
-              <MapPin className="w-4 h-4" />
+              <MapPin className="w-4 h-4" aria-hidden="true" />
               {meeting.location}
             </span>
           </div>
@@ -96,9 +96,9 @@ export default async function MeetingsPage() {
               href={meeting.agendaLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-accent hover:underline mt-3"
+              className="inline-flex items-center gap-1 text-accent hover:underline mt-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-4 h-4" aria-hidden="true" />
               View Agenda
               <span className="sr-only"> (opens in new tab)</span>
             </a>
@@ -122,22 +122,22 @@ export default async function MeetingsPage() {
             {past.map((meeting) => (
               <div
                 key={meeting.id}
-                className="border border-border p-6 bg-bg-dominant mb-4 opacity-75"
+                className="border border-border p-6 bg-bg-dominant mb-4 text-text-secondary"
               >
                 <h3 className="text-xl font-heading font-bold mb-3">
                   {meeting.title}
                 </h3>
                 <div className="flex flex-col sm:flex-row gap-4 text-text-secondary">
                   <time dateTime={meeting.date} className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
+                    <Calendar className="w-4 h-4" aria-hidden="true" />
                     {format(new Date(meeting.date), 'EEEE, MMMM d, yyyy')}
                   </time>
                   <span className="flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
+                    <Clock className="w-4 h-4" aria-hidden="true" />
                     {meeting.time}
                   </span>
                   <span className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
+                    <MapPin className="w-4 h-4" aria-hidden="true" />
                     {meeting.location}
                   </span>
                 </div>
@@ -146,9 +146,9 @@ export default async function MeetingsPage() {
                     href={meeting.agendaLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-accent hover:underline mt-3"
+                    className="inline-flex items-center gap-1 text-accent hover:underline mt-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                   >
-                    <ExternalLink className="w-4 h-4" />
+                    <ExternalLink className="w-4 h-4" aria-hidden="true" />
                     View Agenda
                     <span className="sr-only"> (opens in new tab)</span>
                   </a>

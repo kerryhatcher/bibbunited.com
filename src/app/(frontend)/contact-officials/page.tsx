@@ -125,7 +125,7 @@ export default async function ContactOfficialsPage() {
                     {photo?.url && (
                       <Image
                         src={photo.url}
-                        alt={official.name}
+                        alt={`${official.name}, ${official.role}`}
                         width={80}
                         height={80}
                         className="object-cover mb-4"
@@ -141,18 +141,18 @@ export default async function ContactOfficialsPage() {
                       {official.email && (
                         <a
                           href={`mailto:${official.email}`}
-                          className="flex items-center gap-2 text-accent hover:underline text-sm min-h-[44px] py-1 break-all"
+                          className="flex items-center gap-2 text-accent hover:underline text-sm min-h-[44px] py-1 break-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                         >
-                          <Mail className="w-4 h-4 flex-shrink-0" />
+                          <Mail className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
                           <span className="truncate">{official.email}</span>
                         </a>
                       )}
                       {official.phone && (
                         <a
                           href={`tel:${official.phone}`}
-                          className="flex items-center gap-2 text-accent hover:underline text-sm min-h-[44px] py-1"
+                          className="flex items-center gap-2 text-accent hover:underline text-sm min-h-[44px] py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                         >
-                          <Phone className="w-4 h-4 flex-shrink-0" />
+                          <Phone className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
                           {official.phone}
                         </a>
                       )}

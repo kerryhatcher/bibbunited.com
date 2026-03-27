@@ -67,7 +67,7 @@ export function LatestNews({ posts }: LatestNewsProps) {
             <Link
               key={post.id}
               href={`/news/${post.slug}`}
-              className="flex gap-4 items-start py-4 border-b border-border last:border-0 hover:text-accent transition-colors"
+              className="flex gap-4 items-start py-4 border-b border-border last:border-0 hover:text-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               {getThumbnailUrl(post) && (
                 <Image
@@ -92,7 +92,7 @@ export function LatestNews({ posts }: LatestNewsProps) {
       <div className="mt-8">
         <Link
           href="/news"
-          className="text-accent font-bold uppercase hover:underline"
+          className="text-accent font-bold uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           View All News &rarr;
         </Link>
