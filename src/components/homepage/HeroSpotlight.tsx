@@ -78,9 +78,9 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
               priority={index === 0}
               loading={index === 0 ? 'eager' : 'lazy'}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/5" />
             <div className="absolute bottom-0 left-0 right-0 p-6 pb-12 sm:p-10 sm:pb-10 text-white">
-              <h2 className="text-fluid-hero font-heading font-bold uppercase tracking-tight mb-2 line-clamp-3">
+              <h2 className="text-fluid-hero font-heading font-bold uppercase tracking-tight mb-2 line-clamp-3 text-shadow-hero">
                 <Link
                   href={`/news/${story.slug}`}
                   className="hover:underline focus:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
@@ -89,7 +89,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
                 </Link>
               </h2>
               {story.publishDate && (
-                <p className="text-white/80 text-sm" suppressHydrationWarning>
+                <p className="text-white/80 text-sm text-shadow-hero-sm" suppressHydrationWarning>
                   {formatArticleDate(story.publishDate)}
                 </p>
               )}
