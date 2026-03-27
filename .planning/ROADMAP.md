@@ -38,7 +38,7 @@
 
 **Milestone Goal:** Restructure the data model around organizations, give editors control over homepage content, and automate upstream cache busting on publish.
 
-- [ ] **Phase 15: Organization Data Model** - Organizations collection, Officials refactor, Contact Officials page rebuild, multi-step migration
+- [x] **Phase 15: Organization Data Model** - Organizations collection, Officials refactor, Contact Officials page rebuild, multi-step migration (completed 2026-03-27)
 - [ ] **Phase 16: Homepage Editor Content Block** - Editable rich text block on homepage between hero and latest news
 - [ ] **Phase 17: Cloudflare Cache Busting** - Automated edge cache purge on content publish with graceful local dev fallback
 
@@ -58,11 +58,11 @@
 4. Editor can see all linked officials from an organization's admin page (Join field)
 5. Full seed script runs end-to-end creating organizations and linking officials without errors
 
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 
 - [x] 15-01-PLAN.md -- Organizations collection, slug parameterization, Officials refactor, delete protection
 - [x] 15-02-PLAN.md -- Hand-authored PostgreSQL migration for body-to-organization schema transition
-- [ ] 15-03-PLAN.md -- Seed script update and Contact Officials page rebuild with org-based grouping
+- [x] 15-03-PLAN.md -- Seed script update and Contact Officials page rebuild with org-based grouping
 
 ### Phase 16: Homepage Editor Content Block
 
@@ -115,6 +115,6 @@ Phases execute in numeric order: 15 -> 16 -> 17
 | 12. SEO & Metadata | v1.1 | 2/2 | Complete | 2026-03-25 |
 | 13. Quality Audit | v1.1 | 4/4 | Complete | 2026-03-25 |
 | 14. Navigation URL Fix & Doc Drift | v1.1 | 1/1 | Complete | 2026-03-25 |
-| 15. Organization Data Model | v2.0 | 2/3 | In Progress|  |
+| 15. Organization Data Model | v2.0 | 3/3 | Complete   | 2026-03-27 |
 | 16. Homepage Editor Content Block | v2.0 | 0/0 | Not started | - |
 | 17. Cloudflare Cache Busting | v2.0 | 0/0 | Not started | - |

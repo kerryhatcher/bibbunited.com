@@ -13,8 +13,8 @@ Requirements for CMS Data Model & Content milestone. Each maps to roadmap phases
 - [x] **ORG-02**: Editor can view all officials linked to an organization from the organization admin page (Join field)
 - [x] **ORG-03**: Organization has a slug field for URL-ready identifier
 - [x] **ORG-04**: Official is linked to an organization via relationship field (replaces hardcoded body select)
-- [ ] **ORG-05**: Contact Officials page groups officials by organization and displays org contact info
-- [ ] **ORG-06**: Seed script creates organizations and links existing officials to them
+- [x] **ORG-05**: Contact Officials page groups officials by organization and displays org contact info
+- [x] **ORG-06**: Seed script creates organizations and links existing officials to them
 - [x] **ORG-07**: Data migration maps existing body select values to organization relationships without data loss
 
 ### Homepage Content
@@ -79,8 +79,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ORG-02 | Phase 15 | Complete |
 | ORG-03 | Phase 15 | Complete |
 | ORG-04 | Phase 15 | Complete |
-| ORG-05 | Phase 15 | Pending |
-| ORG-06 | Phase 15 | Pending |
+| ORG-05 | Phase 15 | Complete |
+| ORG-06 | Phase 15 | Complete |
 | ORG-07 | Phase 15 | Complete |
 | HOME-01 | Phase 16 | Pending |
 | HOME-02 | Phase 16 | Pending |
