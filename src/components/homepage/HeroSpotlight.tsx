@@ -57,7 +57,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
     >
       {/* Slides */}
       <div
-        className="flex h-full transition-transform duration-500 ease-in-out"
+        className="flex h-full transition-transform duration-500 ease-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {stories.map((story, index) => (
