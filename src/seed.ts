@@ -423,71 +423,178 @@ async function seed() {
   }
 
   // --------------------------------------------------
-  // 5. Officials -- 9 real Board of Education members
+  // 5. Organizations -- governing bodies
+  // --------------------------------------------------
+  const organizationsData = [
+    // County level (per D-10)
+    {
+      name: 'Board of Education',
+      level: 'county' as const,
+      website: 'https://www.bcsdk12.net',
+      phone: '(478) 765-8711',
+      email: 'board@bcsdk12.net',
+      address: {
+        street: '484 Mulberry St',
+        city: 'Macon',
+        state: 'GA',
+        zip: '31201',
+      },
+      sortOrder: 1,
+    },
+    {
+      name: 'County Commission',
+      level: 'county' as const,
+      website: 'https://www.maconbibb.us',
+      phone: '(478) 751-7400',
+      sortOrder: 2,
+    },
+    {
+      name: 'Water Board',
+      level: 'county' as const,
+      website: 'https://www.maconwater.org',
+      phone: '(478) 464-5600',
+      sortOrder: 3,
+    },
+    // State level (per D-11)
+    {
+      name: 'Georgia Board of Education',
+      level: 'state' as const,
+      website: 'https://www.gadoe.org',
+      sortOrder: 1,
+    },
+    // National level (per D-11)
+    {
+      name: 'U.S. Department of Education',
+      level: 'national' as const,
+      website: 'https://www.ed.gov',
+      sortOrder: 1,
+    },
+  ]
+
+  const orgRefs: Record<string, number> = {}
+  for (const orgData of organizationsData) {
+    const existing = await payload.find({
+      collection: 'organizations',
+      where: { name: { equals: orgData.name } },
+      limit: 1,
+      overrideAccess: true,
+    })
+    if (existing.docs.length === 0) {
+      const created = await payload.create({
+        collection: 'organizations',
+        data: orgData,
+        overrideAccess: true,
+        ...ctx,
+      })
+      orgRefs[orgData.name] = created.id as number
+      console.log('Created organization:', orgData.name)
+    } else {
+      orgRefs[orgData.name] = existing.docs[0].id as number
+      console.log('Organization already exists:', orgData.name)
+    }
+  }
+
+  // --------------------------------------------------
+  // 6. Officials -- 9 real Board of Education members + placeholder officials for other orgs
   // --------------------------------------------------
   const officialsData = [
+    // Board of Education officials (per D-13)
     {
       name: 'Mr. Daryl J. Morton',
       role: 'President',
-      body: 'board-of-education' as const,
+      organization: orgRefs['Board of Education'],
       email: 'daryl.morton@bcsdk12.net',
       sortOrder: 1,
     },
     {
       name: 'Dr. Sundra M. Woodford',
       role: 'Vice President',
-      body: 'board-of-education' as const,
+      organization: orgRefs['Board of Education'],
       email: 'sundra.woodford@bcsdk12.net',
       sortOrder: 2,
     },
     {
       name: 'Mrs. Kristin C. Hanlon',
       role: 'Treasurer',
-      body: 'board-of-education' as const,
+      organization: orgRefs['Board of Education'],
       email: 'kristin.hanlon@bcsdk12.net',
       sortOrder: 3,
     },
     {
       name: 'Ms. Myrtice C. Johnson',
       role: 'Board Member, District 1',
-      body: 'board-of-education' as const,
+      organization: orgRefs['Board of Education'],
       email: 'myrtice.johnson@bcsdk12.net',
       sortOrder: 4,
     },
     {
       name: 'Dr. Henry C. Ficklin',
       role: 'Board Member, District 2',
-      body: 'board-of-education' as const,
+      organization: orgRefs['Board of Education'],
       email: 'henry.ficklin@bcsdk12.net',
       sortOrder: 5,
     },
     {
       name: 'Mr. Barney T. Hester',
       role: 'Board Member, District 4',
-      body: 'board-of-education' as const,
+      organization: orgRefs['Board of Education'],
       email: 'barney.hester@bcsdk12.net',
       sortOrder: 6,
     },
     {
       name: 'Mr. James M. Freeman',
       role: 'Board Member, District 6',
-      body: 'board-of-education' as const,
+      organization: orgRefs['Board of Education'],
       email: 'james.freeman@bcsdk12.net',
       sortOrder: 7,
     },
     {
       name: 'Dr. Lisa W. Garrett-Boyd',
       role: 'Board Member, At-Large Post 8',
-      body: 'board-of-education' as const,
+      organization: orgRefs['Board of Education'],
       email: 'lisa.garrettboyd@bcsdk12.net',
       sortOrder: 8,
     },
     {
       name: 'Dr. Dan A. Sims',
       role: 'Superintendent',
-      body: 'board-of-education' as const,
+      organization: orgRefs['Board of Education'],
       email: 'dan.sims@bcsdk12.net',
       sortOrder: 9,
+    },
+    // County Commission placeholder officials (per D-12)
+    {
+      name: 'Commissioner Example A',
+      role: 'District 1 Commissioner',
+      organization: orgRefs['County Commission'],
+      sortOrder: 1,
+    },
+    {
+      name: 'Commissioner Example B',
+      role: 'District 2 Commissioner',
+      organization: orgRefs['County Commission'],
+      sortOrder: 2,
+    },
+    // Water Board placeholder officials (per D-12)
+    {
+      name: 'Water Board Member A',
+      role: 'Board Chair',
+      organization: orgRefs['Water Board'],
+      sortOrder: 1,
+    },
+    // Georgia Board of Education placeholder (per D-12)
+    {
+      name: 'State Board Member A',
+      role: 'Board Member',
+      organization: orgRefs['Georgia Board of Education'],
+      sortOrder: 1,
+    },
+    // U.S. Department of Education placeholder (per D-12)
+    {
+      name: 'Federal Education Official A',
+      role: 'Regional Representative',
+      organization: orgRefs['U.S. Department of Education'],
+      sortOrder: 1,
     },
   ]
 
@@ -512,7 +619,7 @@ async function seed() {
   }
 
   // --------------------------------------------------
-  // 6. Meetings -- 3 real meetings with fixed dates and agenda links
+  // 7. Meetings -- 3 real meetings with fixed dates and agenda links
   // --------------------------------------------------
   const meetingsData = [
     {
@@ -571,7 +678,7 @@ async function seed() {
   }
 
   // --------------------------------------------------
-  // 7. Navigation global -- flat menu matching production
+  // 8. Navigation global -- flat menu matching production
   // --------------------------------------------------
   const aboutPage = pageRefs['About']
 
@@ -591,7 +698,7 @@ async function seed() {
   console.log('Updated navigation global')
 
   // --------------------------------------------------
-  // 8. Homepage global -- hero spotlight references articles 5, 4, 3
+  // 9. Homepage global -- hero spotlight references articles 5, 4, 3
   // --------------------------------------------------
   const getInvolvedPage = pageRefs['Get Involved']
   const resourcesPage = pageRefs['Resources']
@@ -630,7 +737,7 @@ async function seed() {
   console.log('Updated homepage global')
 
   // --------------------------------------------------
-  // 9. Urgent Banner global
+  // 10. Urgent Banner global
   // --------------------------------------------------
   await payload.updateGlobal({
     slug: 'urgent-banner',
