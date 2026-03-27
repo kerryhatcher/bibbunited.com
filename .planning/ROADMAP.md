@@ -58,10 +58,10 @@
 4. Editor can see all linked officials from an organization's admin page (Join field)
 5. Full seed script runs end-to-end creating organizations and linking officials without errors
 
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 - [x] 15-01-PLAN.md -- Organizations collection, slug parameterization, Officials refactor, delete protection
-- [ ] 15-02-PLAN.md -- Hand-authored PostgreSQL migration for body-to-organization schema transition
+- [x] 15-02-PLAN.md -- Hand-authored PostgreSQL migration for body-to-organization schema transition
 - [ ] 15-03-PLAN.md -- Seed script update and Contact Officials page rebuild with org-based grouping
 
 ### Phase 16: Homepage Editor Content Block
@@ -115,6 +115,6 @@ Phases execute in numeric order: 15 -> 16 -> 17
 | 12. SEO & Metadata | v1.1 | 2/2 | Complete | 2026-03-25 |
 | 13. Quality Audit | v1.1 | 4/4 | Complete | 2026-03-25 |
 | 14. Navigation URL Fix & Doc Drift | v1.1 | 1/1 | Complete | 2026-03-25 |
-| 15. Organization Data Model | v2.0 | 1/3 | In Progress|  |
+| 15. Organization Data Model | v2.0 | 2/3 | In Progress|  |
 | 16. Homepage Editor Content Block | v2.0 | 0/0 | Not started | - |
 | 17. Cloudflare Cache Busting | v2.0 | 0/0 | Not started | - |

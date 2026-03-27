@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: CMS Data Model & Content
 status: executing
-stopped_at: Completed 15-01-PLAN.md
-last_updated: "2026-03-27T23:05:38.218Z"
+stopped_at: Completed 15-02-PLAN.md
+last_updated: "2026-03-27T23:09:31.069Z"
 last_activity: 2026-03-27
 progress:
   total_phases: 3
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
   percent: 67
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-03-27)
 ## Current Position
 
 Phase: 15 (organization-data-model) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-03-27
 
@@ -49,6 +49,7 @@ Progress: [####################..........] 67% (14/17 phases complete across all
 
 *Updated after each plan completion*
 | Phase 15 P01 | 3min | 2 tasks | 6 files |
+| Phase 15 P02 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -61,6 +62,8 @@ Recent decisions affecting current work:
 - [v2.0 Roadmap]: Multi-step migration for Officials body->organization refactor (schema, data, cleanup)
 - [v2.0 Roadmap]: No new npm packages — all features use existing stack capabilities
 - [Phase 15]: Factory pattern for slug parameterization (createSlugField/createFormatSlugHook) preserving backward compat
+- [Phase 15]: Hand-authored SQL migration for enum-to-FK conversion (bypasses Payload auto-migration PostgreSQL transaction limitation)
+- [Phase 15]: Slug-based mapping for body enum to organization_id ensures deterministic data migration
 
 ### Pending Todos
 
@@ -77,5 +80,5 @@ None.
 ## Session Continuity
 
 Last activity: 2026-03-27 — Roadmap created for v2.0 milestone
-Stopped at: Completed 15-01-PLAN.md
+Stopped at: Completed 15-02-PLAN.md
 Resume file: None
