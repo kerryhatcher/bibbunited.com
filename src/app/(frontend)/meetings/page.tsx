@@ -43,7 +43,7 @@ export default async function MeetingsPage() {
           },
         ])}
       />
-      <h1 className="text-fluid-page-title font-heading font-bold uppercase tracking-tight mb-4">
+      <h1 className="text-4xl sm:text-5xl font-heading font-bold uppercase tracking-tight mb-4">
         Meeting Schedule
       </h1>
       <p className="text-text-secondary text-lg mb-12 max-w-[65ch]">
@@ -51,16 +51,16 @@ export default async function MeetingsPage() {
       </p>
 
       {/* Upcoming meetings */}
-      <h2 className="text-2xl sm:text-3xl font-heading font-bold uppercase tracking-tight mb-6">
+      <h2 className="text-2xl sm:text-3xl font-heading font-bold uppercase tracking-tight mb-6 border-b-2 border-accent pb-3">
         Upcoming Meetings
       </h2>
 
       {upcoming.length === 0 && (
         <div className="text-center py-12 border border-border bg-bg-dominant mb-8">
           <Calendar className="mx-auto h-12 w-12 text-text-secondary mb-4" />
-          <h3 className="text-2xl font-heading font-bold uppercase mb-4">
+          <h2 className="text-2xl font-heading font-bold uppercase mb-4">
             No Upcoming Meetings Scheduled
-          </h3>
+          </h2>
           <p className="text-text-secondary mb-6 max-w-md mx-auto">
             Check back soon for the latest meeting dates and locations.
             Want to stay informed? Reach out and let us know.
@@ -69,25 +69,26 @@ export default async function MeetingsPage() {
         </div>
       )}
 
+      <div className="flex flex-col gap-4">
       {upcoming.map((meeting) => (
         <div
           key={meeting.id}
-          className="border border-border p-6 bg-bg-dominant mb-4"
+          className="border border-border border-l-4 border-l-accent p-6 bg-bg-dominant"
         >
           <h3 className="text-xl font-heading font-bold mb-3">
             {meeting.title}
           </h3>
           <div className="flex flex-col sm:flex-row gap-4 text-text-secondary">
-            <time dateTime={meeting.date} className="flex items-center gap-2">
-              <Calendar className="w-4 h-4" aria-hidden="true" />
-              {format(new Date(meeting.date), 'EEEE, MMMM d, yyyy')}
-            </time>
             <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4" aria-hidden="true" />
+              <Calendar className="w-4 h-4" />
+              {format(new Date(meeting.date), 'EEEE, MMMM d, yyyy')}
+            </span>
+            <span className="flex items-center gap-2">
+              <Clock className="w-4 h-4" />
               {meeting.time}
             </span>
             <span className="flex items-center gap-2">
-              <MapPin className="w-4 h-4" aria-hidden="true" />
+              <MapPin className="w-4 h-4" />
               {meeting.location}
             </span>
           </div>
@@ -96,11 +97,10 @@ export default async function MeetingsPage() {
               href={meeting.agendaLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-accent hover:underline mt-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-1 text-accent hover:underline mt-3 min-h-[44px] py-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
-              <ExternalLink className="w-4 h-4" aria-hidden="true" />
+              <ExternalLink className="w-4 h-4" />
               View Agenda
-              <span className="sr-only"> (opens in new tab)</span>
             </a>
           )}
           {meeting.notes && (
@@ -110,34 +110,35 @@ export default async function MeetingsPage() {
           )}
         </div>
       ))}
+      </div>
 
       {/* Past meetings (collapsible) */}
       {past.length > 0 && (
         <details className="mt-12">
-          <summary className="text-2xl font-heading font-bold uppercase tracking-tight cursor-pointer hover:text-accent">
+          <summary className="text-2xl font-heading font-bold uppercase tracking-tight cursor-pointer hover:text-accent transition-colors">
             Past Meetings ({past.length})
           </summary>
 
-          <div className="mt-6">
+          <div className="mt-6 flex flex-col gap-4">
             {past.map((meeting) => (
               <div
                 key={meeting.id}
-                className="border border-border p-6 bg-bg-dominant mb-4 text-text-secondary"
+                className="border border-border p-6 bg-bg-dominant text-text-secondary"
               >
                 <h3 className="text-xl font-heading font-bold mb-3">
                   {meeting.title}
                 </h3>
                 <div className="flex flex-col sm:flex-row gap-4 text-text-secondary">
-                  <time dateTime={meeting.date} className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" aria-hidden="true" />
-                    {format(new Date(meeting.date), 'EEEE, MMMM d, yyyy')}
-                  </time>
                   <span className="flex items-center gap-2">
-                    <Clock className="w-4 h-4" aria-hidden="true" />
+                    <Calendar className="w-4 h-4" />
+                    {format(new Date(meeting.date), 'EEEE, MMMM d, yyyy')}
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
                     {meeting.time}
                   </span>
                   <span className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" aria-hidden="true" />
+                    <MapPin className="w-4 h-4" />
                     {meeting.location}
                   </span>
                 </div>
@@ -146,11 +147,10 @@ export default async function MeetingsPage() {
                     href={meeting.agendaLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-accent hover:underline mt-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                    className="inline-flex items-center gap-1 text-accent hover:underline mt-3 min-h-[44px] py-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
-                    <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                    <ExternalLink className="w-4 h-4" />
                     View Agenda
-                    <span className="sr-only"> (opens in new tab)</span>
                   </a>
                 )}
                 {meeting.notes && (

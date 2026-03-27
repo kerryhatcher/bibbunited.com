@@ -511,35 +511,100 @@ async function seed() {
     }
   }
 
-  // --------------------------------------------------
-  // 6. Meetings -- 3 real meetings with fixed dates and agenda links
-  // --------------------------------------------------
+  // ──────────────────────────────────────────────
+  // 6. Meetings (D-04) -- real Bibb County School District meetings
+  // Source: https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013
+  // ──────────────────────────────────────────────
   const meetingsData = [
     {
       title: 'Board Retreat',
-      date: new Date('2026-03-27').toISOString(),
+      date: '2026-03-27T00:00:00.000Z',
       time: '8:30 AM',
       location: 'Bibb County Board of Education, 484 Mulberry St, Macon, GA',
-      agendaLink:
-        'https://simbli.eboardsolutions.com/SB_Meetings/ViewMeeting.aspx?S=4013&MID=133998',
       notes: '',
     },
     {
       title: 'School Council Meeting',
-      date: new Date('2026-04-15').toISOString(),
+      date: '2026-04-15T00:00:00.000Z',
       time: '10:30 AM',
       location: 'Northwoods Academy',
-      agendaLink:
-        'https://simbli.eboardsolutions.com/SB_Meetings/ViewMeeting.aspx?S=4013&MID=129170',
       notes: '',
     },
     {
       title: 'School Council Meeting',
-      date: new Date('2026-05-07').toISOString(),
+      date: '2026-05-07T00:00:00.000Z',
       time: '5:00 PM',
       location: 'Elam Alexander',
-      agendaLink:
-        'https://simbli.eboardsolutions.com/SB_Meetings/ViewMeeting.aspx?S=4013&MID=128022',
+      notes: '',
+    },
+    {
+      title: 'Board Meeting',
+      date: '2026-03-19T00:00:00.000Z',
+      time: '6:30 PM',
+      location: 'Bibb County Board of Education, 484 Mulberry St, Macon, GA',
+      notes: '',
+    },
+    {
+      title: 'Committee Meeting',
+      date: '2026-03-19T00:00:00.000Z',
+      time: '4:00 PM',
+      location: 'Bibb County Board of Education, 484 Mulberry St, Macon, GA',
+      notes: '',
+    },
+    {
+      title: 'Called Board Meeting',
+      date: '2026-03-19T00:00:00.000Z',
+      time: '3:00 PM',
+      location: 'Bibb County Board of Education, 484 Mulberry St, Macon, GA',
+      notes: '',
+    },
+    {
+      title: 'Called Board Meeting',
+      date: '2026-03-12T00:00:00.000Z',
+      time: '5:00 PM',
+      location: 'Bibb County Board of Education, 484 Mulberry St, Macon, GA',
+      notes: '',
+    },
+    {
+      title: 'School Council Meeting',
+      date: '2026-03-05T00:00:00.000Z',
+      time: '5:00 PM',
+      location: 'Elam Alexander',
+      notes: '',
+    },
+    {
+      title: 'Called Board Meeting',
+      date: '2026-03-04T00:00:00.000Z',
+      time: '4:00 PM',
+      location: 'Bibb County Board of Education, 484 Mulberry St, Macon, GA',
+      notes: '',
+    },
+    {
+      title: 'School Council Meeting',
+      date: '2026-02-26T00:00:00.000Z',
+      time: '10:30 AM',
+      location: 'Northwoods Academy',
+      notes: '',
+    },
+    {
+      title: 'Board Meeting',
+      date: '2026-02-19T00:00:00.000Z',
+      time: '6:30 PM',
+      location: 'Bibb County Board of Education, 484 Mulberry St, Macon, GA',
+      notes: '',
+    },
+    {
+      title: 'Committee Meeting',
+      date: '2026-02-19T00:00:00.000Z',
+      time: '4:00 PM',
+      location: 'Bibb County Board of Education, 484 Mulberry St, Macon, GA',
+      notes: '',
+    },
+    {
+      title: 'Called Board Meeting',
+      date: '2026-02-19T00:00:00.000Z',
+      time: '3:00 PM',
+      location: 'Bibb County Board of Education, 484 Mulberry St, Macon, GA',
       notes: '',
     },
   ]
