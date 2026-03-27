@@ -342,7 +342,7 @@ export function Header({ navItems }: HeaderProps) {
 
         {/* Mobile hamburger button */}
         <button
-          className="bg-transparent border-none cursor-pointer text-text-primary lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="bg-transparent border-none cursor-pointer text-text-primary lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
         >

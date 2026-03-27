@@ -123,13 +123,15 @@ export default async function ContactOfficialsPage() {
                     className="border border-border p-6 bg-bg-dominant"
                   >
                     {photo?.url && (
-                      <Image
-                        src={photo.url}
-                        alt={`${official.name}, ${official.role}`}
-                        width={80}
-                        height={80}
-                        className="object-cover mb-4"
-                      />
+                      <div className="relative w-20 h-20 overflow-hidden mb-4">
+                        <Image
+                          src={photo.url}
+                          alt={`${official.name}, ${official.role}`}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      </div>
                     )}
                     <h3 className="text-xl font-heading font-bold truncate">
                       {official.name}
