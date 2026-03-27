@@ -69,19 +69,19 @@ export function LatestNews({ posts }: LatestNewsProps) {
             <Link
               key={post.id}
               href={`/news/${post.slug}`}
-              className="flex gap-4 items-start py-4 border-b border-border last:border-0 hover:text-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="flex gap-5 items-start py-5 border-b border-border last:border-0 hover:text-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               {thumbUrl && (
                 <Image
                   src={thumbUrl}
                   alt={getImageAlt(post)}
-                  width={64}
-                  height={64}
-                  className="object-cover flex-shrink-0"
+                  width={96}
+                  height={96}
+                  className="rounded-md object-cover flex-shrink-0"
                 />
               )}
               <div>
-                <h4 className="font-heading font-bold text-sm leading-tight mb-1">
+                <h4 className="font-heading font-bold text-base leading-snug mb-1">
                   {post.title}
                 </h4>
                 <DateDisplay publishDate={post.publishDate} variant="compact" />
