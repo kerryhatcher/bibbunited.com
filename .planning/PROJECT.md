@@ -4,6 +4,17 @@
 
 A civic advocacy website for the BIBB community, starting with local school system issues. The site informs residents about what's happening -- budgets, policies, board decisions -- and activates them to take action: attend meetings, contact officials, and get involved. Bold, urgent design with dual-mode color switching (community/urgent) that demands attention. Powered by Payload CMS 3.x so a small editorial team can publish content without touching code. Deployed as a single Docker container on self-hosted K8s.
 
+## Current Milestone: v2.0 CMS Data Model & Content
+
+**Goal:** Restructure the data model around organizations, give editors control over homepage content, and automate upstream cache busting on publish.
+
+**Target features:**
+
+- Organization collection (flat — boards, bodies, authorities) with contact info
+- Officials linked to an organization (refactor existing collection)
+- Single rich text block on homepage between hero and latest news
+- Automated upstream cache busting (Cloudflare/Traefik) on content publish
+
 ## Current State
 
 **Version:** v1.1 shipped (2026-03-25)
@@ -78,7 +89,10 @@ Community members can find clear, actionable information about their local schoo
 
 ### Active
 
-(No active requirements -- next milestone not yet planned)
+- [ ] Organization collection with name, website, phone, address
+- [ ] Officials linked to an organization
+- [ ] Editable homepage content between hero and latest news
+- [ ] Automated upstream cache busting (Cloudflare/Traefik)
 
 ### Out of Scope
 
@@ -134,6 +148,8 @@ Community members can find clear, actionable information about their local schoo
 
 ## Future Milestone Ideas
 
+- **v2.1 API & Data Exchange** — Swagger/OpenAPI spec, bulk org+officials import (one file per org), full site export/backup zip
+- **v2.2 Civic Automation & Subscriptions** — BCSD meetings scraper (K8s CronJob, 12h), .ics calendar feed (webcal), .vcf vCard downloads; CalDAV/CardDAV/JMAP deferred to later
 - Topic taxonomy/tags (TAXO-01, TAXO-02 from v2 backlog)
 - Email newsletter subscription (ENGMT-01, ENGMT-02 from v2 backlog)
 - Resource links page (RSRC-01 from v2 backlog)
@@ -143,5 +159,18 @@ Community members can find clear, actionable information about their local schoo
 
 This document evolves at phase transitions and milestone boundaries.
 
+**After each phase transition** (via `/gsd:transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `/gsd:complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
+
 ---
-*Last updated: 2026-03-25 after v1.1 milestone completion*
+*Last updated: 2026-03-27 after v2.0 milestone started*
