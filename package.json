@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "BIBB United - Civic advocacy website powered by Payload CMS",
   "license": "MIT",
+  "packageManager": "pnpm@10.33.0",
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
