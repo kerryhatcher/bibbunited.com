@@ -50,7 +50,7 @@ export default async function NewsListingPage() {
         ])}
       />
 
-      <h1 className="text-4xl sm:text-5xl font-heading font-bold uppercase tracking-tight mb-8">
+      <h1 className="text-fluid-page-title font-heading font-bold uppercase tracking-tight mb-8">
         NEWS
       </h1>
 

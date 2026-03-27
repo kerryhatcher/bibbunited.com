@@ -6,6 +6,7 @@ import { getHomepage } from '@/lib/getHomepage'
 import { HeroSpotlight } from '@/components/homepage/HeroSpotlight'
 import { LatestNews } from '@/components/homepage/LatestNews'
 import { TopicCallouts } from '@/components/homepage/TopicCallouts'
+import { GetInvolvedCTA } from '@/components/homepage/GetInvolvedCTA'
 import { JsonLdScript, organizationJsonLd, websiteJsonLd } from '@/lib/jsonLd'
 import type { NewsPost, Media, Page as PageType } from '@/payload-types'
 
@@ -68,6 +69,7 @@ export default async function HomePage() {
       <JsonLdScript data={organizationJsonLd()} />
       <JsonLdScript data={websiteJsonLd()} />
       <HeroSpotlight stories={heroStories} />
+      <GetInvolvedCTA />
       <LatestNews posts={latestNews.docs} />
       {topicCallouts.length > 0 && <TopicCallouts callouts={topicCallouts} />}
     </>

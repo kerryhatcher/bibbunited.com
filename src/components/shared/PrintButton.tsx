@@ -8,7 +8,7 @@ export function PrintButton() {
     <button
       onClick={() => window.print()}
       data-print-hide
-      className="inline-flex items-center gap-2 text-text-secondary hover:text-accent text-sm py-2"
+      className="inline-flex items-center gap-2 text-text-secondary hover:text-accent text-sm py-2 min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
     >
       <Printer size={16} />
       Print this article

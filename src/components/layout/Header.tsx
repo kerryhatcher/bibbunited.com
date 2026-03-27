@@ -171,6 +171,7 @@ export function Header({ navItems }: HeaderProps) {
       return (
         <a href={href} className={className} target="_blank" rel="noopener noreferrer" aria-current={active ? 'page' : undefined}>
           {item.label}
+          <span className="sr-only"> (opens in new tab)</span>
         </a>
       )
     }
@@ -218,6 +219,7 @@ export function Header({ navItems }: HeaderProps) {
           onClick={onClick}
         >
           {child.label}
+          <span className="sr-only"> (opens in new tab)</span>
         </a>
       )
     }
@@ -340,7 +342,7 @@ export function Header({ navItems }: HeaderProps) {
 
         {/* Mobile hamburger button */}
         <button
-          className="bg-transparent border-none cursor-pointer text-text-primary lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="bg-transparent border-none cursor-pointer text-text-primary lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
         >
@@ -430,6 +432,7 @@ export function Header({ navItems }: HeaderProps) {
                                   aria-current={childActive ? 'page' : undefined}
                                 >
                                   {child.label}
+                                  <span className="sr-only"> (opens in new tab)</span>
                                 </a>
                               ) : (
                                 <Link
@@ -471,6 +474,7 @@ export function Header({ navItems }: HeaderProps) {
                       aria-current={itemActive ? 'page' : undefined}
                     >
                       {item.label}
+                      <span className="sr-only"> (opens in new tab)</span>
                     </a>
                   ) : (
                     <Link

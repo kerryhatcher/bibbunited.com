@@ -4,19 +4,22 @@ interface SectionProps {
   children: React.ReactNode
   className?: string
   variant?: 'default' | 'dark'
+  divider?: boolean
 }
 
 export function Section({
   children,
   className = '',
   variant = 'default',
+  divider = true,
 }: SectionProps) {
   const bg = variant === 'dark' ? 'bg-bg-secondary' : ''
   const text = variant === 'dark' ? 'text-text-on-dark' : ''
+  const border = divider ? 'border-t border-border' : ''
 
   return (
     <section
-      className={`py-8 sm:py-12 px-4 sm:px-6 lg:px-8 ${bg} ${text} ${className}`}
+      className={`py-[clamp(2rem,4vw,3rem)] px-[clamp(1rem,3vw,2rem)] ${bg} ${text} ${border} ${className}`}
     >
       <div className="mx-auto max-w-7xl">{children}</div>
     </section>

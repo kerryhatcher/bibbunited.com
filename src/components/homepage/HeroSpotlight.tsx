@@ -38,7 +38,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
 
   if (!stories || stories.length === 0) {
     return (
-      <div className="relative w-full aspect-[16/7] sm:aspect-[16/6] overflow-hidden bg-bg-secondary" />
+      <div className="relative w-full aspect-[4/3] sm:aspect-[16/6] overflow-hidden bg-bg-secondary" />
     )
   }
 
@@ -49,7 +49,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
       role="region"
       aria-roledescription="carousel"
       aria-label="Featured stories"
-      className="relative w-full aspect-[16/7] sm:aspect-[16/6] overflow-hidden bg-bg-secondary"
+      className="relative w-full aspect-[4/3] sm:aspect-[16/6] overflow-hidden bg-bg-secondary"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -57,7 +57,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
     >
       {/* Slides */}
       <div
-        className="flex h-full transition-transform duration-500 ease-in-out"
+        className="flex h-full transition-transform duration-500 ease-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {stories.map((story, index) => (
@@ -78,9 +78,9 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
               priority={index === 0}
               loading={index === 0 ? 'eager' : 'lazy'}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 pb-12 sm:p-10 sm:pb-10 text-white">
-              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-heading font-bold uppercase tracking-tight mb-2 line-clamp-3">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 via-40% to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 pb-8 sm:p-10 sm:pb-10 text-white">
+              <h2 className="text-fluid-hero font-heading font-bold uppercase tracking-tight mb-2 line-clamp-4 sm:line-clamp-3 text-shadow-hero">
                 <Link
                   href={`/news/${story.slug}`}
                   className="hover:underline focus:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
@@ -89,7 +89,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
                 </Link>
               </h2>
               {story.publishDate && (
-                <p className="text-white/80 text-sm" suppressHydrationWarning>
+                <p className="text-white/80 text-sm text-shadow-hero-sm" suppressHydrationWarning>
                   {formatArticleDate(story.publishDate)}
                 </p>
               )}
@@ -103,27 +103,32 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
         <>
           <button
             onClick={goToPrev}
-            className="absolute top-1/2 left-3 -translate-y-1/2 bg-[var(--color-overlay)] hover:bg-black/70 text-white rounded-full p-3 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
+            className="absolute top-1/2 left-3 -translate-y-1/2 bg-[var(--color-overlay)] hover:bg-black/70 text-white p-3 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
             aria-label="Previous story"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
             onClick={goToNext}
-            className="absolute top-1/2 right-3 -translate-y-1/2 bg-[var(--color-overlay)] hover:bg-black/70 text-white rounded-full p-3 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
+            className="absolute top-1/2 right-3 -translate-y-1/2 bg-[var(--color-overlay)] hover:bg-black/70 text-white p-3 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
             aria-label="Next story"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
           <button
             onClick={() => setIsPaused((p) => !p)}
-            className="absolute top-4 right-4 bg-[var(--color-overlay)] hover:bg-black/70 text-white rounded-full p-2 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
+            className="absolute top-4 right-4 bg-[var(--color-overlay)] hover:bg-black/70 text-white p-2 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
             aria-label={isPaused ? 'Play slideshow' : 'Pause slideshow'}
           >
             {isPaused ? <Play className="w-5 h-5" /> : <Pause className="w-5 h-5" />}
           </button>
         </>
       )}
+
+      {/* Live region for screen reader announcements */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {`Story ${currentIndex + 1} of ${stories.length}: ${stories[currentIndex]?.title}`}
+      </div>
 
       {/* Dot indicators */}
       {showControls && (
@@ -133,13 +138,36 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
               key={index}
               id={`hero-tab-${index}`}
               role="tab"
+              tabIndex={index === currentIndex ? 0 : -1}
               aria-selected={index === currentIndex}
               aria-controls={`hero-panel-${index}`}
               onClick={() => setCurrentIndex(index)}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                  e.preventDefault()
+                  const next = (index + 1) % stories.length
+                  setCurrentIndex(next)
+                  document.getElementById(`hero-tab-${next}`)?.focus()
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                  e.preventDefault()
+                  const prev = (index - 1 + stories.length) % stories.length
+                  setCurrentIndex(prev)
+                  document.getElementById(`hero-tab-${prev}`)?.focus()
+                } else if (e.key === 'Home') {
+                  e.preventDefault()
+                  setCurrentIndex(0)
+                  document.getElementById('hero-tab-0')?.focus()
+                } else if (e.key === 'End') {
+                  e.preventDefault()
+                  const last = stories.length - 1
+                  setCurrentIndex(last)
+                  document.getElementById(`hero-tab-${last}`)?.focus()
+                }
+              }}
               className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
               aria-label={`Go to story ${index + 1} of ${stories.length}`}
             >
-              <span className={`block w-3 h-3 rounded-full transition-colors ${
+              <span className={`block w-3 h-3 transition-colors ${
                 index === currentIndex ? 'bg-white' : 'bg-white/50'
               }`} />
             </button>

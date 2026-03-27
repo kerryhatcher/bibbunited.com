@@ -87,9 +87,11 @@ None.
 | 260325-sg9 | Deploy bibbunited.com to production on k8s cluster | 2026-03-26 | 24d5d73 | [260325-sg9-deploy-bibbunited-com-to-production-on-k](./quick/260325-sg9-deploy-bibbunited-com-to-production-on-k/) |
 | 260326-0qi | Fix sharp module error in Docker — admin panel 500 | 2026-03-26 | 5a94303 | [260326-0qi-fix-sharp-module-error-in-docker-admin-p](./quick/260326-0qi-fix-sharp-module-error-in-docker-admin-p/) |
 | 260326-239 | Add on-demand revalidation via Payload afterChange hooks | 2026-03-26 | 7d25788 | [260326-239-add-on-demand-revalidation-via-payload-a](./quick/260326-239-add-on-demand-revalidation-via-payload-a/) |
+| 260327-f29 | Update seed content data to match production site | 2026-03-27 | 741f10f | [260327-f29-update-seed-content-data-to-match-prod-s](./quick/260327-f29-update-seed-content-data-to-match-prod-s/) |
+| 260327-gi7 | Make footer BIBB text red to match header logo colors | 2026-03-27 | 75436b2 | [260327-gi7-make-footer-bibb-text-red-to-match-heade](./quick/260327-gi7-make-footer-bibb-text-red-to-match-heade/) |
 
 ## Session Continuity
 
-Last activity: 2026-03-26 - Completed quick task 260326-239: On-demand revalidation
-Stopped at: Revalidation hooks deployed to prod
+Last activity: 2026-03-27 - Completed quick task 260327-gi7: Make footer BIBB text red to match header logo colors
+Stopped at: Completed quick task 260327-gi7: Make footer BIBB text red to match header logo colors
 Resume file: None

@@ -29,7 +29,7 @@ export function LatestNews({ posts }: LatestNewsProps) {
   if (!posts || posts.length === 0) {
     return (
       <Section>
-        <h2 className="text-3xl sm:text-4xl font-heading font-bold uppercase tracking-tight mb-8">
+        <h2 className="text-fluid-section-title font-heading font-bold uppercase tracking-tight mb-8 section-heading-rule">
           Latest News
         </h2>
         <p className="text-text-secondary">No news posts published yet.</p>
@@ -42,7 +42,7 @@ export function LatestNews({ posts }: LatestNewsProps) {
 
   return (
     <Section>
-      <h2 className="text-3xl sm:text-4xl font-heading font-bold uppercase tracking-tight mb-8">
+      <h2 className="text-fluid-section-title font-heading font-bold uppercase tracking-tight mb-8 section-heading-rule">
         Latest News
       </h2>
 
@@ -63,36 +63,39 @@ export function LatestNews({ posts }: LatestNewsProps) {
 
         {/* Smaller list items */}
         <div className="lg:col-span-1">
-          {listItems.map((post) => (
+          {listItems.map((post) => {
+            const thumbUrl = getThumbnailUrl(post)
+            return (
             <Link
               key={post.id}
               href={`/news/${post.slug}`}
-              className="flex gap-4 items-start py-4 border-b border-border last:border-0 hover:text-accent transition-colors"
+              className="flex gap-5 items-start py-5 border-b border-border last:border-0 hover:text-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
-              {getThumbnailUrl(post) && (
+              {thumbUrl && (
                 <Image
-                  src={getThumbnailUrl(post)!}
+                  src={thumbUrl}
                   alt={getImageAlt(post)}
-                  width={64}
-                  height={64}
-                  className="object-cover flex-shrink-0"
+                  width={96}
+                  height={96}
+                  className="rounded-md object-cover flex-shrink-0"
                 />
               )}
               <div>
-                <h4 className="font-heading font-bold text-sm leading-tight mb-1">
+                <h4 className="font-heading font-bold text-base leading-snug mb-1">
                   {post.title}
                 </h4>
                 <DateDisplay publishDate={post.publishDate} variant="compact" />
               </div>
             </Link>
-          ))}
+            )
+          })}
         </div>
       </div>
 
       <div className="mt-8">
         <Link
           href="/news"
-          className="text-accent font-bold uppercase hover:underline"
+          className="text-accent font-bold uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         >
           View All News &rarr;
         </Link>

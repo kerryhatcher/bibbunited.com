@@ -78,7 +78,7 @@ export default async function ContactOfficialsPage() {
           />
         )
       })}
-      <h1 className="text-4xl sm:text-5xl font-heading font-bold uppercase tracking-tight mb-4">
+      <h1 className="text-fluid-page-title font-heading font-bold uppercase tracking-tight mb-4">
         Contact Your Officials
       </h1>
       <p className="text-text-secondary text-lg mb-12 max-w-[65ch]">
@@ -123,13 +123,15 @@ export default async function ContactOfficialsPage() {
                     className="border border-border p-6 bg-bg-dominant"
                   >
                     {photo?.url && (
-                      <Image
-                        src={photo.url}
-                        alt={official.name}
-                        width={80}
-                        height={80}
-                        className="object-cover mb-4"
-                      />
+                      <div className="relative w-20 h-20 overflow-hidden mb-4">
+                        <Image
+                          src={photo.url}
+                          alt={`${official.name}, ${official.role}`}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      </div>
                     )}
                     <h3 className="text-xl font-heading font-bold truncate">
                       {official.name}
@@ -141,18 +143,18 @@ export default async function ContactOfficialsPage() {
                       {official.email && (
                         <a
                           href={`mailto:${official.email}`}
-                          className="flex items-center gap-2 text-accent hover:underline text-sm min-h-[44px] py-1 break-all"
+                          className="flex items-center gap-2 text-accent hover:underline text-sm min-h-[44px] py-1 break-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                         >
-                          <Mail className="w-4 h-4 flex-shrink-0" />
+                          <Mail className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
                           <span className="truncate">{official.email}</span>
                         </a>
                       )}
                       {official.phone && (
                         <a
                           href={`tel:${official.phone}`}
-                          className="flex items-center gap-2 text-accent hover:underline text-sm min-h-[44px] py-1"
+                          className="flex items-center gap-2 text-accent hover:underline text-sm min-h-[44px] py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                         >
-                          <Phone className="w-4 h-4 flex-shrink-0" />
+                          <Phone className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
                           {official.phone}
                         </a>
                       )}

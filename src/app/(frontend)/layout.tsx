@@ -1,6 +1,6 @@
 import React from 'react'
 import type { Metadata } from 'next'
-import { Barlow_Condensed, Inter } from 'next/font/google'
+import { Barlow_Condensed, Source_Serif_4 } from 'next/font/google'
 import { getThemeMode } from '@/lib/getTheme'
 import { getNavigation } from '@/lib/getNavigation'
 import { Header } from '@/components/layout/Header'
@@ -15,9 +15,9 @@ const barlowCondensed = Barlow_Condensed({
   display: 'swap',
 })
 
-const inter = Inter({
+const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-source-serif',
   display: 'swap',
 })
 
@@ -48,7 +48,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const navigation = await getNavigation()
 
   return (
-    <html lang="en" className={`${barlowCondensed.variable} ${inter.variable}`}>
+    <html lang="en" className={`${barlowCondensed.variable} ${sourceSerif.variable}`}>
       <body data-mode={mode}>
         <a
           href="#main-content"
