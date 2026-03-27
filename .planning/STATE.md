@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: CMS Data Model & Content
-status: Defining requirements
-stopped_at: Milestone v2.0 started
+status: Ready to plan
+stopped_at: Roadmap created for v2.0
 last_updated: "2026-03-27"
 last_activity: 2026-03-27
 progress:
-  total_phases: 0
+  total_phases: 3
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -17,17 +17,35 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-25)
+See: .planning/PROJECT.md (updated 2026-03-27)
 
 **Core value:** Community members can find clear, actionable information about their local school system and know exactly what to do about it.
-**Current focus:** v2.0 CMS Data Model & Content
+**Current focus:** Phase 15 - Organization Data Model
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-03-27 — Milestone v2.0 started
+Phase: 15 of 17 (Organization Data Model)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-03-27 — Roadmap created for v2.0 milestone (3 phases, 14 requirements)
+
+Progress: [####################..........] 67% (14/17 phases complete across all milestones)
+
+## Performance Metrics
+
+**Velocity:**
+- Total plans completed: 32 (v1.0: 18, v1.1: 14)
+- Average duration: varies
+- Total execution time: n/a
+
+**By Phase:**
+
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| v1.0 (8 phases) | 18 | — | — |
+| v1.1 (6 phases) | 14 | — | — |
+
+*Updated after each plan completion*
 
 ## Accumulated Context
 
@@ -36,33 +54,9 @@ Last activity: 2026-03-27 — Milestone v2.0 started
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- [v1.1 Roadmap]: Sequence fixes by dependency chain, not severity -- foundation first, QA last
-- [v1.1 Roadmap]: next/link and next/image migrations each done as single coordinated batch (Phase 10)
-- [v1.1 Roadmap]: displayName DB migration in Phase 9 before byline code change in Phase 11
-- [Phase 09]: displayName field optional -- byline falls back to BIBB United Staff
-- [Phase 09]: Cache headers on /media and /api/media only -- Next.js handles /_next/static automatically
-- [Phase 09]: OG image uploaded as Payload media item -- layout.tsx /og-default.png remains fallback until Phase 12
-- [Phase 09]: Navigation uses external type with URL for collection listing routes (/news, /officials, /meetings)
-- [Phase 10]: Internal/external link detection uses href.startsWith('/') heuristic
-- [Phase 10]: Hero carousel only first slide gets priority={true} for LCP optimization
-- [Phase 10]: Used native inert attribute (React 19) for mobile panel accessibility instead of manual aria-hidden
-- [Phase 10]: Co-located useFocusTrap hook in Header.tsx -- single consumer, extract later if reused
-- [Phase 11]: Named isActiveLink to avoid collision with useFocusTrap isActive parameter
-- [Phase 11]: Extracted FooterCTA as client component to keep Footer as server component
-- [Phase 12]: Native App Router sitemap.ts/robots.ts replace next-sitemap -- eliminates ESM/CJS compatibility issue and postbuild step
-- [Phase 12]: Homepage uses title.absolute to bypass layout template suffix
-- [Phase 12]: OG image fallback chain: page SEO image -> featured image -> SiteTheme ogDefaultImage -> /og-default.png
-- [Phase 13]: Used lighthouse@13 with playwright-lighthouse@4 for Node 22 compatibility
-- [Phase 13]: Refactored lighthouse spec to use direct API for score capture instead of playAudit
-- [Phase 13]: Footer color contrast identified as single root cause for all axe-core failures
-- [Phase 13]: Logo variant prop (default|footer) controls UNITED text color per dark/light context
-- [Phase 13-quality-audit]: News article meta description fallback uses post.title + brand suffix, matching CMS page pattern
-- [Phase 14]: Data-only fix: corrected seed URL, did not modify Header.tsx or add redirects
-
-### Roadmap Evolution
-
-- Phases 5-8 added during v1.0 via audit-driven gap closure
-- Phases 9-13 added for v1.1 Production Polish milestone
+- [v2.0 Roadmap]: Organizations first (breaking migration), Homepage second (additive), Cache busting last (cross-cutting hooks)
+- [v2.0 Roadmap]: Multi-step migration for Officials body->organization refactor (schema, data, cleanup)
+- [v2.0 Roadmap]: No new npm packages — all features use existing stack capabilities
 
 ### Pending Todos
 
@@ -70,30 +64,14 @@ None.
 
 ### Blockers/Concerns
 
-- [Phase 10]: Turbopack/webpack build conflict -- verify `pnpm build` succeeds before component changes
-- [Phase 10]: next/image CLS regression risk -- audit parent `position: relative` for every `<Image fill>`
-- [Phase 12]: next-sitemap `additionalPaths` ESM/CJS compatibility -- may need App Router `sitemap.ts` fallback
-- [Phase 11]: pt-16 was removed -- sticky header reserves flow space, pt-16 was causing a visible gap (resolved in quick-260325-jc8)
-
-### Quick Tasks Completed
-
-| # | Description | Date | Commit | Directory |
-|---|-------------|------|--------|-----------|
-| 260324-koh | Fix postbuild script to use next-sitemap --config next-sitemap.config.cjs | 2026-03-24 | 4956e61 | [260324-koh-fix-postbuild-script-to-use-next-sitemap](./quick/260324-koh-fix-postbuild-script-to-use-next-sitemap/) |
-| 260324-u4b | Add Next.js app service to docker-compose.dev.yml for single-command dev startup | 2026-03-25 | 765ad69 | [260324-u4b-update-the-docker-compose-setup-so-that-](./quick/260324-u4b-update-the-docker-compose-setup-so-that-/) |
-| 260324-vt1 | Make header background solid white instead of theme-dependent | 2026-03-25 | 7bddf40 | [260324-vt1-make-the-top-menu-solid-white-instead-of](./quick/260324-vt1-make-the-top-menu-solid-white-instead-of/) |
-| 260324-vxb | Fix footer text contrast - text-white instead of text-text-on-dark | 2026-03-25 | b31e6b0 | [260324-vxb-fix-footer-text-contrast-text-nearly-unr](./quick/260324-vxb-fix-footer-text-contrast-text-nearly-unr/) |
-| 260324-wer | Fix header broken in dark theme - restore bg-bg-dominant | 2026-03-25 | 1b1bf3a | [260324-wer-fix-header-broken-in-dark-theme-restore-](./quick/260324-wer-fix-header-broken-in-dark-theme-restore-/) |
-| 260324-wou | Dark mode header background matches footer navy | 2026-03-25 | 58e6e0d | [260324-wou-dark-mode-header-background-matches-foot](./quick/260324-wou-dark-mode-header-background-matches-foot/) |
-| 260325-jc8 | Remove gap between hero image and top menu | 2026-03-25 | d4b49a6 | [260325-jc8-remove-the-gap-between-the-hero-img-and-](./quick/260325-jc8-remove-the-gap-between-the-hero-img-and-/) |
-| 260325-sg9 | Deploy bibbunited.com to production on k8s cluster | 2026-03-26 | 24d5d73 | [260325-sg9-deploy-bibbunited-com-to-production-on-k](./quick/260325-sg9-deploy-bibbunited-com-to-production-on-k/) |
-| 260326-0qi | Fix sharp module error in Docker — admin panel 500 | 2026-03-26 | 5a94303 | [260326-0qi-fix-sharp-module-error-in-docker-admin-p](./quick/260326-0qi-fix-sharp-module-error-in-docker-admin-p/) |
-| 260326-239 | Add on-demand revalidation via Payload afterChange hooks | 2026-03-26 | 7d25788 | [260326-239-add-on-demand-revalidation-via-payload-a](./quick/260326-239-add-on-demand-revalidation-via-payload-a/) |
-| 260327-f29 | Update seed content data to match production site | 2026-03-27 | 741f10f | [260327-f29-update-seed-content-data-to-match-prod-s](./quick/260327-f29-update-seed-content-data-to-match-prod-s/) |
-| 260327-gi7 | Make footer BIBB text red to match header logo colors | 2026-03-27 | 75436b2 | [260327-gi7-make-footer-bibb-text-red-to-match-heade](./quick/260327-gi7-make-footer-bibb-text-red-to-match-heade/) |
+- [Phase 15]: PostgreSQL enum transaction error — auto-migration will fail for body->organization refactor; must hand-author migration SQL
+- [Phase 15]: Contact Officials page must update atomically with Officials schema change to avoid runtime crash
+- [Phase 15]: Check production Officials data inventory before migration — verify body values match expected set
+- [Phase 17]: Verify `_status` guard in afterChange hook args for Payload 3.80.0 before implementing publish-only purge
+- [Phase 17]: Confirm `NEXT_PUBLIC_SERVER_URL` is set to production domain in K8s secrets before testing purge
 
 ## Session Continuity
 
-Last activity: 2026-03-27 - Completed quick task 260327-gi7: Make footer BIBB text red to match header logo colors
-Stopped at: Completed quick task 260327-gi7: Make footer BIBB text red to match header logo colors
+Last activity: 2026-03-27 — Roadmap created for v2.0 milestone
+Stopped at: Roadmap written, ready to plan Phase 15
 Resume file: None

@@ -75,27 +75,27 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ORG-01 | — | Pending |
-| ORG-02 | — | Pending |
-| ORG-03 | — | Pending |
-| ORG-04 | — | Pending |
-| ORG-05 | — | Pending |
-| ORG-06 | — | Pending |
-| ORG-07 | — | Pending |
-| HOME-01 | — | Pending |
-| HOME-02 | — | Pending |
-| HOME-03 | — | Pending |
-| CACHE-01 | — | Pending |
-| CACHE-02 | — | Pending |
-| CACHE-03 | — | Pending |
-| CACHE-04 | — | Pending |
+| ORG-01 | Phase 15 | Pending |
+| ORG-02 | Phase 15 | Pending |
+| ORG-03 | Phase 15 | Pending |
+| ORG-04 | Phase 15 | Pending |
+| ORG-05 | Phase 15 | Pending |
+| ORG-06 | Phase 15 | Pending |
+| ORG-07 | Phase 15 | Pending |
+| HOME-01 | Phase 16 | Pending |
+| HOME-02 | Phase 16 | Pending |
+| HOME-03 | Phase 16 | Pending |
+| CACHE-01 | Phase 17 | Pending |
+| CACHE-02 | Phase 17 | Pending |
+| CACHE-03 | Phase 17 | Pending |
+| CACHE-04 | Phase 17 | Pending |
 
 **Coverage:**
 
 - v2.0 requirements: 14 total
-- Mapped to phases: 0
-- Unmapped: 14
+- Mapped to phases: 14
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-27*
-*Last updated: 2026-03-27 after initial definition*
+*Last updated: 2026-03-27 after roadmap creation*
