@@ -63,15 +63,17 @@ export function LatestNews({ posts }: LatestNewsProps) {
 
         {/* Smaller list items */}
         <div className="lg:col-span-1">
-          {listItems.map((post) => (
+          {listItems.map((post) => {
+            const thumbUrl = getThumbnailUrl(post)
+            return (
             <Link
               key={post.id}
               href={`/news/${post.slug}`}
               className="flex gap-4 items-start py-4 border-b border-border last:border-0 hover:text-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
-              {getThumbnailUrl(post) && (
+              {thumbUrl && (
                 <Image
-                  src={getThumbnailUrl(post)!}
+                  src={thumbUrl}
                   alt={getImageAlt(post)}
                   width={64}
                   height={64}
@@ -85,7 +87,8 @@ export function LatestNews({ posts }: LatestNewsProps) {
                 <DateDisplay publishDate={post.publishDate} variant="compact" />
               </div>
             </Link>
-          ))}
+            )
+          })}
         </div>
       </div>
 
