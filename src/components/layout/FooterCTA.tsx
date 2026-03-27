@@ -2,17 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
-
-interface CTALink {
-  href: string
-  label: string
-  variant: 'primary' | 'secondary'
-}
-
-const CTA_LINKS: CTALink[] = [
-  { href: '/contact-officials', label: 'Contact Officials', variant: 'primary' },
-  { href: '/meetings', label: 'Upcoming Meetings', variant: 'secondary' },
-]
+import { CTA_LINKS } from '@/lib/ctaLinks'
 
 export function FooterCTA() {
   const pathname = usePathname()
