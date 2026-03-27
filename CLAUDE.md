@@ -16,6 +16,27 @@ A civic advocacy website for the BIBB community, starting with local school syst
 - **Content team**: Must be manageable by non-technical editors through Payload admin UI
 <!-- GSD:project-end -->
 
+## Local Development
+
+**Always use `docker compose` to start the local dev environment.** This starts both PostgreSQL and the Next.js+Payload dev server:
+
+```bash
+docker compose up        # foreground (see logs)
+docker compose up -d     # background
+```
+
+- App: http://localhost:3000
+- Payload admin: http://localhost:3000/admin
+- Database: PostgreSQL on localhost:5499
+
+If running Next.js outside Docker (for faster HMR), still use Docker for the database:
+
+```bash
+docker compose up -d db
+cp .env.example .env     # if .env doesn't exist
+pnpm dev
+```
+
 <!-- GSD:stack-start source:research/STACK.md -->
 ## Technology Stack
 
