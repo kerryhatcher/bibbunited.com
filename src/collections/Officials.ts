@@ -8,7 +8,7 @@ export const Officials: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'role', 'body', 'email'],
+    defaultColumns: ['name', 'role', 'organization', 'email'],
   },
   access: {
     read: () => true,
@@ -26,15 +26,14 @@ export const Officials: CollectionConfig = {
       label: 'Title / Role',
     },
     {
-      name: 'body',
-      type: 'select',
+      name: 'organization',
+      type: 'relationship',
+      relationTo: 'organizations',
       required: true,
-      label: 'Governing Body',
-      options: [
-        { label: 'Board of Education', value: 'board-of-education' },
-        { label: 'County Commission', value: 'county-commission' },
-        { label: 'Water Board', value: 'water-board' },
-      ],
+      label: 'Organization',
+      admin: {
+        position: 'sidebar',
+      },
     },
     {
       name: 'email',

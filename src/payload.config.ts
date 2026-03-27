@@ -13,6 +13,7 @@ import { Media } from './collections/Media'
 import { Users } from './collections/Users'
 import { Officials } from './collections/Officials'
 import { Meetings } from './collections/Meetings'
+import { Organizations } from './collections/Organizations'
 import { UrgentBanner } from './globals/UrgentBanner'
 import { SiteTheme } from './globals/SiteTheme'
 import { Navigation } from './globals/Navigation'
@@ -42,7 +43,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, NewsPosts, Media, Users, Officials, Meetings],
+  collections: [Pages, NewsPosts, Media, Users, Officials, Meetings, Organizations],
   globals: [UrgentBanner, SiteTheme, Navigation, Homepage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
