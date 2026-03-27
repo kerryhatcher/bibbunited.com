@@ -38,7 +38,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
 
   if (!stories || stories.length === 0) {
     return (
-      <div className="relative w-full aspect-[16/7] sm:aspect-[16/6] overflow-hidden bg-bg-secondary" />
+      <div className="relative w-full aspect-[4/3] sm:aspect-[16/6] overflow-hidden bg-bg-secondary" />
     )
   }
 
@@ -49,7 +49,7 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
       role="region"
       aria-roledescription="carousel"
       aria-label="Featured stories"
-      className="relative w-full aspect-[16/7] sm:aspect-[16/6] overflow-hidden bg-bg-secondary"
+      className="relative w-full aspect-[4/3] sm:aspect-[16/6] overflow-hidden bg-bg-secondary"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -78,9 +78,9 @@ export function HeroSpotlight({ stories }: HeroSpotlightProps) {
               priority={index === 0}
               loading={index === 0 ? 'eager' : 'lazy'}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/5" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 pb-12 sm:p-10 sm:pb-10 text-white">
-              <h2 className="text-fluid-hero font-heading font-bold uppercase tracking-tight mb-2 line-clamp-3 text-shadow-hero">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 via-40% to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 pb-8 sm:p-10 sm:pb-10 text-white">
+              <h2 className="text-fluid-hero font-heading font-bold uppercase tracking-tight mb-2 line-clamp-4 sm:line-clamp-3 text-shadow-hero">
                 <Link
                   href={`/news/${story.slug}`}
                   className="hover:underline focus:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
