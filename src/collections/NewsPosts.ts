@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { slugField } from '../fields/slug'
 import { ctaFields } from '../fields/cta'
 import { richTextEditor } from '../editors/richText'
-import { revalidateCollection } from '../hooks/revalidate'
+import { revalidateCollection, revalidateOnDelete } from '../hooks/revalidate'
 import { preventSpotlightNewsDelete } from '../hooks/preventReferencedDelete'
 
 export const NewsPosts: CollectionConfig = {
@@ -16,6 +16,13 @@ export const NewsPosts: CollectionConfig = {
       ]),
     ],
     beforeDelete: [preventSpotlightNewsDelete],
+    afterDelete: [
+      revalidateOnDelete((doc) => [
+        '/news',
+        `/news/${doc.slug}`,
+        '/',
+      ]),
+    ],
   },
   admin: {
     useAsTitle: 'title',

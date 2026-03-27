@@ -1,4 +1,8 @@
-import type { CollectionAfterChangeHook, GlobalAfterChangeHook } from 'payload'
+import type {
+  CollectionAfterChangeHook,
+  CollectionAfterDeleteHook,
+  GlobalAfterChangeHook,
+} from 'payload'
 
 /**
  * Safely call revalidatePath only when running inside a Next.js server action
@@ -45,6 +49,26 @@ export function revalidateCollection(
       safeRevalidate(path)
     }
     return doc
+  }
+}
+
+/**
+ * Revalidate specific paths when a collection document is deleted.
+ * Same logic as revalidateCollection but typed for the afterDelete hook.
+ */
+export function revalidateOnDelete(
+  paths: string[] | ((doc: any) => string[]),
+): CollectionAfterDeleteHook {
+  return ({ doc, req, context }) => {
+    if (req.context?.disableRevalidate || context?.disableRevalidate) return
+    const method = req?.method?.toUpperCase?.()
+    if (method === 'GET') return
+
+    const resolved = typeof paths === 'function' ? paths(doc) : paths
+    for (const path of resolved) {
+      if (!path || path.includes('undefined') || path.includes('null')) continue
+      safeRevalidate(path)
+    }
   }
 }
 
